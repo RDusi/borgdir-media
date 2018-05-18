@@ -1,0 +1,69 @@
+{{define "content"}}
+
+<div class="container myequipgrid">
+  <div class="row headline">
+    <div class="col">
+      <h3 style="font-weight: bold ">Warenkorb</h3>
+    </div>
+  </div>
+  <div class="row beschr abstandGrid">
+    <div class="col-4 beschrFont">
+      Equipment
+    </div>
+    <div class="col-3 beschrFont">
+      Beschreibung
+    </div>
+    <div class="col-2 beschrFont">
+      Anzahl
+    </div>
+    <div class="col-2 beschrFont">
+      Rückgabe bis
+    </div>
+    <div class="col-1 beschrFont">
+      Löschen
+    </div>
+  </div>
+  <div>
+    <hr>
+  </div>
+  {{range .Items}}
+  <div class="row cartgrid abstandGrid">
+    <div class="col-4 cartprod">
+      <div class="row">
+        <div class="col">
+          <img src="http://via.placeholder.com/150x150" alt="img">
+        </div>
+        <div class="col">
+          <h5>{{.Name}}</h5>
+          <small>ID: {{.ID}}</small>
+        </div>
+      </div>
+    </div>
+    <div class="col-3 beschreibung">
+      <p>{{.Inhalt}}</p>
+    </div>
+    <div class="col-2 anzahl">
+      <select name=" " id="">
+      <option value="0">0</option>
+      <option value="1" selected>1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      </select>
+    </div>
+    <div class="col-2 rueckgbis borgdir-color">
+      {{.Rueckgabe}}
+    </div>
+    <div class="col-1 verl">
+      <a href="#"><i class="far fa-trash-alt iconspez"></i></a>
+    </div>
+  </div>
+  {{end}}
+  <div class="row ausleihbtn abstandGrid">
+    <div class="col" style="display:flex; justify-content:flex-end">
+      <button type="button" class="btn btn-primary">Jetzt Ausleihen</button>
+    </div>
+  </div>
+</div>
+
+{{end}}

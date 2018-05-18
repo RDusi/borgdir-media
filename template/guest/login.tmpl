@@ -1,0 +1,36 @@
+{{define "content"}}
+
+<div class="container welcome-section">
+  <h1>Login</h1>
+</div>
+
+<div class="container">
+  <form action="/login" method="post">
+    <div class="row">
+      <div class="col-3"></div>
+      <div class="col-6">
+        <label for="benutzername">Benutzername:</label>
+        <input type="text" name="benutzername" class="form-control">
+      </div>
+      <div class="col-3"></div>
+    </div>
+    <div class="row abstandTop20">
+      <div class="col-3"></div>
+      <div class="col-6">
+        <label for="Passwort">Passwort:</label>
+        <input type="password" name="passwort" class="form-control">
+      </div>
+      <div class="col-3"></div>
+    </div>
+    <div class="row abstandTop20">
+      <div class="col-4"></div>
+      <div class="col-4">
+        <button type="submit" value="Anmelden" class="btn btn-block btn-primary">Anmelden</button>
+      </div>
+      <div class="col-4"></div>
+    </div>
+  </form>
+</div>
+
+
+{{end}}

@@ -1,0 +1,72 @@
+{{define "content"}}
+
+<div class="container <profilbearb></profilbearb>">
+  <div class="row headline">
+    <div class="col">
+      <h3 style="font-weight: bold ">Profil bearbeiten</h3>
+      <h5>Status: <span class="borgdir-color">{{.BenutzerStatus}}</span></h5>
+    </div>
+  </div>
+  <div class="row formProfil abstandGrid">
+    <div class="col">
+      <form action="/profil" method="post">
+        <div class="row">
+          <div class="form-group col">
+            <label for="Benutzername">Benutzername:</label>
+            <input type="text" name="benutzername" class="form-control">
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group col">
+            <label for="Email">E-Mail Adresse:</label>
+            <input type="text" name="email" class="form-control">
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group col">
+            <label for="altPasswort">Altes Passwort:</label>
+            <input type="password" name="passwortalt" class="form-control">
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group col">
+            <label for="neuPasswort">Neues Passwort:</label>
+            <input type="password" name="passwortneu" class="form-control">
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group col">
+            <label for="neuPasswortwdh">Neues Passwort wiederholen:</label>
+            <input type="password" name="passwortneuwdh" class="form-control">
+          </div>
+        </div>
+        <div class="row abstandTop20 buttons">
+          <div class="col">
+            <button type="submit" class="btn btn-block btn-primary">Änderungen speichern</button>
+          </div>
+      </form>
+      <div class="col">
+        <form action="/profil" method="post">
+          <button type="submit" name="loeschen" class="btn btn-block btn-primary btn-black">Konto löschen</button>
+        </form>
+      </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="row">
+        <div class="col center">
+          <img class="bild" src="http://via.placeholder.com/350x350" alt="img">
+        </div>
+      </div>
+      <div class="row abstandTop10">
+        <div class="col center">
+          <form action="/profil" method="post">
+            <input type="file" name="datei">
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{end}}

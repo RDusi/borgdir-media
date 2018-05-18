@@ -1,0 +1,153 @@
+/*Test*/
+
+.test {
+  background-color: grey;
+}
+
+.test2 {
+  background-color: red;
+}
+
+/*Allgemein*/
+
+body {
+  font-family: 'Nunito Sans', sans-serif;
+}
+
+.brand-size {
+  font-size: 40px;
+}
+
+.borgdir-color {
+  color: rgb(255, 99, 71) !important;
+}
+
+input {
+  border-radius: 50px !important;
+}
+
+.center {
+  justify-content: center;
+}
+
+.beschrFont {
+  font-weight: bold;
+}
+
+.iconspez {
+  font-size: 30px;
+  color: black;
+}
+
+.center {
+  display: flex;
+  align-items: center;
+}
+
+/*Navigationsleiste*/
+
+.navileiste {
+  margin-top: 5px;
+}
+
+.nav-item {
+  font-size: 25px;
+  color: black;
+}
+
+.anordnung-nav-items1 {
+  justify-content: center;
+}
+
+.anordnung-nav-items2 {
+  justify-content: flex-end;
+}
+
+.avatar {
+  font-size: 30px;
+  margin-right: 10px;
+}
+
+/*Buttons*/
+
+.btn {
+  border-radius: 50px;
+  background-color: rgb(255, 99, 71);
+  border: 0px;
+}
+
+.btn:hover {
+  background-color: rgb(252, 120, 71) !important;
+}
+
+/*Individuelle Seiteneinstellungen*/
+
+.abstandBtnWelcomeSection {
+  margin-top: 50px;
+}
+
+.welcome-section {
+  text-align: center;
+  margin-top: 100px;
+}
+
+.searchbar {
+  text-align: right;
+}
+
+.sortbar {
+  text-align: right;
+}
+
+.headline {
+  display: flex;
+  align-items: flex-end;
+  margin-top: 20px;
+}
+
+.headline2 {
+  display: flex;
+  align-items: center;
+}
+
+/*Grid*/
+
+.abstandGrid {
+  margin-top: 50px;
+}
+
+.abstandTop20 {
+  margin-top: 20px;
+}
+
+.abstandTop10 {
+  margin-top: 10px;
+}
+
+.myequip {
+  margin-top: 20px;
+}
+
+.vorgegrid {
+  margin-top: 50px;
+}
+
+.btn-black {
+  background-color: black;
+}
+
+.bild {
+  border-radius: 50%;
+}
+
+.iconsizeadmin {
+  font-size: 300px;
+}
+
+select {
+  border-radius: 50px !important;
+}
+
+textarea {
+  border-radius: 50px !important;
+}

@@ -1,0 +1,246 @@
+{{define "layout"}}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!--Imports Web-->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css?family=Nunito+Sans" rel="stylesheet">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script defer src="https://use.fontawesome.com/releases/v5.0.10/js/all.js" integrity="sha384-slN8GvtUJGnv6ca26v8EzVaR9DC58QEwsIk9q1QXdCU8Yu8ck/tL/5szYlBbqmS+" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://unpkg.com/@bootstrapstudio/bootstrap-better-nav/dist/bootstrap-better-nav.min.css">
+  <!-- Imports Local -->
+  <!--<link rel="stylesheet" href="../../static/css/styles.css">
+  <link rel="stylesheet" href="../../static/css/carousel.css">-->
+  <link rel="icon" href="../../static/favicon/favicon.png">
+  <!-- -->
+  <meta charset=" UTF-8 ">
+  <meta name="viewport " content="width=device-width, initial-scale=1.0 ">
+  <meta http-equiv="X-UA-Compatible " content="ie=edge ">
+  <!-- Title -->
+  <title>borgdir.media</title>
+  <style>
+    /*Test*/
+
+    .test {
+      background-color: grey;
+    }
+
+    .test2 {
+      background-color: red;
+    }
+
+    /*Allgemein*/
+
+    body {
+      font-family: 'Nunito Sans', sans-serif;
+    }
+
+    .brand-size {
+      font-size: 40px;
+    }
+
+    .borgdir-color {
+      color: rgb(255, 99, 71) !important;
+    }
+
+    input {
+      border-radius: 50px !important;
+    }
+
+    .center {
+      justify-content: center;
+    }
+
+    .beschrFont {
+      font-weight: bold;
+    }
+
+    .iconspez {
+      font-size: 30px;
+      color: black;
+    }
+
+    .center {
+      display: flex;
+      align-items: center;
+    }
+
+    /*Navigationsleiste*/
+
+    .navileiste {
+      margin-top: 5px;
+    }
+
+    .nav-item {
+      font-size: 25px;
+      color: black;
+    }
+
+    .anordnung-nav-items1 {
+      justify-content: center;
+    }
+
+    .anordnung-nav-items2 {
+      justify-content: flex-end;
+    }
+
+    .avatar {
+      font-size: 30px;
+      margin-right: 10px;
+    }
+
+    /*Buttons*/
+
+    .btn {
+      border-radius: 50px;
+      background-color: rgb(255, 99, 71);
+      border: 0px;
+    }
+
+    .btn:hover {
+      background-color: rgb(252, 120, 71) !important;
+    }
+
+    /*Individuelle Seiteneinstellungen*/
+
+    .abstandBtnWelcomeSection {
+      margin-top: 50px;
+    }
+
+    .welcome-section {
+      text-align: center;
+      margin-top: 100px;
+    }
+
+    .searchbar {
+      text-align: right;
+    }
+
+    .sortbar {
+      text-align: right;
+    }
+
+    .headline {
+      display: flex;
+      align-items: flex-end;
+      margin-top: 20px;
+    }
+
+    .headline2 {
+      display: flex;
+      align-items: center;
+    }
+
+    /*Grid*/
+
+    .abstandGrid {
+      margin-top: 50px;
+    }
+
+    .abstandTop20 {
+      margin-top: 20px;
+    }
+
+    .abstandTop40 {
+      margin-top: 40px;
+    }
+
+    .abstandTop10 {
+      margin-top: 10px;
+    }
+
+    .myequip {
+      margin-top: 20px;
+    }
+
+    .vorgegrid {
+      margin-top: 50px;
+    }
+
+    .btn-black {
+      background-color: black;
+    }
+
+    .bild {
+      border-radius: 50%;
+    }
+
+    .iconsizeadmin {
+      font-size: 300px;
+    }
+
+    select {
+      border-radius: 50px !important;
+    }
+
+    textarea {
+      border-radius: 50px !important;
+    }
+
+    .carousel-inner .carousel-item-right.active,
+    .carousel-inner .carousel-item-next {
+      transform: translateX(25%);
+    }
+
+    .carousel-inner .carousel-item-left.active,
+    .carousel-inner .carousel-item-prev {
+      transform: translateX(-25%)
+    }
+
+    .carousel-inner .carousel-item-right,
+    .carousel-inner .carousel-item-left {
+      transform: translateX(0);
+    }
+
+    .carousel-inner .carousel-item.active,
+    .carousel-inner .carousel-item-next,
+    .carousel-inner .carousel-item-prev {
+      display: flex;
+    }
+
+    .carousel-inner {
+      margin-top: :50px;
+    }
+
+    .abstandCarousel {
+      margin-top: 100px;
+    }
+  </style>
+</head>
+
+<body>
+  {{template "header" .}} {{template "content" .}}
+</body>
+<!-- Script -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js " integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ " crossorigin="anonymous "></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js " integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm " crossorigin="anonymous "></script>
+<script src="https://unpkg.com/@bootstrapstudio/bootstrap-better-nav/dist/bootstrap-better-nav.min.js "></script>
+<!--<script src="../../js/carousel.js "></script>-->
+<script>
+  $('#recipeCarousel').carousel({
+    interval: 3000
+  });
+
+  $('.carousel .carousel-item').each(function() {
+    var next = $(this).next();
+    if (!next.length) {
+      next = $(this).siblings(':first');
+    }
+    next.children(':first-child').clone().appendTo($(this));
+
+    for (var i = 0; i < 2; i++) {
+      next = next.next();
+      if (!next.length) {
+        next = $(this).siblings(':first');
+      }
+
+      next.children(':first-child').clone().appendTo($(this));
+    }
+  });
+</script>
+
+</html>
+{{end}}

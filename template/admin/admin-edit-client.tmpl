@@ -1,0 +1,64 @@
+{{define "content"}}
+
+<div class="container">
+  <div class="row headline">
+    <div class="col">
+      <h3 style="font-weight: bold ">Profil bearbeiten</h3>
+      <h5>Kunden-ID: <span class="borgdir-color">{{.ID}}</span> | Status: <span class="borgdir-color">{{.ClientState}}</span></h5>
+    </div>
+  </div>
+  <div class="row formProfil abstandGrid">
+    <form action="/admin/edit-client" method="post">
+      <div class="col">
+        <div class="row">
+          <div class="form-group col">
+            <label for="Benutzername">Benutzername:</label>
+            <input type="text" name="benutzername" class="form-control">
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group col">
+            <label for="Email">E-Mail Adresse:</label>
+            <input type="text" name="email" class="form-control">
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group col">
+            <label for="neuPasswort">Neues Passwort:</label>
+            <input type="password" name="passwortneu" class="form-control">
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group col">
+            <label for="neuPasswortwdh">Neues Passwort wiederholen:</label>
+            <input type="password" name="passwortneuwdh" class="form-control">
+          </div>
+        </div>
+        <div class="row abstandTop20 buttons">
+          <div class="col">
+            <button type="submit" class="btn btn-block btn-primary">Änderungen speichern</button>
+          </div>
+          <div class="col">
+            <form action="">
+              <button type="button" class="btn btn-block btn-primary btn-black">Konto sperren</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </form>
+    <div class="col">
+      <div class="row">
+        <div class="col center">
+          <img class="bild" src="http://via.placeholder.com/350x350" alt="img">
+        </div>
+      </div>
+      <div class="row abstandTop10">
+        <div class="col center">
+          <input type="file">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{end}}

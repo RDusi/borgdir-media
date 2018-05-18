@@ -1,0 +1,106 @@
+{{define "content"}}
+
+<div class="container myequipgrid">
+  <div class="row headline">
+    <div class="col">
+      <h3 style="font-weight: bold ">Meine Geräte</h3>
+    </div>
+  </div>
+  <div class="row beschr abstandGrid">
+    <div class="col-4 beschrFont">
+      Equipment
+    </div>
+    <div class="col-3 beschrFont">
+      Beschreibung
+    </div>
+    <div class="col-2 beschrFont">
+      Entliehen am
+    </div>
+    <div class="col-2 beschrFont">
+      Rückgabe bis
+    </div>
+    <div class="col-1 beschrFont">
+      Verlängern
+    </div>
+  </div>
+  <div>
+    <hr>
+  </div>
+  {{range .Items}}
+  <div class="row myequip">
+    <div class="col-4 equip">
+      <div class="row">
+        <div class="col">
+          <img src="http://via.placeholder.com/150x150" alt="img">
+        </div>
+        <div class="col">
+          <h5>{{.Name}}</h5>
+          <small>{{.ID}}</small>
+        </div>
+      </div>
+    </div>
+    <div class="col-3 beschreibung">
+      <p>{{.Inhalt}}</p>
+    </div>
+    <div class="col-2 entlam">
+      {{.Entliehen}}
+    </div>
+    <div class="col-2 rueckgbis borgdir-color">
+      {{.Rueckgabe}}
+    </div>
+    <div class="col-1 verl">
+      <a href="#"><i class="fas fa-sync-alt iconspez"></i></a>
+    </div>
+  </div>
+  {{end}}
+  <div class="container vorgegrid">
+    <div class="row headline">
+      <div class="col">
+        <h3 style="font-weight: bold ">Vorgemerkt</h3>
+      </div>
+    </div>
+    <div class="row beschr abstandGrid">
+      <div class="col-4 beschrFont">
+        Equipment
+      </div>
+      <div class="col-3 beschrFont">
+        Beschreibung
+      </div>
+      <div class="col-4 beschrFont">
+        Rückgabe bis
+      </div>
+      <div class="col-1 beschrFont">
+        Entfernen
+      </div>
+    </div>
+    <div>
+      <hr>
+    </div>
+    {{range .Items}}
+    <div class="row myequip">
+      <div class="col-4 equip">
+        <div class="row">
+          <div class="col">
+            <img src="http://via.placeholder.com/150x150" alt="img">
+
+          </div>
+          <div class="col">
+            <h5>{{.Name}}</h5>
+            <small>{{.ID}}</small>
+          </div>
+        </div>
+      </div>
+      <div class="col-3 beschreibung">
+        <p>{{.Inhalt}}</p>
+      </div>
+      <div class="col-4 rueckgbis borgdir-color">
+        {{.Rueckgabe}}
+      </div>
+      <div class="col-1 verl">
+        <a href="#"><i class="far fa-trash-alt iconspez"></i></a>
+      </div>
+    </div>
+    {{end}}
+  </div>
+
+  {{end}}

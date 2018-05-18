@@ -1,0 +1,63 @@
+{{define "content"}}
+
+<div class="container equipgrid">
+  <div class="row ">
+    <div class="col headline ">
+      <h3 style="font-weight: bold ">Equipment</h3>
+    </div>
+    <div class="col searchbar ">
+      <small>Kategorie</small>
+      <div>
+        <form action="/equipment" method="post">
+          <input type="text " placeholder="Suche ">
+          <select name="" id="kategorie ">
+          <option selected>Alle</option>
+          <option value="1 ">Kategorie1</option>
+        </select>
+        </form>
+      </div>
+    </div>
+    <div class="col sortbar ">
+      <small>Sortieren nach</small>
+      <div>
+        <select>
+          <option selected id="sortby ">--</option>
+          <option value="1 ">Kategorie1</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="row equiprow abstandGrid">
+    {{range .Items}}
+    <div class="col-6 equipprodukt abstandTop40">
+      <div class="row">
+
+        <div class="col">
+          <h5>{{.Name}}</h5>
+          <p>{{.Inhalt}}</p>
+        </div>
+        <div class="col">
+          <img src="http://via.placeholder.com/150x150" alt="img">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-6">
+          <div class="row">
+            <div class="col-6">
+              <a href="#" role="button" class="btn btn-primary">In den Warenkorb</a>
+            </div>
+            <div class="col-6" style="display:flex; align-items:center; justify-content:flex-end">
+              <small style="text-align:right">{{.Anzahl}} Verfügbar</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-6"></div>
+      </div>
+    </div>
+    {{end}}
+  </div>
+
+</div>
+
+{{end}}

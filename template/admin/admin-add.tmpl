@@ -1,0 +1,81 @@
+{{define "content"}}
+
+<div class="container">
+  <div class="row headline">
+    <div class="col">
+      <h3 style="font-weight: bold ">Equipment hinzufügen</h3>
+    </div>
+  </div>
+  <form action="/admin/add" method="post">
+    <div class="row formProfil abstandGrid">
+      <div class="col">
+        <div class="row">
+          <div class="form-group col">
+            <label for="Bezeichnung">Bezeichnung:</label>
+            <input type="text" name="bezeichnung" class="form-control">
+          </div>
+          <div class="form-group col">
+            <label for="Kategorie">Kategorie:</label>
+            <select name="kategorie" id="Kategorie" class="form-control">
+            <option value="0" selected>---</option>
+            <option value="1">Kamera</option>
+            <option value="2">Objektiv</option>
+            <option value="3">Stativ</option>
+          </select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group col">
+            <label for="Invnr">Inventar-Nummer:</label>
+            <input type="text" name="invnr" class="form-control">
+          </div>
+          <div class="form-group col">
+            <label for="Lagerort">Lagerort:</label>
+            <input type="text" name="lagerort" class="form-control">
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group col">
+            <label for="Inhalt">Inhalt:</label>
+            <input type="text" name="inhalt" class="form-control">
+          </div>
+          <div class="form-group col">
+            <label for="Anzahl">Anzahl:</label>
+            <select name="anzahl" id="Anzahl" class="form-control">
+            <option value="1" selected>1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+          </select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group col">
+            <label for="Hinweise">Hinweise für den Benutzer:</label>
+            <textarea name="hinweise" id="Hinweise" cols="5" rows="5" class="form-control"></textarea>
+          </div>
+        </div>
+        <div class="row abstandTop20 buttons">
+          <div class="col">
+            <button type="submit" class="btn btn-block btn-primary">Speichern</button>
+          </div>
+          <div class="col"></div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="row">
+          <div class="col center">
+            <img src="http://via.placeholder.com/350x350" alt="img">
+          </div>
+        </div>
+        <div class="row abstandTop10">
+          <div class="col center">
+            <input type="file">
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+{{end}}

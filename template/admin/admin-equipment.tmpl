@@ -1,0 +1,72 @@
+{{define "content"}}
+
+<div class="container equipgrid">
+  <div class="row abstandTop20">
+    <div class="col headline2">
+      <h3 style="font-weight: bold ">Equipment verwalten</h3>
+    </div>
+    <div class="col headline2">
+      <a href="/admin/add"><button type="button" class="btn btn-primary">Equipment hinzufügen</button></a>
+    </div>
+    <div class="col searchbar">
+      <small>Kategorie</small>
+      <div><input type="text " placeholder="Suche ">
+        <select name=" " id="kategorie ">
+        <option selected>Alle</option>
+        <option value="Kamera">Kameras</option>
+        <option value="2 ">Objektive</option>
+        <option value="3 ">Mikrofone</option>
+        <option value="4 ">Stative</option>
+      </select></div>
+
+    </div>
+  </div>
+
+</div>
+
+<div class="container myequipgrid">
+  <div class="row beschr abstandGrid">
+    <div class="col-4 beschrFont">
+      Equipment
+    </div>
+    <div class="col-3 beschrFont">
+      Beschreibung
+    </div>
+    <div class="col-5 beschrFont">
+      Status
+    </div>
+  </div>
+  <div>
+    <hr>
+  </div>
+  {{range .Items}}
+  <div class="row cartgrid abstandGrid">
+    <div class="col-4 cartprod">
+      <div class="row">
+        <div class="col">
+          <img src="http://via.placeholder.com/150x150" alt="img">
+        </div>
+        <div class="col">
+          <h5>{{.Name}}</h5>
+          <small>ID: {{.ID}}</small>
+        </div>
+      </div>
+    </div>
+    <div class="col-3 beschreibung">
+      <p>{{.Inhalt}}</p>
+    </div>
+    <div class="col-2 entl">
+      Entliehen an: <br> <span class="borgdir-color">{{.EntliehenAn}}</span>
+    </div>
+    <div class="col-2 rueckgbis">
+      Rückgabe: <br> <span class="borgdir-color">{{.Rueckgabe}}</span>
+    </div>
+    <div class="col-1 verl">
+      <a href="/admin/edit-client"><i class="fas fa-pencil-alt iconspez"></i></a>
+      <a href="#" style="margin-left: 3px"><i class="far fa-trash-alt iconspez"></i></a>
+    </div>
+  </div>
+  {{end}}
+</div>
+
+{{end}}

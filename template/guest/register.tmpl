@@ -1,0 +1,37 @@
+{{define "content"}}
+<div class="container welcome-section">
+  <h1>Noch kein Kunde bei uns?</h1>
+</div>
+
+<div class="container">
+  <form action="/register" method="post">
+    <div class="row abstandTop20">
+      <div class="col-6">
+        <label for="Benutzername">Benutzername:</label>
+        <input type="text" name="benutzername" class="form-control">
+      </div>
+      <div class="col-6">
+        <label for="EMail">E-Mail:</label>
+        <input type="text" name="email" class="form-control">
+      </div>
+    </div>
+    <div class="row abstandTop20">
+      <div class="col-6">
+        <label for="Passwort">Passwort:</label>
+        <input type="password" name="passwort" class="form-control">
+      </div>
+      <div class="col-6">
+        <label for="Passwortwiederholen">Passwort wiederholen:</label>
+        <input type="password" name="passwortwdh" class="form-control">
+      </div>
+    </div>
+    <div class="row abstandTop20">
+      <div class="col-4"></div>
+      <div class="col-4">
+        <button type="submit" class="btn btn-block btn-primary">Registrieren</button>
+      </div>
+      <div class="col-4"></div>
+    </div>
+  </form>
+</div>
+{{end}}

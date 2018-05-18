@@ -1,0 +1,66 @@
+{{define "content"}}
+
+<div class="container kundegridhead">
+  <div class="row abstandTop20">
+    <div class="col headline2">
+      <h3 style="font-weight: bold ">Kunden verwalten</h3>
+    </div>
+    <div class="col searchbar">
+      <small>Kategorie</small>
+      <div><input type="text " placeholder="Suche ">
+        <select name=" " id="kategorie ">
+        <option selected>Alle</option>
+        <option value="1 ">Kameras</option>
+        <option value="2 ">Objektive</option>
+        <option value="3 ">Mikrofone</option>
+        <option value="4 ">Stative</option>
+      </select></div>
+
+    </div>
+  </div>
+</div>
+
+<div class="container kundegrid">
+  <div class="row beschr abstandGrid">
+    <div class="col-4 beschrFont">
+      Kunde
+    </div>
+    <div class="col-5 beschrFont">
+      Ausgeliehenes Equipment
+    </div>
+    <div class="col-2 beschrFont">
+      Status
+    </div>
+  </div>
+  <div>
+    <hr>
+  </div>
+  {{range .Clients}}
+  <div class="row cartgrid abstandGrid">
+    <div class="col-4 cartprod">
+      <div class="row">
+        <div class="col">
+          <img src="http://via.placeholder.com/150x150" alt="img">
+        </div>
+        <div class="col">
+          <h5 style="font-weight:bold">{{.ClientName}}</h5>
+          <small>ID: {{.ID}}</small>
+          <br>
+          <small class="borgdir-color">{{.ClientState}}</small>
+        </div>
+      </div>
+    </div>
+    <div class="col-5 beschreibung">
+      <p>{{.Equipment}}</p>
+    </div>
+    <div class="col-2 entl">
+      Konto aktiv bis: <br> <span class="borgdir-color">{{.ActiveUntil}}</span>
+    </div>
+    <div class="col-1 button">
+      <a href="/admin/edit-client"><i class="fas fa-pencil-alt iconspez"></i></a>
+    </div>
+  </div>
+  {{end}}
+</div>
+
+{{end}}
