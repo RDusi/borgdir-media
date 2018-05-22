@@ -76,6 +76,10 @@ input {
   border: 0px;
 }
 
+.btnUpload {
+  background-color: gray !important;
+}
+
 .btn:hover {
   background-color: rgb(252, 120, 71) !important;
 }

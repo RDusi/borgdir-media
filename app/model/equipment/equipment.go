@@ -6,6 +6,7 @@ type Equipment struct {
 	Inhalt string
 	Anzahl int
 	Status int
+	Bild   string
 }
 
 type EquipmentData struct {
@@ -19,9 +20,10 @@ func EuqipmentListeDummy() EquipmentData {
 		Benutzername:   "Erica Mustermann",
 		BenutzerStatus: "Benutzer",
 		Items: []Equipment{
-			{ID: 1, Name: "Kamera 1", Inhalt: "Beschreibung", Anzahl: 123, Status: 2},
-			{ID: 2, Name: "Kamera 2", Inhalt: "Beschreibung", Anzahl: 10, Status: 2},
-			{ID: 3, Name: "Kamera 3", Inhalt: "Beschreibung", Anzahl: 200, Status: 2},
+			{ID: 1, Name: "Kamera 1", Inhalt: "Beschreibung", Anzahl: 123, Status: 2, Bild: "../../../static/images/kamera1_150x150.jpg"},
+			{ID: 2, Name: "Stativ 1", Inhalt: "Beschreibung", Anzahl: 10, Status: 2, Bild: "../../../static/images/stativ1_150x150.jpg"},
+			{ID: 3, Name: "Mikro 1", Inhalt: "Beschreibung", Anzahl: 200, Status: 2, Bild: "../../../static/images/mikro1_150x150.jpg"},
+			{ID: 4, Name: "Objektiv 1", Inhalt: "Beschreibung", Anzahl: 200, Status: 2, Bild: "../../../static/images/objektiv1_150x150.jpg"},
 		},
 	}
 	return liste

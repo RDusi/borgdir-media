@@ -6,6 +6,7 @@ type Client struct {
 	ClientState string
 	ActiveUntil string
 	Equipment   string
+	Bild        string
 }
 
 type ClientListe struct {
@@ -26,9 +27,9 @@ func ClientListeDummy() ClientListe {
 		Benutzername:   "Peter Dieter",
 		BenutzerStatus: "Verleiher",
 		Clients: []Client{
-			{ID: 1, ClientName: "Client 1", Equipment: "Kamera 1, Kamera 2", ClientState: "Benutzer", ActiveUntil: "12.04.2016"},
-			{ID: 2, ClientName: "Client 2", Equipment: "Kamera 1, Kamera 2", ClientState: "Benutzer", ActiveUntil: "15.04.2016"},
-			{ID: 3, ClientName: "Client 3", Equipment: "Kamera 1, Kamera 2", ClientState: "Benutzer", ActiveUntil: "25.04.2016"},
+			{ID: 1, ClientName: "Client 1", Equipment: "Kamera 1, Kamera 2", ClientState: "Benutzer", ActiveUntil: "12.04.2016", Bild: "../../../static/images/avatar_150x150.jpg"},
+			{ID: 2, ClientName: "Client 2", Equipment: "Kamera 1, Kamera 2", ClientState: "Benutzer", ActiveUntil: "15.04.2016", Bild: "../../../static/images/avatar_150x150.jpg"},
+			{ID: 3, ClientName: "Client 3", Equipment: "Kamera 1, Kamera 2", ClientState: "Benutzer", ActiveUntil: "25.04.2016", Bild: "../../../static/images/avatar_150x150.jpg"},
 		},
 	}
 	return clientliste

@@ -31,16 +31,16 @@
     <div class="col-4 equip">
       <div class="row">
         <div class="col">
-          <img src="http://via.placeholder.com/150x150" alt="img">
+          <img src="{{.EuqipmentItem.Bild}}" alt="img">
         </div>
         <div class="col">
-          <h5>{{.Name}}</h5>
-          <small>{{.ID}}</small>
+          <h5>{{.EuqipmentItem.Name}}</h5>
+          <small>ID: {{.EuqipmentItem.ID}}</small>
         </div>
       </div>
     </div>
     <div class="col-3 beschreibung">
-      <p>{{.Inhalt}}</p>
+      <p>{{.EuqipmentItem.Inhalt}}</p>
     </div>
     <div class="col-2 entlam">
       {{.Entliehen}}
@@ -81,17 +81,16 @@
       <div class="col-4 equip">
         <div class="row">
           <div class="col">
-            <img src="http://via.placeholder.com/150x150" alt="img">
-
+            <img src="{{.EuqipmentItem.Bild}}" alt="img">
           </div>
           <div class="col">
-            <h5>{{.Name}}</h5>
-            <small>{{.ID}}</small>
+            <h5>{{.EuqipmentItem.Name}}</h5>
+            <small>ID: {{.EuqipmentItem.ID}}</small>
           </div>
         </div>
       </div>
       <div class="col-3 beschreibung">
-        <p>{{.Inhalt}}</p>
+        <p>{{.EuqipmentItem.Inhalt}}</p>
       </div>
       <div class="col-4 rueckgbis borgdir-color">
         {{.Rueckgabe}}

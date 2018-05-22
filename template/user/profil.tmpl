@@ -42,11 +42,12 @@
         </div>
         <div class="row abstandTop20 buttons">
           <div class="col">
-            <button type="submit" class="btn btn-block btn-primary">Änderungen speichern</button>
+            <button type="submit" name="speichern" class="btn btn-block btn-primary">Änderungen speichern</button>
           </div>
       </form>
       <div class="col">
         <form action="/profil" method="post">
+          <input type="hidden" value="1" name="loeschen">
           <button type="submit" name="loeschen" class="btn btn-block btn-primary btn-black">Konto löschen</button>
         </form>
       </div>
@@ -60,8 +61,15 @@
       </div>
       <div class="row abstandTop10">
         <div class="col center">
-          <form action="/profil" method="post">
+          <!--<form action="/profil" method="post">
             <input type="file" name="datei">
+            <button type="submit" name="fotoupload" class="btn btn-primary" style="background-color:gray;">Bild uploaden</button>
+            <input type="submit" value="upload">
+          </form>-->
+          <form enctype="multipart/form-data" action="http://127.0.0.1:3000/profil" method="post">
+            <input type="file" name="uploadfile" />
+            <input type="hidden" name="token" value="{{.}}" />
+            <input type="submit" value="upload" />
           </form>
         </div>
       </div>

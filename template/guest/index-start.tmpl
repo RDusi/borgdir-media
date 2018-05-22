@@ -18,24 +18,13 @@
       <div id="recipeCarousel" class="carousel slide w-100" data-ride="carousel">
         <div class="carousel-inner" role="listbox">
           <div class="carousel-item active">
-            <img class="d-block col-3 img-fluid" src="http://placehold.it/500x500?text=1">
+            <img class="d-block col-3 img-fluid" src="{{.Startbild}}">
           </div>
+          {{range .EquipmentListe}}
           <div class="carousel-item">
-            <img class="d-block col-3 img-fluid" src="http://placehold.it/500x500?text=2">
+            <img class="d-block col-3 img-fluid" src="{{.Bild}}">
           </div>
-          <div class="carousel-item">
-            <img class="d-block col-3 img-fluid" src="http://placehold.it/500x500?text=3">
-          </div>
-          <div class="carousel-item">
-            <img class="d-block col-3 img-fluid" src="http://placehold.it/500x500?text=4">
-          </div>
-          <div class="carousel-item">
-            <img class="d-block col-3 img-fluid" src="http://placehold.it/500x500?text=5">
-          </div>
-          <div class="carousel-item">
-            <img class="d-block col-3 img-fluid" src="http://placehold.it/500x500?text=6">
-          </div>
-
+          {{end}}
         </div>
         <a class="carousel-control-prev" href="#recipeCarousel" role="button" data-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
