@@ -155,3 +155,18 @@ select {
 textarea {
   border-radius: 50px !important;
 }
+
+.festeGroesse150x150 {
+  max-height: 150px;
+  max-width: 150px;
+}
+
+.festeGroesse300x300 {
+  max-height: 300px;
+  max-width: 300px;
+}
+
+.festeGroesse350x350 {
+  max-height: 350px;
+  max-width: 350px;
+}

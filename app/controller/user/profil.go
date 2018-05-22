@@ -14,12 +14,13 @@ func ProfilHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("ProfilHandler")
 	fmt.Println("method:", r.Method)
 
+	t, err := template.ParseFiles("template/layout/layout.tmpl", "template/user/header/header-profil.tmpl", "template/user/profil.tmpl")
+	if err != nil {
+		fmt.Println(err)
+	}
+
 	if r.Method == "GET" {
 		// GET
-		t, err := template.ParseFiles("template/layout/layout.tmpl", "template/user/header/header-profil.tmpl", "template/user/profil.tmpl")
-		if err != nil {
-			fmt.Println(err)
-		}
 		data := profil.ProfilDummyDataUser()
 		err = t.ExecuteTemplate(w, "layout", data)
 		if err != nil {
@@ -39,7 +40,7 @@ func ProfilHandler(w http.ResponseWriter, r *http.Request) {
 		passwortalt := r.FormValue("passwortalt")
 		passwortneu := r.FormValue("passwortneu")
 		passwortneuwdh := r.FormValue("passwortneuwdh")
-		loeschen := r.FormValue("key")
+		loeschen := r.FormValue("speichern")
 
 		fmt.Println("Benutzername: ", benutzername)
 		fmt.Println("E-Mail: ", email)
@@ -48,7 +49,6 @@ func ProfilHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Passwort Neu Wdh: ", passwortneuwdh)
 		fmt.Println("Loeschen: ", loeschen)
 
-		r.ParseMultipartForm(32 << 20)
 		file, handler, err := r.FormFile("uploadfile")
 		if err != nil {
 			fmt.Println(err)
@@ -56,6 +56,8 @@ func ProfilHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		defer file.Close()
 		fmt.Println("Bild wurde hochgeladen: ", handler.Filename)
+		data := profil.ProfilDummyDataUser()
+		err = t.ExecuteTemplate(w, "layout", data)
 		f, err := os.OpenFile("./static/images/upload/"+handler.Filename, os.O_WRONLY|os.O_CREATE, 0666)
 		if err != nil {
 			fmt.Println(err)

@@ -28,5 +28,10 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		passwort := r.FormValue("passwort")
 		fmt.Println("Benutzername : ", benutzername)
 		fmt.Println("Passwort: ", passwort)
+		if benutzername == "test" && passwort == "test" {
+
+		} else {
+			fmt.Fprintf(w, "%s", "<h1>Falsche Daten</h1>")
+		}
 	}
 }

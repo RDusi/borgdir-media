@@ -9,29 +9,29 @@
   </div>
   <div class="row formProfil abstandGrid">
     <div class="col">
-      <form action="/profil" method="post">
+      <form enctype="multipart/form-data" action="/profil" method="post">
         <div class="row">
           <div class="form-group col">
             <label for="Benutzername">Benutzername:</label>
-            <input type="text" name="benutzername" class="form-control">
+            <input type="text" name="benutzername" required="required" class="form-control">
           </div>
         </div>
         <div class="row">
           <div class="form-group col">
             <label for="Email">E-Mail Adresse:</label>
-            <input type="text" name="email" class="form-control">
+            <input type="text" name="email" required="required" class="form-control">
           </div>
         </div>
         <div class="row">
           <div class="form-group col">
             <label for="altPasswort">Altes Passwort:</label>
-            <input type="password" name="passwortalt" class="form-control">
+            <input type="password" name="passwortalt" required="required" class="form-control">
           </div>
         </div>
         <div class="row">
           <div class="form-group col">
             <label for="neuPasswort">Neues Passwort:</label>
-            <input type="password" name="passwortneu" class="form-control">
+            <input type="password" name="passwortneu" required="required" class="form-control">
           </div>
         </div>
         <div class="row">
@@ -42,38 +42,22 @@
         </div>
         <div class="row abstandTop20 buttons">
           <div class="col">
-            <button type="submit" name="speichern" class="btn btn-block btn-primary">Änderungen speichern</button>
+            <button type="submit" name="speichern" value="2" class="btn btn-block btn-primary">Änderungen speichern</button>
           </div>
-      </form>
-      <div class="col">
-        <form action="/profil" method="post">
-          <input type="hidden" value="1" name="loeschen">
-          <button type="submit" name="loeschen" class="btn btn-block btn-primary btn-black">Konto löschen</button>
-        </form>
-      </div>
-      </div>
+          <div class="col">
+            <button type="submit" name="speichern" value="1" class="btn btn-block btn-primary btn-black" onclick="document.getElementById('hiddendel').value=1;return false;">Konto löschen</button>
+          </div>
+        </div>
     </div>
     <div class="col">
       <div class="row">
         <div class="col center">
-          <img class="bild" src="http://via.placeholder.com/350x350" alt="img">
-        </div>
-      </div>
-      <div class="row abstandTop10">
-        <div class="col center">
-          <!--<form action="/profil" method="post">
-            <input type="file" name="datei">
-            <button type="submit" name="fotoupload" class="btn btn-primary" style="background-color:gray;">Bild uploaden</button>
-            <input type="submit" value="upload">
-          </form>-->
-          <form enctype="multipart/form-data" action="http://127.0.0.1:3000/profil" method="post">
-            <input type="file" name="uploadfile" />
-            <input type="hidden" name="token" value="{{.}}" />
-            <input type="submit" value="upload" />
-          </form>
+          <img id="profilbild" class="bild" src="http://via.placeholder.com/350x350" alt="img" onclick="previewFile()" class="festeGroesse350x350" style="max-height:350px; max-width:350px;">
+          <input id="inputProfilbild" type="file" name="uploadfile" style="display: none" onchange="loadFile()" />
         </div>
       </div>
     </div>
+    </form>
   </div>
 </div>
 
