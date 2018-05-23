@@ -1,0 +1,9 @@
+- TEMPLATES: set correct size for all images
+- CART TEMPLATE: "Jetzt ausleihen" - button a bit higher
+- ADMIN/EQUIPMENT TEMPLATE: link to edit equipment is wrong, put /admin/add or #
+- ADMIN/ADD: revise like /profil
+- ADMIN/EDIT-CLIENT: revise like /profil
+- ADMIN/EQUIPMENT: put "delete" - button in a form and submit data
+- CART: put "delete" - button in a form and submit data
+- CART: put "number" of items in a form and submit data
+- EQUIPMENT: put searchbar and sortbar in a form and submit data
