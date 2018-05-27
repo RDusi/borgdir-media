@@ -62,8 +62,12 @@
       Rückgabe: <br> <span class="borgdir-color">{{.Rueckgabe}}</span>
     </div>
     <div class="col-1 verl">
-      <a href="/admin/edit-client"><i class="fas fa-pencil-alt iconspez"></i></a>
-      <a href="#" style="margin-left: 3px"><i class="far fa-trash-alt iconspez"></i></a>
+      <form action="/admin/equipment" method="post">
+        <div class=row>
+          <button name="edit" value="2" class="btn-icon"><i class="fas fa-pencil-alt iconspez" ></i></button>
+          <button name="loeschen" value="1" class="btn-icon"><i class="far fa-trash-alt iconspez " ></i></button>
+        </div>
+      </form>
     </div>
   </div>
   {{end}}

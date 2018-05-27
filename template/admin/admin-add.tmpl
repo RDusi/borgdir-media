@@ -6,7 +6,7 @@
       <h3 style="font-weight: bold ">Equipment hinzufügen</h3>
     </div>
   </div>
-  <form action="/admin/add" method="post">
+  <form enctype="multipart/form-data" action="/admin/add" method="post">
     <div class="row formProfil abstandGrid">
       <div class="col">
         <div class="row">
@@ -57,7 +57,7 @@
         </div>
         <div class="row abstandTop20 buttons">
           <div class="col">
-            <button type="submit" class="btn btn-block btn-primary">Speichern</button>
+            <button type="submit" name="speichern" value="2" class="btn btn-block btn-primary">Änderungen speichern</button>
           </div>
           <div class="col"></div>
         </div>
@@ -65,12 +65,8 @@
       <div class="col">
         <div class="row">
           <div class="col center">
-            <img src="http://via.placeholder.com/350x350" alt="img">
-          </div>
-        </div>
-        <div class="row abstandTop10">
-          <div class="col center">
-            <input type="file">
+            <img id="showbild" src="http://via.placeholder.com/350x350" alt="img" onclick="previewFile()" class="festeGroesse350x350">
+            <input id="inputUploadBild" type="file" name="uploadfile" style="display: none" onchange="loadFile()" />
           </div>
         </div>
       </div>

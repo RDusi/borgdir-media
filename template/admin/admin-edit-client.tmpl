@@ -7,8 +7,8 @@
       <h5>Kunden-ID: <span class="borgdir-color">{{.ID}}</span> | Status: <span class="borgdir-color">{{.ClientState}}</span></h5>
     </div>
   </div>
-  <div class="row formProfil abstandGrid">
-    <form action="/admin/edit-client" method="post">
+  <form enctype="multipart/form-data" action="/admin/edit-client" method="post">
+    <div class="row formProfil abstandGrid">
       <div class="col">
         <div class="row">
           <div class="form-group col">
@@ -19,7 +19,7 @@
         <div class="row">
           <div class="form-group col">
             <label for="Email">E-Mail Adresse:</label>
-            <input type="text" name="email" class="form-control">
+            <input type="email" name="email" class="form-control">
           </div>
         </div>
         <div class="row">
@@ -36,29 +36,23 @@
         </div>
         <div class="row abstandTop20 buttons">
           <div class="col">
-            <button type="submit" class="btn btn-block btn-primary">Änderungen speichern</button>
+            <button type="submit" name="speichern" value="2" class="btn btn-block btn-primary">Änderungen speichern</button>
           </div>
           <div class="col">
-            <form action="">
-              <button type="button" class="btn btn-block btn-primary btn-black">Konto sperren</button>
-            </form>
+            <button type="submit" name="speichern" value="1" class="btn btn-block btn-primary btn-black" onclick="document.getElementById('hiddendel').value=1;return false;">Konto sperren</button>
           </div>
         </div>
       </div>
-    </form>
-    <div class="col">
-      <div class="row">
-        <div class="col center">
-          <img class="bild" src="http://via.placeholder.com/350x350" alt="img">
-        </div>
-      </div>
-      <div class="row abstandTop10">
-        <div class="col center">
-          <input type="file">
+      <div class="col">
+        <div class="row">
+          <div class="col center">
+            <img id="showbild" class="bild" src="http://via.placeholder.com/350x350" alt="img" onclick="previewFile()" class="festeGroesse350x350" style="max-height:350px; max-width:350px;">
+            <input id="inputUploadBild" type="file" name="uploadfile" style="display: none" onchange="loadFile()" />
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </form>
 </div>
 
 {{end}}

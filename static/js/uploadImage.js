@@ -1,11 +1,11 @@
 function previewFile() {
-  var preview = document.getElementById("inputProfilbild");
+  var preview = document.getElementById("inputUploadBild");
   preview.click();
 }
 
 function loadFile() {
-  var img = document.getElementById("profilbild");
-  var preview = document.getElementById("inputProfilbild");
+  var img = document.getElementById("showbild");
+  var preview = document.getElementById("inputUploadBild");
   var file = preview.files[0];
   var reader = new FileReader();
 

@@ -40,14 +40,15 @@ func ProfilHandler(w http.ResponseWriter, r *http.Request) {
 		passwortalt := r.FormValue("passwortalt")
 		passwortneu := r.FormValue("passwortneu")
 		passwortneuwdh := r.FormValue("passwortneuwdh")
-		loeschen := r.FormValue("speichern")
+		// if speichern == 2 {speichern}, if speichern == 1 {Konto loeschen}
+		speichern := r.FormValue("speichern")
 
 		fmt.Println("Benutzername: ", benutzername)
 		fmt.Println("E-Mail: ", email)
 		fmt.Println("Passwort Alt: ", passwortalt)
 		fmt.Println("Passwort Neu: ", passwortneu)
 		fmt.Println("Passwort Neu Wdh: ", passwortneuwdh)
-		fmt.Println("Loeschen: ", loeschen)
+		fmt.Println("Loeschen: ", speichern)
 
 		file, handler, err := r.FormFile("uploadfile")
 		if err != nil {

@@ -170,3 +170,12 @@ textarea {
   max-height: 350px;
   max-width: 350px;
 }
+
+.btn-icon {
+  background-color: transparent;
+  border: 0px;
+}
+
+.btn-icon:hover {
+  transform: scale(1.05);
+}

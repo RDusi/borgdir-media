@@ -12,12 +12,13 @@ func EquipmentAdminHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("EquipmentAdminHandler")
 	fmt.Println("method:", r.Method)
 
+	t, err := template.ParseFiles("template/layout/layout.tmpl", "template/admin/header/header-admin-std.tmpl", "template/admin/admin-equipment.tmpl")
+	if err != nil {
+		fmt.Println(err)
+	}
+
 	if r.Method == "GET" {
 		// GET
-		t, err := template.ParseFiles("template/layout/layout.tmpl", "template/admin/header/header-admin-std.tmpl", "template/admin/admin-equipment.tmpl")
-		if err != nil {
-			fmt.Println(err)
-		}
 		data := equipment.EquipmentAdminListeDummy()
 		err = t.ExecuteTemplate(w, "layout", data)
 		if err != nil {
@@ -29,5 +30,16 @@ func EquipmentAdminHandler(w http.ResponseWriter, r *http.Request) {
 		// POST
 		r.ParseForm()
 		// logic part of Equipment
+		loeschen := r.FormValue("loeschen")
+		bearbeiten := r.FormValue("edit")
+
+		fmt.Println("Loeschen: ", loeschen)
+		fmt.Println("Bearbeiten: ", bearbeiten)
+
+		data := equipment.EquipmentAdminListeDummy()
+		err = t.ExecuteTemplate(w, "layout", data)
+		if err != nil {
+			fmt.Println(err)
+		}
 	}
 }
