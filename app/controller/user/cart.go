@@ -8,29 +8,10 @@ import (
 	"github.com/jhoefker/borgdir-media/app/model/equipment"
 )
 
-type Cart struct {
-	EuqipmentItem equipment.Equipment
-	Rueckgabe     string
-}
-
-type CartData struct {
+type CartPageData struct {
 	Benutzername   string
-	BenutzerStatus string
-	Items          []Cart
-}
-
-func renderCartData() CartData {
-	cartdata := CartData{
-		Benutzername:   "Erica Mustermann",
-		BenutzerStatus: "Benutzer",
-		Items: []Cart{
-			{EuqipmentItem: equipment.MyEquipmentListeDummy().Items[0].EuqipmentItem, Rueckgabe: equipment.MyEquipmentListeDummy().Items[0].Rueckgabe},
-			{EuqipmentItem: equipment.MyEquipmentListeDummy().Items[1].EuqipmentItem, Rueckgabe: equipment.MyEquipmentListeDummy().Items[0].Rueckgabe},
-			{EuqipmentItem: equipment.MyEquipmentListeDummy().Items[2].EuqipmentItem, Rueckgabe: equipment.MyEquipmentListeDummy().Items[0].Rueckgabe},
-			{EuqipmentItem: equipment.MyEquipmentListeDummy().Items[3].EuqipmentItem, Rueckgabe: equipment.MyEquipmentListeDummy().Items[0].Rueckgabe},
-		},
-	}
-	return cartdata
+	BenutzerTyp    string
+	Ausleihvorgang []equipment.Equipment //noch aendern
 }
 
 func CartHandler(w http.ResponseWriter, r *http.Request) {
@@ -43,7 +24,14 @@ func CartHandler(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			fmt.Println(err)
 		}
-		data := renderCartData()
+
+		currentBenutzerName := "Peter Dieter"
+		currentBenutzerTyp := "Benutzer"
+		data := CartPageData{
+			Benutzername:   currentBenutzerName,
+			BenutzerTyp:    currentBenutzerTyp,
+			Ausleihvorgang: []equipment.Equipment{},
+		}
 		err = t.ExecuteTemplate(w, "layout", data)
 		if err != nil {
 			fmt.Println(err)

@@ -8,6 +8,13 @@ import (
 	"github.com/jhoefker/borgdir-media/app/model/equipment"
 )
 
+type MyEquipmentPageData struct {
+	Benutzername string
+	BenutzerTyp  string
+	MeineGeraete []equipment.Equipment //noch aendern
+	Vorgemerkte  []equipment.Equipment //noch aendern
+}
+
 func MyEquipmentHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("MyEquipmentHandler")
 	fmt.Println("method:", r.Method)
@@ -19,7 +26,15 @@ func MyEquipmentHandler(w http.ResponseWriter, r *http.Request) {
 			fmt.Println(err)
 		}
 
-		data := equipment.MyEquipmentListeDummy()
+		currentBenutzerName := "Peter Dieter"
+		currentBenutzerTyp := "Benutzer"
+		meineGeraeteListe, _ := equipment.GetAll() // noch aendern zu DB
+		data := MyEquipmentPageData{
+			Benutzername: currentBenutzerName,
+			BenutzerTyp:  currentBenutzerTyp,
+			MeineGeraete: meineGeraeteListe,
+			Vorgemerkte:  []equipment.Equipment{},
+		}
 		err = t.ExecuteTemplate(w, "layout", data)
 		if err != nil {
 			fmt.Println(err)

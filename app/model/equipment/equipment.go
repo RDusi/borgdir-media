@@ -1,30 +1,80 @@
 package equipment
 
+import (
+	"database/sql"
+
+	_ "github.com/mattn/go-sqlite3"
+)
+
 type Equipment struct {
-	ID     int
-	Name   string
-	Inhalt string
-	Anzahl int
-	Status int
-	Bild   string
+	ID          int
+	Bezeichnung string
+	Kategorie   string
+	InventarNr  string
+	Lagerort    string
+	Inhalt      string
+	Anzahl      int
+	Hinweise    string
+	Bild        string
 }
 
-type EquipmentData struct {
-	Items          []Equipment
-	Benutzername   string
-	BenutzerStatus string
-}
+// Db handle
+var Db *sql.DB
 
-func EuqipmentListeDummy() EquipmentData {
-	liste := EquipmentData{
-		Benutzername:   "Erica Mustermann",
-		BenutzerStatus: "Benutzer",
-		Items: []Equipment{
-			{ID: 1, Name: "Kamera 1", Inhalt: "Beschreibung", Anzahl: 123, Status: 2, Bild: "../../../static/images/kamera1_150x150.jpg"},
-			{ID: 2, Name: "Stativ 1", Inhalt: "Beschreibung", Anzahl: 10, Status: 2, Bild: "../../../static/images/stativ1_150x150.jpg"},
-			{ID: 3, Name: "Mikro 1", Inhalt: "Beschreibung", Anzahl: 200, Status: 2, Bild: "../../../static/images/mikro1_150x150.jpg"},
-			{ID: 4, Name: "Objektiv 1", Inhalt: "Beschreibung", Anzahl: 200, Status: 2, Bild: "../../../static/images/objektiv1_150x150.jpg"},
-		},
+func init() {
+	var err error
+	Db, err = sql.Open("sqlite3", "./data/borgdir.media.db")
+	if err != nil {
+		panic(err)
 	}
-	return liste
+}
+
+// GetAll Todo
+func GetAll() (equipments []Equipment, err error) {
+	rows, err := Db.Query("select * from equipment")
+
+	if err != nil {
+		return
+	}
+
+	for rows.Next() {
+		equipment := Equipment{}
+		err = rows.Scan(&equipment.ID, &equipment.Bezeichnung, &equipment.Kategorie, &equipment.InventarNr, &equipment.Lagerort, &equipment.Inhalt, &equipment.Anzahl, &equipment.Hinweise, &equipment.Bild)
+
+		if err != nil {
+			return
+		}
+
+		equipments = append(equipments, equipment)
+	}
+
+	rows.Close()
+	return
+}
+
+// Get Todo with the provided id
+func Get(id int) (equipment Equipment, err error) {
+	equipment = Equipment{}
+	err = Db.QueryRow("select * from equipment where id = $1", id).Scan(&equipment.ID, &equipment.Bezeichnung, &equipment.Kategorie, &equipment.InventarNr, &equipment.Lagerort, &equipment.Inhalt, &equipment.Anzahl, &equipment.Hinweise, &equipment.Bild)
+	return
+}
+
+// Add Todo
+func (equipment *Equipment) Add() (err error) {
+	statement := "insert into equipment (Bezeichnung, Kategorie, InventarNr, Lagerort, Inhalt, Anzahl, Hinweise, Bild) values ($1, $2, $3, $4, $5, $6, $7, $8)"
+	stmt, err := Db.Prepare(statement)
+
+	if err != nil {
+		return
+	}
+
+	defer stmt.Close()
+	_, err = stmt.Exec(equipment.Bezeichnung, equipment.Kategorie, equipment.InventarNr, equipment.Lagerort, equipment.Inhalt, equipment.Anzahl, equipment.Hinweise, equipment.Bild)
+	return
+}
+
+// Delete Todo with the provided id from the list of Todos
+func (equipment *Equipment) Delete() (err error) {
+	_, err = Db.Exec("delete from equipment where id = $1", equipment.ID)
+	return
 }

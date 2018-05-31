@@ -29,13 +29,14 @@
   </div>
 
   <div class="row equiprow abstandGrid">
-    {{range .Items}}
+    {{range .EquipmentListe}}
     <div class="col-6 equipprodukt vorgegrid">
       <div class="row">
 
         <div class="col">
-          <h5>{{.Name}}</h5>
+          <h5 style="font-weight:bold">{{.Bezeichnung}}</h5>
           <p>{{.Inhalt}}</p>
+          <small>{{.Hinweise}}</small>
         </div>
         <div class="col">
           <img src="{{.Bild}}" alt="img" class="festeGroesse150x150">

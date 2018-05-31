@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
-
-	"github.com/jhoefker/borgdir-media/app/model/clients"
 )
 
 func ClientsAdminHandler(w http.ResponseWriter, r *http.Request) {
@@ -19,8 +17,8 @@ func ClientsAdminHandler(w http.ResponseWriter, r *http.Request) {
 			fmt.Println(err)
 		}
 
-		data := clients.ClientListeDummy()
-		err = t.ExecuteTemplate(w, "layout", data)
+		//data := clients.ClientListeDummy()
+		err = t.ExecuteTemplate(w, "layout", "data")
 		if err != nil {
 			fmt.Println(err)
 		}

@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
-
-	"github.com/jhoefker/borgdir-media/app/model/profil"
 )
 
 func IndexAdminHandler(w http.ResponseWriter, r *http.Request) {
@@ -19,9 +17,9 @@ func IndexAdminHandler(w http.ResponseWriter, r *http.Request) {
 			fmt.Println(err)
 		}
 
-		data := profil.ProfilDummyDataAdmin()
+		//data := profil.ProfilDummyDataAdmin()
 
-		err = t.ExecuteTemplate(w, "layout", data)
+		err = t.ExecuteTemplate(w, "layout", "data")
 		if err != nil {
 			fmt.Println(err)
 		}

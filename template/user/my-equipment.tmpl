@@ -26,32 +26,34 @@
   <div>
     <hr>
   </div>
-  {{range .Items}}
+  {{range .MeineGeraete}}
   <div class="row myequip">
     <div class="col-4 equip">
       <div class="row">
         <div class="col">
-          <img src="{{.EuqipmentItem.Bild}}" alt="img" class="festeGroesse150x150">
+          <img src="{{.Bild}}" alt="img" class="festeGroesse150x150">
         </div>
         <div class="col">
-          <h5>{{.EuqipmentItem.Name}}</h5>
-          <small>ID: {{.EuqipmentItem.ID}}</small>
+          <h5>{{.Bezeichnung}}</h5>
+          <small>Inv_Nr: {{.InventarNr}}</small>
         </div>
       </div>
     </div>
     <div class="col-3 beschreibung">
-      <p>{{.EuqipmentItem.Inhalt}}</p>
+      <p>{{.Inhalt}}</p>
     </div>
     <div class="col-2 entlam">
-      {{.Entliehen}}
+      Platzhalter
     </div>
     <div class="col-2 rueckgbis borgdir-color">
-      {{.Rueckgabe}}
+      Platzhalter
     </div>
     <div class="col-1 verl">
       <a href="#"><i class="fas fa-sync-alt iconspez"></i></a>
     </div>
   </div>
+  {{else}}
+  <div style="color:gray; font-size:35px">Keine Artikel derzeitig ausgeliehen</div>
   {{end}}
   <div class="container vorgegrid">
     <div class="row headline">
@@ -76,29 +78,31 @@
     <div>
       <hr>
     </div>
-    {{range .Items}}
+    {{range .Vorgemerkte}}
     <div class="row myequip">
       <div class="col-4 equip">
         <div class="row">
           <div class="col">
-            <img src="{{.EuqipmentItem.Bild}}" alt="img">
+            <img src="{{.Bild}}" alt="img">
           </div>
           <div class="col">
-            <h5>{{.EuqipmentItem.Name}}</h5>
-            <small>ID: {{.EuqipmentItem.ID}}</small>
+            <h5>{{.Bezeichnung}}</h5>
+            <small>Inv_Nr: {{.InventarNr}}</small>
           </div>
         </div>
       </div>
       <div class="col-3 beschreibung">
-        <p>{{.EuqipmentItem.Inhalt}}</p>
+        <p>{{.Inhalt}}</p>
       </div>
       <div class="col-4 rueckgbis borgdir-color">
-        {{.Rueckgabe}}
+        Platzhalter
       </div>
       <div class="col-1 verl">
         <a href="#"><i class="far fa-trash-alt iconspez"></i></a>
       </div>
     </div>
+    {{else}}
+    <div style="color:gray; font-size:35px">Keine Artikel derzeitig Vorgemerkt</div>
     {{end}}
   </div>
 

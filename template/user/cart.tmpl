@@ -26,7 +26,7 @@
   <div>
     <hr>
   </div>
-  {{range .Items}}
+  {{range .Ausleihvorgang}}
   <div class="row cartgrid abstandGrid">
     <div class="col-4 cartprod">
       <div class="row">
@@ -34,13 +34,13 @@
           <img src="{{.EuqipmentItem.Bild}}" alt="img" class="festeGroesse150x150">
         </div>
         <div class="col">
-          <h5>{{.EuqipmentItem.Name}}</h5>
-          <small>ID: {{.EuqipmentItem.ID}}</small>
+          <h5>Noch zu fuellen</h5>
+          <small>ID: Noch zu fuellen</small>
         </div>
       </div>
     </div>
     <div class="col-3 beschreibung">
-      <p>{{.EuqipmentItem.Inhalt}}</p>
+      <p>Noch zu fuellen</p>
     </div>
     <div class="col-2 anzahl">
       <select name=" " id="">
@@ -52,18 +52,19 @@
       </select>
     </div>
     <div class="col-2 rueckgbis borgdir-color">
-      {{.Rueckgabe}}
+      Noch zu fuellen
     </div>
     <div class="col-1 verl">
       <a href="#"><i class="far fa-trash-alt iconspez"></i></a>
     </div>
   </div>
-  {{end}}
   <div class="row ausleihbtn">
     <div class="col" style="display:flex; justify-content:flex-end">
       <button type="button" class="btn btn-primary">Jetzt Ausleihen</button>
     </div>
   </div>
+  {{else}}
+  <div style="color:gray; font-size:35px">Nichts im Warenkorb</div> {{end}}
 </div>
 
 {{end}}

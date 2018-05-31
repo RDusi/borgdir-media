@@ -19,7 +19,7 @@ func EquipmentAdminHandler(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method == "GET" {
 		// GET
-		data := equipment.EquipmentAdminListeDummy()
+		data, err := equipment.GetAll()
 		err = t.ExecuteTemplate(w, "layout", data)
 		if err != nil {
 			fmt.Println(err)
@@ -36,7 +36,7 @@ func EquipmentAdminHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Loeschen: ", loeschen)
 		fmt.Println("Bearbeiten: ", bearbeiten)
 
-		data := equipment.EquipmentAdminListeDummy()
+		data, err := equipment.GetAll()
 		err = t.ExecuteTemplate(w, "layout", data)
 		if err != nil {
 			fmt.Println(err)

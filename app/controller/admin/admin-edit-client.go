@@ -6,8 +6,6 @@ import (
 	"io"
 	"net/http"
 	"os"
-
-	"github.com/jhoefker/borgdir-media/app/model/clients"
 )
 
 func EditClientAdminHandler(w http.ResponseWriter, r *http.Request) {
@@ -21,8 +19,8 @@ func EditClientAdminHandler(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method == "GET" {
 		// GET
-		data := clients.CreateClientDummy()
-		err = t.ExecuteTemplate(w, "layout", data)
+		//	data := clients.CreateClientDummy()
+		err = t.ExecuteTemplate(w, "layout", "data")
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -54,8 +52,8 @@ func EditClientAdminHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		defer file.Close()
 		fmt.Println("Bild wurde hochgeladen: ", handler.Filename)
-		data := clients.CreateClientDummy()
-		err = t.ExecuteTemplate(w, "layout", data)
+		//data := clients.CreateClientDummy()
+		err = t.ExecuteTemplate(w, "layout", "data")
 		f, err := os.OpenFile("./static/images/upload/"+handler.Filename, os.O_WRONLY|os.O_CREATE, 0666)
 		if err != nil {
 			fmt.Println(err)

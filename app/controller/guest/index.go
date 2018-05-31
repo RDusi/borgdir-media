@@ -14,10 +14,10 @@ type SliderData struct {
 }
 
 func renderSliderBilder() SliderData {
-	liste := equipment.EuqipmentListeDummy()
+	liste, _ := equipment.GetAll()
 	startdata := SliderData{
-		EquipmentListe: liste.Items[1:],
-		Startbild:      liste.Items[0].Bild,
+		EquipmentListe: liste[1:],
+		Startbild:      liste[0].Bild,
 	}
 	return startdata
 }
