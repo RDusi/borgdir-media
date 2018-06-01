@@ -6,7 +6,15 @@ import (
 	"io"
 	"net/http"
 	"os"
+
+	"github.com/jhoefker/borgdir-media/app/model/benutzer"
 )
+
+type AdminEditClientPageData struct {
+	Benutzername string
+	BenutzerTyp  string
+	UserData     benutzer.User
+}
 
 func EditClientAdminHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("ProfilHandler")
@@ -17,10 +25,18 @@ func EditClientAdminHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 	}
 
+	currentBenutzerName := "Peter Dieter"
+	currentBenutzerTyp := "Benutzer"
+	currentUser, _ := benutzer.Get(1)
+
 	if r.Method == "GET" {
 		// GET
-		//	data := clients.CreateClientDummy()
-		err = t.ExecuteTemplate(w, "layout", "data")
+		data := AdminEditClientPageData{
+			Benutzername: currentBenutzerName,
+			BenutzerTyp:  currentBenutzerTyp,
+			UserData:     currentUser,
+		}
+		err = t.ExecuteTemplate(w, "layout", data)
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -34,26 +50,35 @@ func EditClientAdminHandler(w http.ResponseWriter, r *http.Request) {
 
 		benutzername := r.FormValue("benutzername")
 		email := r.FormValue("email")
-		passwortneu := r.FormValue("passwortneu")
-		passwortneuwdh := r.FormValue("passwortneuwdh")
-		// if speichern == 2 {speichern}, if speichern == 1 {Konto sperren}
-		speichern := r.FormValue("speichern")
-
-		fmt.Println("Benutzername: ", benutzername)
-		fmt.Println("E-Mail: ", email)
-		fmt.Println("Passwort Neu: ", passwortneu)
-		fmt.Println("Passwort Neu Wdh: ", passwortneuwdh)
-		fmt.Println("Konto sperren: ", speichern)
-
 		file, handler, err := r.FormFile("uploadfile")
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
+		bild := "../../../static/images/" + handler.Filename
+
+		var passwort string
+		if r.FormValue("passwortneu") == r.FormValue("passwortneuwdh") {
+			fmt.Println("gleiches Passwort wurde eingegeben")
+			passwort = r.FormValue("passwortneu")
+		}
+
+		user := benutzer.User{ID: currentUser.ID, Benutzername: benutzername, Email: email, Passwort: passwort, Bild: bild}
+		if r.FormValue("speichern") == "1" {
+			fmt.Println("Konto sperren")
+		}
+
+		if r.FormValue("speichern") == "2" {
+			user.Update()
+			fmt.Println("User wurde geupdated")
+		}
 		defer file.Close()
 		fmt.Println("Bild wurde hochgeladen: ", handler.Filename)
-		//data := clients.CreateClientDummy()
-		err = t.ExecuteTemplate(w, "layout", "data")
+		data := AdminEditClientPageData{
+			Benutzername: currentBenutzerName,
+			BenutzerTyp:  currentBenutzerTyp,
+		}
+		err = t.ExecuteTemplate(w, "layout", data)
 		f, err := os.OpenFile("./static/images/upload/"+handler.Filename, os.O_WRONLY|os.O_CREATE, 0666)
 		if err != nil {
 			fmt.Println(err)

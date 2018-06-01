@@ -35,7 +35,7 @@
   <div>
     <hr>
   </div>
-  {{range .Clients}}
+  {{range .UserListe}}
   <div class="row cartgrid abstandGrid">
     <div class="col-4 cartprod">
       <div class="row">
@@ -43,23 +43,25 @@
           <img src="{{.Bild}}" alt="img" class="festeGroesse150x150">
         </div>
         <div class="col">
-          <h5 style="font-weight:bold">{{.ClientName}}</h5>
+          <h5 style="font-weight:bold">{{.Benutzername}}</h5>
           <small>ID: {{.ID}}</small>
           <br>
-          <small class="borgdir-color">{{.ClientState}}</small>
+          <small class="borgdir-color">{{.BenutzerTyp}}</small>
         </div>
       </div>
     </div>
     <div class="col-5 beschreibung">
-      <p>{{.Equipment}}</p>
+      <p>Platzhalter</p>
     </div>
     <div class="col-2 entl">
-      Konto aktiv bis: <br> <span class="borgdir-color">{{.ActiveUntil}}</span>
+      Konto aktiv bis: <br> <span class="borgdir-color">{{.AktivBis}}</span>
     </div>
     <div class="col-1 button">
       <a href="/admin/edit-client"><i class="fas fa-pencil-alt iconspez"></i></a>
     </div>
   </div>
+  {{else}}
+  <div style="color:gray; font-size:35px">Keine Benutzer vorhanden</div>
   {{end}}
 </div>
 

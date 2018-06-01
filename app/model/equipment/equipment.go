@@ -29,7 +29,7 @@ func init() {
 	}
 }
 
-// GetAll Todo
+// GetAll Equipment
 func GetAll() (equipments []Equipment, err error) {
 	rows, err := Db.Query("select * from equipment")
 

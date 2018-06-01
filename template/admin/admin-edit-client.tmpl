@@ -4,7 +4,7 @@
   <div class="row headline">
     <div class="col">
       <h3 style="font-weight: bold ">Profil bearbeiten</h3>
-      <h5>Kunden-ID: <span class="borgdir-color">{{.ID}}</span> | Status: <span class="borgdir-color">{{.ClientState}}</span></h5>
+      <h5>Kunden-ID: <span class="borgdir-color">{{.UserData.ID}}</span> | Status: <span class="borgdir-color">{{.BenutzerTyp}}</span></h5>
     </div>
   </div>
   <form enctype="multipart/form-data" action="/admin/edit-client" method="post">
@@ -13,13 +13,13 @@
         <div class="row">
           <div class="form-group col">
             <label for="Benutzername">Benutzername:</label>
-            <input type="text" name="benutzername" class="form-control">
+            <input type="text" name="benutzername" class="form-control" value="{{.UserData.Benutzername}}">
           </div>
         </div>
         <div class="row">
           <div class="form-group col">
             <label for="Email">E-Mail Adresse:</label>
-            <input type="email" name="email" class="form-control">
+            <input type="email" name="email" class="form-control" value="{{.UserData.Email}}">
           </div>
         </div>
         <div class="row">
@@ -46,7 +46,7 @@
       <div class="col">
         <div class="row">
           <div class="col center">
-            <img id="showbild" class="bild" src="http://via.placeholder.com/350x350" alt="img" onclick="previewFile()" class="festeGroesse350x350" style="max-height:350px; max-width:350px;">
+            <img id="showbild" class="bild" src="{{.UserData.Bild}}" alt="img" onclick="previewFile()" class="festeGroesse350x350" style="max-height:350px; max-width:350px;">
             <input id="inputUploadBild" type="file" name="uploadfile" style="display: none" onchange="loadFile()" />
           </div>
         </div>

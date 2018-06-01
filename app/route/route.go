@@ -19,6 +19,7 @@ func MapToController() {
 	http.HandleFunc("/profil", user.ProfilHandler)
 	http.HandleFunc("/admin/", admin.IndexAdminHandler)
 	http.HandleFunc("/admin/equipment", admin.EquipmentAdminHandler)
+	http.HandleFunc("/delete-equip", admin.DeleteEquipment)
 	http.HandleFunc("/admin/add", admin.AddAdminHandler)
 	http.HandleFunc("/admin/clients", admin.ClientsAdminHandler)
 	http.HandleFunc("/admin/edit-client", admin.EditClientAdminHandler)

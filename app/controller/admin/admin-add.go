@@ -24,11 +24,10 @@ func AddAdminHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Println(err)
 	}
-
+	currentBenutzerName := "Peter Meier"
+	currentBenutzerTyp := "Verleiher"
 	if r.Method == "GET" {
 		// GET
-		currentBenutzerName := "Peter Meier"
-		currentBenutzerTyp := "Verleiher"
 		data := AdminAddPageData{
 			Benutzername: currentBenutzerName,
 			BenutzerTyp:  currentBenutzerTyp,
@@ -52,30 +51,21 @@ func AddAdminHandler(w http.ResponseWriter, r *http.Request) {
 		inhalt := r.FormValue("inhalt")
 		anzahl, _ := strconv.Atoi(r.FormValue("anzahl"))
 		hinweise := r.FormValue("hinweise")
-
-		fmt.Println("Bezeichnung: ", bezeichnung)
-		fmt.Println("Kategorie: ", kategorie)
-		fmt.Println("Inventar-Nummer: ", invnr)
-		fmt.Println("Lagerort: ", lagerort)
-		fmt.Println("Inhalt: ", inhalt)
-		fmt.Println("Anzahl:", anzahl)
-		fmt.Println("Hinweise:", hinweise)
-
 		file, handler, err := r.FormFile("uploadfile")
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
+		bild := "../../../static/images/" + handler.Filename
 
+		equipment := equipment.Equipment{Bezeichnung: bezeichnung, Kategorie: kategorie, InventarNr: invnr, Lagerort: lagerort, Inhalt: inhalt, Anzahl: anzahl, Hinweise: hinweise, Bild: bild}
+		fmt.Println(equipment)
 		defer file.Close()
 		fmt.Println("Bild wurde hochgeladen: ", handler.Filename)
+
 		if r.FormValue("speichern") == "2" {
-			equipment := equipment.Equipment{Bezeichnung: bezeichnung, Kategorie: kategorie, InventarNr: invnr, Lagerort: lagerort, Inhalt: inhalt, Anzahl: anzahl, Hinweise: hinweise, Bild: "../../../static/images/" + handler.Filename + ".jpg"}
-			fmt.Println(equipment)
-			fmt.Println("Neues Equipment wurde hinzugefuegt")
+			equipment.Add()
 		}
-		currentBenutzerName := "Peter Meier"
-		currentBenutzerTyp := "Verleiher"
 		data := AdminAddPageData{
 			Benutzername: currentBenutzerName,
 			BenutzerTyp:  currentBenutzerTyp,
