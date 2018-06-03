@@ -1,6 +1,10 @@
 package benutzer
 
-import "database/sql"
+import (
+	"database/sql"
+
+	_ "github.com/mattn/go-sqlite3"
+)
 
 type User struct {
 	ID           int

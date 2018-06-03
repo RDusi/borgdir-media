@@ -179,3 +179,7 @@ textarea {
 .btn-icon:hover {
   transform: scale(1.05);
 }
+
+.sperren:hover {
+  background-color: white;
+}

@@ -4,7 +4,7 @@
   <div class="row headline">
     <div class="col">
       <h3 style="font-weight: bold ">Profil bearbeiten</h3>
-      <h5>Kunden-ID: <span class="borgdir-color">{{.UserData.ID}}</span> | Status: <span class="borgdir-color">{{.BenutzerTyp}}</span></h5>
+      <h5>Kunden-ID: <span class="borgdir-color">{{.UserData.ID}}</span> | Status/Aktiv bis: <span class="borgdir-color">{{.UserData.AktivBis}}</span></h5>
     </div>
   </div>
   <form enctype="multipart/form-data" action="/admin/edit-client" method="post">
@@ -39,7 +39,10 @@
             <button type="submit" name="speichern" value="2" class="btn btn-block btn-primary">Änderungen speichern</button>
           </div>
           <div class="col">
-            <button type="submit" name="speichern" value="1" class="btn btn-block btn-primary btn-black" onclick="document.getElementById('hiddendel').value=1;return false;">Konto sperren</button>
+            <div style="background-color: black;padding: 5px 10px 5px 10px; text-align: center; border-radius:50px;" class="sperren">
+              <a href="/admin/konto-sperren?id={{.UserData.ID}}" style="text-decoration: none; color:white;">Konto sperren</a>
+            </div>
+
           </div>
         </div>
       </div>
@@ -51,8 +54,9 @@
           </div>
         </div>
       </div>
-    </div>
   </form>
+  </div>
+
 </div>
 
 {{end}}

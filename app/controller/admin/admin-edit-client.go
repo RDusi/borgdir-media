@@ -6,6 +6,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"strconv"
 
 	"github.com/jhoefker/borgdir-media/app/model/benutzer"
 )
@@ -16,18 +17,25 @@ type AdminEditClientPageData struct {
 	UserData     benutzer.User
 }
 
+var tmpl *template.Template
+var err error
+
+// Is executed automatically on package load
+func init() {
+	tmpl, err = template.ParseFiles("template/layout/layout.tmpl", "template/admin/header/header-admin-std.tmpl", "template/admin/admin-edit-client.tmpl")
+	if err != nil {
+		fmt.Println(err)
+	}
+}
+
 func EditClientAdminHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("ProfilHandler")
 	fmt.Println("method:", r.Method)
 
-	t, err := template.ParseFiles("template/layout/layout.tmpl", "template/admin/header/header-admin-std.tmpl", "template/admin/admin-edit-client.tmpl")
-	if err != nil {
-		fmt.Println(err)
-	}
-
+	id, _ := strconv.Atoi(r.FormValue("id"))
 	currentBenutzerName := "Peter Dieter"
 	currentBenutzerTyp := "Benutzer"
-	currentUser, _ := benutzer.Get(1)
+	currentUser, _ := benutzer.Get(id)
 
 	if r.Method == "GET" {
 		// GET
@@ -36,7 +44,7 @@ func EditClientAdminHandler(w http.ResponseWriter, r *http.Request) {
 			BenutzerTyp:  currentBenutzerTyp,
 			UserData:     currentUser,
 		}
-		err = t.ExecuteTemplate(w, "layout", data)
+		err = tmpl.ExecuteTemplate(w, "layout", data)
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -64,21 +72,21 @@ func EditClientAdminHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		user := benutzer.User{ID: currentUser.ID, Benutzername: benutzername, Email: email, Passwort: passwort, Bild: bild}
-		if r.FormValue("speichern") == "1" {
-			fmt.Println("Konto sperren")
-		}
-
+		fmt.Println(user)
+		defer file.Close()
 		if r.FormValue("speichern") == "2" {
 			user.Update()
 			fmt.Println("User wurde geupdated")
+			fmt.Println("Bild wurde hochgeladen: ", handler.Filename)
+			currentUserBearb, _ := benutzer.Get(2)
+			data := AdminEditClientPageData{
+				Benutzername: currentBenutzerName,
+				BenutzerTyp:  currentBenutzerTyp,
+				UserData:     currentUserBearb,
+			}
+			err = tmpl.ExecuteTemplate(w, "layout", data)
 		}
-		defer file.Close()
-		fmt.Println("Bild wurde hochgeladen: ", handler.Filename)
-		data := AdminEditClientPageData{
-			Benutzername: currentBenutzerName,
-			BenutzerTyp:  currentBenutzerTyp,
-		}
-		err = t.ExecuteTemplate(w, "layout", data)
+
 		f, err := os.OpenFile("./static/images/upload/"+handler.Filename, os.O_WRONLY|os.O_CREATE, 0666)
 		if err != nil {
 			fmt.Println(err)
@@ -86,5 +94,25 @@ func EditClientAdminHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		defer f.Close()
 		io.Copy(f, file)
+	}
+}
+
+func BlockUser(w http.ResponseWriter, r *http.Request) {
+	id, _ := strconv.Atoi(r.FormValue("id"))
+	currentUserbearb, _ := benutzer.Get(id)
+	currentUserbearb.Sperren()
+	fmt.Println("Konto mit ID " + strconv.Itoa(id) + " wurde gesperrt")
+
+	currentBenutzerName := "Peter Dieter"
+	currentBenutzerTyp := "Benutzer"
+	currentUser, _ := benutzer.Get(id)
+	data := AdminEditClientPageData{
+		Benutzername: currentBenutzerName,
+		BenutzerTyp:  currentBenutzerTyp,
+		UserData:     currentUser,
+	}
+	err = tmpl.ExecuteTemplate(w, "layout", data)
+	if err != nil {
+		fmt.Println(err)
 	}
 }

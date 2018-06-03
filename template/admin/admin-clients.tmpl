@@ -10,10 +10,8 @@
       <div><input type="text " placeholder="Suche ">
         <select name=" " id="kategorie ">
         <option selected>Alle</option>
-        <option value="1 ">Kameras</option>
-        <option value="2 ">Objektive</option>
-        <option value="3 ">Mikrofone</option>
-        <option value="4 ">Stative</option>
+        <option value="Benutzer">Benutzer</option>
+        <option value="Verleiher">Verleiher</option>
       </select></div>
 
     </div>
@@ -57,7 +55,7 @@
       Konto aktiv bis: <br> <span class="borgdir-color">{{.AktivBis}}</span>
     </div>
     <div class="col-1 button">
-      <a href="/admin/edit-client"><i class="fas fa-pencil-alt iconspez"></i></a>
+      <a href="/admin/edit-client?id={{.ID}}"><i class="fas fa-pencil-alt iconspez"></i></a>
     </div>
   </div>
   {{else}}
