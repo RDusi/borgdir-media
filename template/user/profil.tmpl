@@ -4,7 +4,7 @@
   <div class="row headline">
     <div class="col">
       <h3 style="font-weight: bold ">Profil bearbeiten</h3>
-      <h5>Status: <span class="borgdir-color">{{.BenutzerTyp}}</span></h5>
+      <h5>Status: <span class="borgdir-color">{{.UserData.BenutzerTyp}}</span></h5>
     </div>
   </div>
   <div class="row formProfil abstandGrid">
@@ -13,19 +13,19 @@
         <div class="row">
           <div class="form-group col">
             <label for="Benutzername">Benutzername:</label>
-            <input type="text" name="benutzername" class="form-control">
+            <input type="text" name="benutzername" class="form-control" value="{{.UserData.Benutzername}}">
           </div>
         </div>
         <div class="row">
           <div class="form-group col">
             <label for="Email">E-Mail Adresse:</label>
-            <input type="text" name="email" class="form-control">
+            <input type="text" name="email" class="form-control" value="{{.UserData.Email}}">
           </div>
         </div>
         <div class="row">
           <div class="form-group col">
             <label for="altPasswort">Altes Passwort:</label>
-            <input type="password" name="passwortalt" class="form-control">
+            <input type="password" name="passwortalt" class="form-control" value="{{.UserData.Passwort}}">
           </div>
         </div>
         <div class="row">
@@ -42,10 +42,12 @@
         </div>
         <div class="row abstandTop20 buttons">
           <div class="col">
-            <button type="submit" name="speichern" value="2" class="btn btn-block btn-primary">Änderungen speichern</button>
+            <button type="submit" name="speichern" value="{{.UserData.ID}}" class="btn btn-block btn-primary">Änderungen speichern</button>
           </div>
           <div class="col">
-            <button type="submit" name="speichern" value="1" class="btn btn-block btn-primary btn-black" onclick="document.getElementById('hiddendel').value=1;return false;">Konto löschen</button>
+            <div style="background-color: black;padding: 5px 10px 5px 10px; text-align: center; border-radius:50px;" class="sperren">
+              <a href="/konto-loeschen?id={{.UserData.ID}}" style="text-decoration: none; color:white;">Konto löschen</a>
+            </div>
           </div>
         </div>
     </div>

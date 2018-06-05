@@ -6,6 +6,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"strconv"
 
 	"github.com/jhoefker/borgdir-media/app/model/benutzer"
 )
@@ -16,18 +17,24 @@ type ProfilPageData struct {
 	UserData     benutzer.User
 }
 
+var tmpl *template.Template
+var err error
+
+// Is executed automatically on package load
+func init() {
+	tmpl, err = template.ParseFiles("template/layout/layout.tmpl", "template/user/header/header-profil.tmpl", "template/user/profil.tmpl")
+	if err != nil {
+		fmt.Println(err)
+	}
+}
+
 func ProfilHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("ProfilHandler")
 	fmt.Println("method:", r.Method)
 
-	t, err := template.ParseFiles("template/layout/layout.tmpl", "template/user/header/header-profil.tmpl", "template/user/profil.tmpl")
-	if err != nil {
-		fmt.Println(err)
-	}
-
 	currentBenutzerName := "Peter Dieter"
 	currentBenutzerTyp := "Benutzer"
-	currentUser, _ := benutzer.Get(1)
+	currentUser, _ := benutzer.Get(2)
 
 	if r.Method == "GET" {
 		// GET
@@ -36,7 +43,7 @@ func ProfilHandler(w http.ResponseWriter, r *http.Request) {
 			BenutzerTyp:  currentBenutzerTyp,
 			UserData:     currentUser,
 		}
-		err = t.ExecuteTemplate(w, "layout", data)
+		err = tmpl.ExecuteTemplate(w, "layout", data)
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -55,6 +62,7 @@ func ProfilHandler(w http.ResponseWriter, r *http.Request) {
 		passwortneu := r.FormValue("passwortneu")
 		passwortneuwdh := r.FormValue("passwortneuwdh")
 		file, handler, err := r.FormFile("uploadfile")
+		speichern, _ := strconv.Atoi(r.FormValue("speichern"))
 		if err != nil {
 			fmt.Println(err)
 			return
@@ -68,19 +76,18 @@ func ProfilHandler(w http.ResponseWriter, r *http.Request) {
 			passwort = r.FormValue("passwortneu")
 		}
 
-		if r.FormValue("speichern") == "2" {
-			user := benutzer.User{ID: currentUser.ID, Benutzername: benutzername, Email: email, Passwort: passwort, Bild: bild}
-			user.Update()
-		}
+		userNEW := benutzer.User{ID: speichern, Benutzername: benutzername, Email: email, Passwort: passwort, Bild: bild}
+		userNEW.Update()
 
 		defer file.Close()
 		fmt.Println("Bild wurde hochgeladen: ", handler.Filename)
+		currentUserBearb, _ := benutzer.Get(speichern)
 		data := ProfilPageData{
 			Benutzername: currentBenutzerName,
 			BenutzerTyp:  currentBenutzerTyp,
-			UserData:     currentUser,
+			UserData:     currentUserBearb,
 		}
-		err = t.ExecuteTemplate(w, "layout", data)
+		err = tmpl.ExecuteTemplate(w, "layout", data)
 		f, err := os.OpenFile("./static/images/upload/"+handler.Filename, os.O_WRONLY|os.O_CREATE, 0666)
 		if err != nil {
 			fmt.Println(err)
@@ -88,5 +95,21 @@ func ProfilHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		defer f.Close()
 		io.Copy(f, file)
+	}
+}
+
+func DeleteUser(w http.ResponseWriter, r *http.Request) {
+	id, _ := strconv.Atoi(r.FormValue("id"))
+	currentUserbearb, _ := benutzer.Get(id)
+	currentUserbearb.Delete()
+	fmt.Println("Konto mit ID " + strconv.Itoa(id) + " wurde gelöscht")
+	tmpl, err := template.ParseFiles("template/layout/layout.tmpl", "template/user/header/header-profil.tmpl", "template/user/profil-delete.tmpl")
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	err = tmpl.ExecuteTemplate(w, "layout", "data")
+	if err != nil {
+		fmt.Println(err)
 	}
 }

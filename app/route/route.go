@@ -17,6 +17,7 @@ func MapToController() {
 	http.HandleFunc("/cart", user.CartHandler)
 	http.HandleFunc("/my-equipment", user.MyEquipmentHandler)
 	http.HandleFunc("/profil", user.ProfilHandler)
+	http.HandleFunc("/konto-loeschen", user.DeleteUser)
 	http.HandleFunc("/admin/", admin.IndexAdminHandler)
 	http.HandleFunc("/admin/equipment", admin.EquipmentAdminHandler)
 	http.HandleFunc("/delete-equip", admin.DeleteEquipment)
@@ -24,4 +25,5 @@ func MapToController() {
 	http.HandleFunc("/admin/clients", admin.ClientsAdminHandler)
 	http.HandleFunc("/admin/edit-client", admin.EditClientAdminHandler)
 	http.HandleFunc("/admin/konto-sperren", admin.BlockUser)
+	http.HandleFunc("/admin/konto-entsperren", admin.DeblockUser)
 }

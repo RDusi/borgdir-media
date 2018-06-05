@@ -78,3 +78,16 @@ func (equipment *Equipment) Delete() (err error) {
 	_, err = Db.Exec("delete from equipment where id = $1", equipment.ID)
 	return
 }
+
+func (equipment *Equipment) Update() (err error) {
+	statement := "update equipment set Bezeichnung = ?, Kategorie= ?, InventarNr= ?, Lagerort= ?, Inhalt= ?, Anzahl= ?, Hinweise= ?, Bild= ? where id = ?"
+	stmt, err := Db.Prepare(statement)
+
+	if err != nil {
+		return
+	}
+
+	defer stmt.Close()
+	_, err = stmt.Exec(equipment.Bezeichnung, equipment.Kategorie, equipment.InventarNr, equipment.Lagerort, equipment.Inhalt, equipment.Anzahl, equipment.Hinweise, equipment.Bild, equipment.ID)
+	return
+}

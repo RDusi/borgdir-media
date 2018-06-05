@@ -72,12 +72,25 @@ func (user *User) Add() (err error) {
 }
 
 func (user *User) Update() (err error) {
-	_, err = Db.Exec("update User set Benutzername = $2, Email = $3, Passwort = $4, Bild = $5 where id = $1", user.ID, user.Benutzername, user.Email, user.Passwort, user.Bild)
+	statement := "update User set Benutzername = ?, Email= ?, Passwort= ?, BenutzerTyp= ?, AktivBis= ?, Bild= ? where id = ?"
+	stmt, err := Db.Prepare(statement)
+
+	if err != nil {
+		return
+	}
+
+	defer stmt.Close()
+	_, err = stmt.Exec(user.Benutzername, user.Email, user.Passwort, user.BenutzerTyp, user.AktivBis, user.Bild, user.ID)
 	return
 }
 
 func (user *User) Sperren() (err error) {
 	_, err = Db.Exec("update User set AktivBis = 'gesperrt' where id = $1", user.ID)
+	return
+}
+
+func (user *User) Entsperren() (err error) {
+	_, err = Db.Exec("update User set AktivBis = 'aktiv' where id = $1", user.ID)
 	return
 }
 
