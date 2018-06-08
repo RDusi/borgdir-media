@@ -10,10 +10,10 @@ CREATE TABLE IF NOT EXISTS `Equipment` (
 	`Hinweise`	TEXT,
 	`Bild`	TEXT
 );
-INSERT INTO `equipment` VALUES (1,'Nikon D800','Kamera','14-156','Regal 5','Kamera Body + extra Akku',20,'Eine Kamera zum Fotos machen und Filmen','../../../static/images/nikon_d800.jpg');
-INSERT INTO `equipment` VALUES (2,'Canon 50mm 1.2','Objektiv','45-567','Regal 6','Objektiv',45,'scharfe Linse','../../../static/images/canon_50_12.jpg');
-INSERT INTO `equipment` VALUES (3,'Red Epic','Kamera','67-567','Regal 5','Brain + Bildschirm',3,'Filmkamera','../../../static/images/red_epic.jpg');
-INSERT INTO `equipment` VALUES (4,'Sennheiser MKE 600','Mikrofon','78-789','Regal 4','Mikrofon',5,'man kann etwas damit aufnehmen','../../../static/images/sennheiser_mke_600.jpg');
+INSERT INTO `Equipment` VALUES (1,'Nikon D800','Kamera','14-156','Regal 5','Kamera Body + extra Akku',20,'Eine Kamera zum Fotos machen und Filmen','../../../static/images/nikon_d800.jpg');
+INSERT INTO `Equipment` VALUES (2,'Canon 50mm 1.2','Objektiv','45-567','Regal 6','Objektiv',45,'scharfe Linse','../../../static/images/canon_50_12.jpg');
+INSERT INTO `Equipment` VALUES (3,'Red Epic','Kamera','67-567','Regal 5','Brain + Bildschirm',3,'Filmkamera','../../../static/images/red_epic.jpg');
+INSERT INTO `Equipment` VALUES (4,'Sennheiser MKE 600','Mikrofon','78-789','Regal 4','Mikrofon',5,'man kann etwas damit aufnehmen','../../../static/images/sennheiser_mke_600.jpg');
 CREATE TABLE IF NOT EXISTS `User` (
 	`ID`	INTEGER PRIMARY KEY AUTOINCREMENT,
 	`Benutzername`	TEXT,
@@ -28,11 +28,25 @@ INSERT INTO `User` VALUES (2,'Erica Meier','erica.meier@gmail.com','gutesPasswor
 INSERT INTO `User` VALUES (8,'Test','','','Benutzer','','../../../static/images/avatar_150x150.jpg',NULL);
 INSERT INTO `User` VALUES (9,'Meier','test@meier.de','TestPW','Benutzer','','../../../static/images/avatar_frau_150x150.jpg',NULL);
 INSERT INTO `User` VALUES (11,'Neuer Kunde','kunde@kunde.de','123','Benutzer','aktiv','../../../static/images/avatar_150x150.jpg',NULL);
-CREATE TABLE IF NOT EXISTS `Ausleihvorgang` (
+CREATE TABLE IF NOT EXISTS `Warenkorb` (
 	`ID`	INTEGER PRIMARY KEY AUTOINCREMENT,
 	`UserID`	INTEGER,
 	`EquipmentID`	INTEGER,
 	`EntleihDatum`	DATE,
+	`RueckgabeDatum`	DATE,
+  `Anzahl` INTEGER
+);
+CREATE TABLE IF NOT EXISTS `MeineGeraete` (
+	`ID`	INTEGER PRIMARY KEY AUTOINCREMENT,
+	`UserID`	INTEGER,
+	`EquipmentID`	INTEGER,
+	`EntleihDatum`	DATE,
+	`RueckgabeDatum`	DATE
+);
+CREATE TABLE IF NOT EXISTS `Vorgemerkt` (
+	`ID`	INTEGER PRIMARY KEY AUTOINCREMENT,
+	`UserID`	INTEGER,
+	`EquipmentID`	INTEGER,
 	`RueckgabeDatum`	DATE,
   `Anzahl` INTEGER
 );
