@@ -4,7 +4,10 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
+	"strconv"
+	"time"
 
+	"github.com/jhoefker/borgdir-media/app/model/cart"
 	"github.com/jhoefker/borgdir-media/app/model/equipment"
 )
 
@@ -45,4 +48,16 @@ func EquipmentHandler(w http.ResponseWriter, r *http.Request) {
 		r.ParseForm()
 		// logic part of Equipment
 	}
+}
+
+func AddToCart(w http.ResponseWriter, r *http.Request) {
+	id, _ := strconv.Atoi(r.FormValue("id"))
+	currentEquip, _ := equipment.Get(id)
+	var cartItem cart.CartItem
+	cartItem.Equipment = currentEquip
+	cartItem.EntleihDatum = time.Now()
+	cartItem.RueckgabeDatum = time.Now().AddDate(0, 2, 0)
+	cartItem.Anzahl = 1
+	cartItem.Add()
+	http.Redirect(w, r, "/equipment", 301)
 }
