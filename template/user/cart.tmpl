@@ -26,45 +26,48 @@
   <div>
     <hr>
   </div>
-  {{range .Ausleihvorgang}}
+  {{range .CartItems}}
   <div class="row cartgrid abstandGrid">
     <div class="col-4 cartprod">
       <div class="row">
         <div class="col">
-          <img src="{{.EuqipmentItem.Bild}}" alt="img" class="festeGroesse150x150">
+          <img src="{{.Equipment.Bild}}" alt="img" class="festeGroesse150x150">
         </div>
         <div class="col">
-          <h5>Noch zu fuellen</h5>
-          <small>ID: Noch zu fuellen</small>
+          <h5>{{.Equipment.Bezeichnung}}</h5>
+          <small>Inv_Nr: {{.Equipment.InventarNr}}</small>
         </div>
       </div>
     </div>
     <div class="col-3 beschreibung">
-      <p>Noch zu fuellen</p>
+      <p>{{.Equipment.Inhalt}}</p>
     </div>
     <div class="col-2 anzahl">
-      <select name=" " id="">
-      <option value="0">0</option>
-      <option value="1" selected>1</option>
+      <form action="/cart" method="post">
+        <select name="anzahl" id="{{.ID}}" onchange="this.form.submit()">
+      <option value="{{.Anzahl}}">{{.Anzahl}}</option>
+      <option value="1">1</option>
       <option value="2">2</option>
       <option value="3">3</option>
       <option value="4">4</option>
-      </select>
+
+      <input type="hidden" value="{{.ID}}" name="id">
+      </select></form>
     </div>
     <div class="col-2 rueckgbis borgdir-color">
-      Noch zu fuellen
+      {{.RueckgabeDatum}}
     </div>
     <div class="col-1 verl">
-      <a href="#"><i class="far fa-trash-alt iconspez"></i></a>
-    </div>
-  </div>
-  <div class="row ausleihbtn">
-    <div class="col" style="display:flex; justify-content:flex-end">
-      <button type="button" class="btn btn-primary">Jetzt Ausleihen</button>
+      <a href="/delete-cart-item?id={{.ID}}"><i class="far fa-trash-alt iconspez"></i></a>
     </div>
   </div>
   {{else}}
   <div style="color:gray; font-size:35px">Nichts im Warenkorb</div> {{end}}
+  <div class="row ausleihbtn">
+    <div class="col" style="display:flex; justify-content:flex-end">
+      <a href="#" role="button" class="btn btn-primary">Jetzt ausleihen</a>
+    </div>
+  </div>
 </div>
 
 {{end}}

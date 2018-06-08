@@ -31,7 +31,7 @@ func init() {
 
 // GetAll Equipment
 func GetAll() (equipments []Equipment, err error) {
-	rows, err := Db.Query("select * from equipment")
+	rows, err := Db.Query("select * from Equipment")
 
 	if err != nil {
 		return
@@ -55,13 +55,13 @@ func GetAll() (equipments []Equipment, err error) {
 // Get Todo with the provided id
 func Get(id int) (equipment Equipment, err error) {
 	equipment = Equipment{}
-	err = Db.QueryRow("select * from equipment where id = $1", id).Scan(&equipment.ID, &equipment.Bezeichnung, &equipment.Kategorie, &equipment.InventarNr, &equipment.Lagerort, &equipment.Inhalt, &equipment.Anzahl, &equipment.Hinweise, &equipment.Bild)
+	err = Db.QueryRow("select * from Equipment where id = $1", id).Scan(&equipment.ID, &equipment.Bezeichnung, &equipment.Kategorie, &equipment.InventarNr, &equipment.Lagerort, &equipment.Inhalt, &equipment.Anzahl, &equipment.Hinweise, &equipment.Bild)
 	return
 }
 
-// Add Todo
+// Add Equipment
 func (equipment *Equipment) Add() (err error) {
-	statement := "insert into equipment (Bezeichnung, Kategorie, InventarNr, Lagerort, Inhalt, Anzahl, Hinweise, Bild) values ($1, $2, $3, $4, $5, $6, $7, $8)"
+	statement := "insert into Equipment (Bezeichnung, Kategorie, InventarNr, Lagerort, Inhalt, Anzahl, Hinweise, Bild) values ($1, $2, $3, $4, $5, $6, $7, $8)"
 	stmt, err := Db.Prepare(statement)
 
 	if err != nil {
@@ -73,14 +73,13 @@ func (equipment *Equipment) Add() (err error) {
 	return
 }
 
-// Delete Todo with the provided id from the list of Todos
 func (equipment *Equipment) Delete() (err error) {
-	_, err = Db.Exec("delete from equipment where id = $1", equipment.ID)
+	_, err = Db.Exec("delete from Equipment where id = $1", equipment.ID)
 	return
 }
 
 func (equipment *Equipment) Update() (err error) {
-	statement := "update equipment set Bezeichnung = ?, Kategorie= ?, InventarNr= ?, Lagerort= ?, Inhalt= ?, Anzahl= ?, Hinweise= ?, Bild= ? where id = ?"
+	statement := "update Equipment set Bezeichnung = ?, Kategorie= ?, InventarNr= ?, Lagerort= ?, Inhalt= ?, Anzahl= ?, Hinweise= ?, Bild= ? where id = ?"
 	stmt, err := Db.Prepare(statement)
 
 	if err != nil {
