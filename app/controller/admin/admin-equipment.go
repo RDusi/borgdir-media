@@ -6,34 +6,29 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/jhoefker/borgdir-media/app/model/benutzer"
 	"github.com/jhoefker/borgdir-media/app/model/equipment"
 )
 
 type AdminEquipmentPageData struct {
-	Benutzername    string
-	BenutzerTyp     string
+	User            benutzer.User
 	EquipementListe []equipment.Equipment
 }
 
 func EquipmentAdminHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("EquipmentAdminHandler")
 	fmt.Println("method:", r.Method)
-
+	currentUser := benutzer.User{ID: 0, Benutzername: "Peter Test", BenutzerTyp: "Verleiher"}
+	var currentEquipliste []equipment.Equipment
 	t, err := template.ParseFiles("template/layout/layout.tmpl", "template/admin/header/header-admin-std.tmpl", "template/admin/admin-equipment.tmpl")
 	if err != nil {
 		fmt.Println(err)
 	}
-
-	currentBenutzerName := "Peter Dieter"
-	currentBenutzerTyp := "Benutzer"
-	currentEquipliste, _ := equipment.GetAll()
-
 	if r.Method == "GET" {
-		// GET
+		currentEquipliste, _ = equipment.GetAll()
 
 		data := AdminEquipmentPageData{
-			Benutzername:    currentBenutzerName,
-			BenutzerTyp:     currentBenutzerTyp,
+			User:            currentUser,
 			EquipementListe: currentEquipliste,
 		}
 		err = t.ExecuteTemplate(w, "layout", data)
@@ -46,45 +41,12 @@ func EquipmentAdminHandler(w http.ResponseWriter, r *http.Request) {
 		// POST
 		r.ParseForm()
 		// logic part of Equipment
-		loeschen := r.FormValue("loeschen")
-		bearbeiten := r.FormValue("edit")
-
-		fmt.Println("Loeschen: ", loeschen)
-		fmt.Println("Bearbeiten: ", bearbeiten)
-
-		data := AdminEquipmentPageData{
-			Benutzername:    currentBenutzerName,
-			BenutzerTyp:     currentBenutzerTyp,
-			EquipementListe: currentEquipliste,
-		}
-		err = t.ExecuteTemplate(w, "layout", data)
-		if err != nil {
-			fmt.Println(err)
-		}
 	}
 }
 
 func DeleteEquipment(w http.ResponseWriter, r *http.Request) {
-	t, err := template.ParseFiles("template/layout/layout.tmpl", "template/admin/header/header-admin-std.tmpl", "template/admin/admin-equipment.tmpl")
-	if err != nil {
-		fmt.Println(err)
-	}
-
 	id, _ := strconv.Atoi(r.FormValue("id"))
 	currentEquip, _ := equipment.Get(id)
 	currentEquip.Delete()
-
-	currentBenutzerName := "Peter Dieter"
-	currentBenutzerTyp := "Benutzer"
-	currentEquipliste, _ := equipment.GetAll()
-
-	data := AdminEquipmentPageData{
-		Benutzername:    currentBenutzerName,
-		BenutzerTyp:     currentBenutzerTyp,
-		EquipementListe: currentEquipliste,
-	}
-	err = t.ExecuteTemplate(w, "layout", data)
-	if err != nil {
-		fmt.Println(err)
-	}
+	http.Redirect(w, r, "/admin/equipment", 301)
 }

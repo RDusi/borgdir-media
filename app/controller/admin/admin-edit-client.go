@@ -12,9 +12,8 @@ import (
 )
 
 type AdminEditClientPageData struct {
-	Benutzername string
-	BenutzerTyp  string
-	UserData     benutzer.User
+	User     benutzer.User
+	UserData benutzer.User
 }
 
 var tmpl *template.Template
@@ -32,19 +31,15 @@ func init() {
 func EditClientAdminHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("ProfilHandler")
 	fmt.Println("method:", r.Method)
-
 	id, _ := strconv.Atoi(r.FormValue("id"))
-	currentBenutzerName := "Peter Dieter"
-	currentBenutzerTyp := "Benutzer"
-	currentUser, _ := benutzer.Get(id)
-	currentUserglob = currentUser
+	currentUser := benutzer.User{ID: 0, Benutzername: "Peter Test", BenutzerTyp: "Verleiher"}
+	currentUserEdit, _ := benutzer.Get(id)
 
 	if r.Method == "GET" {
 		// GET
 		data := AdminEditClientPageData{
-			Benutzername: currentBenutzerName,
-			BenutzerTyp:  currentBenutzerTyp,
-			UserData:     currentUser,
+			User:     currentUser,
+			UserData: currentUserglob,
 		}
 		if data.UserData.AktivBis == "gesperrt" {
 			tmpl, err = template.ParseFiles("template/layout/layout.tmpl", "template/admin/header/header-admin-std.tmpl", "template/admin/admin-edit-client-gesperrt.tmpl")
@@ -53,7 +48,7 @@ func EditClientAdminHandler(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 
-		fmt.Println("current User", currentUserglob.ID)
+		fmt.Println("current User", currentUserEdit.ID)
 		err = tmpl.ExecuteTemplate(w, "layout", data)
 		if err != nil {
 			fmt.Println(err)
@@ -62,7 +57,7 @@ func EditClientAdminHandler(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method == "POST" {
 		// POST
-		fmt.Println("current User Post", currentUserglob.ID)
+		fmt.Println("current User Post", currentUserEdit.ID)
 		r.ParseForm()
 		r.ParseMultipartForm(32 << 20)
 		// logic part of Profil
@@ -84,23 +79,13 @@ func EditClientAdminHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		defer file.Close()
-		currentBenutzerTyp = "Benutzer"
-		aktivBis := currentUser.AktivBis
-		user := benutzer.User{ID: speichern, Benutzername: benutzername, Email: email, Passwort: passwort, Bild: bild, BenutzerTyp: currentBenutzerTyp, AktivBis: aktivBis}
+		user := benutzer.User{ID: speichern, Benutzername: benutzername, Email: email, Passwort: passwort, Bild: bild, BenutzerTyp: currentUserEdit.BenutzerTyp, AktivBis: currentUserEdit.AktivBis}
 		fmt.Println(currentUser.ID)
 		fmt.Println(user)
 		fmt.Println("Speichern", r.FormValue("speichern"))
 		user.Update()
 		fmt.Println("User wurde geupdated")
 		fmt.Println("Bild wurde hochgeladen: ", handler.Filename)
-		currentUserBearb, _ := benutzer.Get(speichern)
-		data := AdminEditClientPageData{
-			Benutzername: currentBenutzerName,
-			BenutzerTyp:  currentBenutzerTyp,
-			UserData:     currentUserBearb,
-		}
-		err = tmpl.ExecuteTemplate(w, "layout", data)
-
 		f, err := os.OpenFile("./static/images/upload/"+handler.Filename, os.O_WRONLY|os.O_CREATE, 0666)
 		if err != nil {
 			fmt.Println(err)
@@ -120,13 +105,11 @@ func BlockUser(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Println(err)
 	}
-	currentBenutzerName := "Peter Dieter"
-	currentBenutzerTyp := "Benutzer"
-	currentUser, _ := benutzer.Get(id)
+	currentUser := benutzer.User{ID: 0, Benutzername: "Peter Test", BenutzerTyp: "Verleiher"}
+	currentUserEdit, _ := benutzer.Get(id)
 	data := AdminEditClientPageData{
-		Benutzername: currentBenutzerName,
-		BenutzerTyp:  currentBenutzerTyp,
-		UserData:     currentUser,
+		User:     currentUser,
+		UserData: currentUserEdit,
 	}
 	err = tmpl.ExecuteTemplate(w, "layout", data)
 	if err != nil {
@@ -143,13 +126,11 @@ func DeblockUser(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Println(err)
 	}
-	currentBenutzerName := "Peter Dieter"
-	currentBenutzerTyp := "Benutzer"
-	currentUser, _ := benutzer.Get(id)
+	currentUser := benutzer.User{ID: 0, Benutzername: "Peter Test", BenutzerTyp: "Verleiher"}
+	currentUserEdit, _ := benutzer.Get(id)
 	data := AdminEditClientPageData{
-		Benutzername: currentBenutzerName,
-		BenutzerTyp:  currentBenutzerTyp,
-		UserData:     currentUser,
+		User:     currentUser,
+		UserData: currentUserEdit,
 	}
 	err = tmpl.ExecuteTemplate(w, "layout", data)
 	if err != nil {

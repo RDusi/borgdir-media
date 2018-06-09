@@ -4,22 +4,20 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
+
+	"github.com/jhoefker/borgdir-media/app/model/benutzer"
 )
 
 type AdminIndextPageData struct {
-	Benutzername string
-	BenutzerTyp  string
+	User benutzer.User
 }
 
 func IndexAdminHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("IndexAdminHandler")
 	fmt.Println("method:", r.Method)
-
+	currentUser := benutzer.User{ID: 0, Benutzername: "Peter Test", BenutzerTyp: "Verleiher"}
 	if r.Method == "GET" {
 		// GET
-
-		currentBenutzerName := "Peter Meier"
-		currentBenutzerTyp := "Verleiher"
 
 		t, err := template.ParseFiles("template/layout/layout.tmpl", "template/admin/header/header-admin-std.tmpl", "template/admin/admin-index.tmpl")
 		if err != nil {
@@ -27,8 +25,7 @@ func IndexAdminHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		data := AdminIndextPageData{
-			Benutzername: currentBenutzerName,
-			BenutzerTyp:  currentBenutzerTyp,
+			User: currentUser,
 		}
 		err = t.ExecuteTemplate(w, "layout", data)
 		if err != nil {

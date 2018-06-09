@@ -18,19 +18,16 @@ type AdminAddPageData struct {
 	User benutzer.User
 }
 
-func init() {
-	tmpl, err = template.ParseFiles("template/layout/layout.tmpl", "template/admin/header/header-admin-std.tmpl", "template/admin/admin-add.tmpl")
-	if err != nil {
-		fmt.Println(err)
-	}
-}
-
 func AddAdminHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("AddEquipmentAdminHandler")
 	fmt.Println("method:", r.Method)
 	currentUser := benutzer.User{ID: 0, Benutzername: "Peter Test", BenutzerTyp: "Verleiher"}
 
 	if r.Method == "GET" {
+		tmpl, err = template.ParseFiles("template/layout/layout.tmpl", "template/admin/header/header-admin-std.tmpl", "template/admin/admin-add.tmpl")
+		if err != nil {
+			fmt.Println(err)
+		}
 		data := AdminAddPageData{
 			User: currentUser,
 		}
