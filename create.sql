@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS `Equipment` (
 INSERT INTO `Equipment` VALUES (1,'Nikon D800','Kamera','14-156','Regal 5','Kamera Body + extra Akku',20,'Eine Kamera zum Fotos machen und Filmen','../../../static/images/nikon_d800.jpg');
 INSERT INTO `Equipment` VALUES (2,'Canon 50mm 1.2','Objektiv','45-567','Regal 6','Objektiv',45,'scharfe Linse','../../../static/images/canon_50_12.jpg');
 INSERT INTO `Equipment` VALUES (3,'Red Epic','Kamera','67-567','Regal 5','Brain + Bildschirm',3,'Filmkamera','../../../static/images/red_epic.jpg');
-INSERT INTO `Equipment` VALUES (4,'Sennheiser MKE 600','Mikrofon','78-789','Regal 4','Mikrofon',5,'man kann etwas damit aufnehmen','../../../static/images/sennheiser_mke_600.jpg');
+INSERT INTO `Equipment` VALUES (4,'Sennheiser MKE 600',1,'78-789','2','Mikrofon',5,'man kann etwas damit aufnehmen','../../../static/images/sennheiser_mke_600.jpg');
 CREATE TABLE IF NOT EXISTS `User` (
 	`ID`	INTEGER PRIMARY KEY AUTOINCREMENT,
 	`Benutzername`	TEXT,

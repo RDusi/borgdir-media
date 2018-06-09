@@ -9,6 +9,7 @@ import (
 	"strconv"
 
 	"github.com/jhoefker/borgdir-media/app/model/benutzer"
+	"github.com/jhoefker/borgdir-media/app/model/nutzung"
 )
 
 type AdminEditClientPageData struct {
@@ -16,30 +17,23 @@ type AdminEditClientPageData struct {
 	UserData benutzer.User
 }
 
-var tmpl *template.Template
-var err error
-var currentUserglob benutzer.User
-
-// Is executed automatically on package load
-func init() {
-	tmpl, err = template.ParseFiles("template/layout/layout.tmpl", "template/admin/header/header-admin-std.tmpl", "template/admin/admin-edit-client.tmpl")
-	if err != nil {
-		fmt.Println(err)
-	}
-}
-
 func EditClientAdminHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("ProfilHandler")
 	fmt.Println("method:", r.Method)
-	id, _ := strconv.Atoi(r.FormValue("id"))
-	currentUser := benutzer.User{ID: 0, Benutzername: "Peter Test", BenutzerTyp: "Verleiher"}
-	currentUserEdit, _ := benutzer.Get(id)
 
 	if r.Method == "GET" {
-		// GET
+		tmpl, err := template.ParseFiles("template/layout/layout.tmpl", "template/admin/header/header-admin-std.tmpl", "template/admin/admin-edit-client.tmpl")
+		if err != nil {
+			fmt.Println(err)
+		}
+
+		id, _ := strconv.Atoi(r.FormValue("id"))
+		currentUser := nutzung.GetCurrent().User
+		currentUserEdit, _ := benutzer.Get(id)
+
 		data := AdminEditClientPageData{
 			User:     currentUser,
-			UserData: currentUserglob,
+			UserData: currentUserEdit,
 		}
 		if data.UserData.AktivBis == "gesperrt" {
 			tmpl, err = template.ParseFiles("template/layout/layout.tmpl", "template/admin/header/header-admin-std.tmpl", "template/admin/admin-edit-client-gesperrt.tmpl")
@@ -47,8 +41,6 @@ func EditClientAdminHandler(w http.ResponseWriter, r *http.Request) {
 				fmt.Println(err)
 			}
 		}
-
-		fmt.Println("current User", currentUserEdit.ID)
 		err = tmpl.ExecuteTemplate(w, "layout", data)
 		if err != nil {
 			fmt.Println(err)
@@ -57,7 +49,6 @@ func EditClientAdminHandler(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method == "POST" {
 		// POST
-		fmt.Println("current User Post", currentUserEdit.ID)
 		r.ParseForm()
 		r.ParseMultipartForm(32 << 20)
 		// logic part of Profil
@@ -79,10 +70,11 @@ func EditClientAdminHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		defer file.Close()
-		user := benutzer.User{ID: speichern, Benutzername: benutzername, Email: email, Passwort: passwort, Bild: bild, BenutzerTyp: currentUserEdit.BenutzerTyp, AktivBis: currentUserEdit.AktivBis}
-		fmt.Println(currentUser.ID)
-		fmt.Println(user)
-		fmt.Println("Speichern", r.FormValue("speichern"))
+		user, _ := benutzer.Get(speichern)
+		user.Benutzername = benutzername
+		user.Email = email
+		user.Passwort = passwort
+		user.Bild = bild
 		user.Update()
 		fmt.Println("User wurde geupdated")
 		fmt.Println("Bild wurde hochgeladen: ", handler.Filename)
@@ -92,7 +84,10 @@ func EditClientAdminHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		defer f.Close()
-		io.Copy(f, file)
+		wert, _ := io.Copy(f, file)
+		if wert != 0 {
+			http.Redirect(w, r, "/admin/edit-client", 301)
+		}
 	}
 }
 
@@ -101,20 +96,7 @@ func BlockUser(w http.ResponseWriter, r *http.Request) {
 	currentUserbearb, _ := benutzer.Get(id)
 	currentUserbearb.Sperren()
 	fmt.Println("Konto mit ID " + strconv.Itoa(id) + " wurde gesperrt")
-	tmpl, err = template.ParseFiles("template/layout/layout.tmpl", "template/admin/header/header-admin-std.tmpl", "template/admin/admin-edit-client-gesperrt.tmpl")
-	if err != nil {
-		fmt.Println(err)
-	}
-	currentUser := benutzer.User{ID: 0, Benutzername: "Peter Test", BenutzerTyp: "Verleiher"}
-	currentUserEdit, _ := benutzer.Get(id)
-	data := AdminEditClientPageData{
-		User:     currentUser,
-		UserData: currentUserEdit,
-	}
-	err = tmpl.ExecuteTemplate(w, "layout", data)
-	if err != nil {
-		fmt.Println(err)
-	}
+	http.Redirect(w, r, "/admin/edit-client?id="+strconv.Itoa(id)+"", 301)
 }
 
 func DeblockUser(w http.ResponseWriter, r *http.Request) {
@@ -122,18 +104,5 @@ func DeblockUser(w http.ResponseWriter, r *http.Request) {
 	currentUserbearb, _ := benutzer.Get(id)
 	currentUserbearb.Entsperren()
 	fmt.Println("Konto mit ID " + strconv.Itoa(id) + " wurde entsperrt")
-	tmpl, err = template.ParseFiles("template/layout/layout.tmpl", "template/admin/header/header-admin-std.tmpl", "template/admin/admin-edit-client.tmpl")
-	if err != nil {
-		fmt.Println(err)
-	}
-	currentUser := benutzer.User{ID: 0, Benutzername: "Peter Test", BenutzerTyp: "Verleiher"}
-	currentUserEdit, _ := benutzer.Get(id)
-	data := AdminEditClientPageData{
-		User:     currentUser,
-		UserData: currentUserEdit,
-	}
-	err = tmpl.ExecuteTemplate(w, "layout", data)
-	if err != nil {
-		fmt.Println(err)
-	}
+	http.Redirect(w, r, "/admin/edit-client?id="+strconv.Itoa(id)+"", 301)
 }

@@ -2,21 +2,22 @@ package myequipment
 
 import (
 	"database/sql"
-	"time"
 
 	"github.com/jhoefker/borgdir-media/app/model/benutzer"
+	"github.com/jhoefker/borgdir-media/app/model/categorie"
 	"github.com/jhoefker/borgdir-media/app/model/equipment"
+	"github.com/jhoefker/borgdir-media/app/model/storage"
+	_ "github.com/mattn/go-sqlite3"
 )
 
 type MyEquipItem struct {
 	ID             int
 	User           benutzer.User
 	Equipment      equipment.Equipment
-	EntleihDatum   time.Time
-	RueckgabeDatum time.Time
+	EntleihDatum   string
+	RueckgabeDatum string
 }
 
-// Db handle
 var Db *sql.DB
 
 func init() {
@@ -27,7 +28,6 @@ func init() {
 	}
 }
 
-// GetAll Cart Items
 func GetAll() (myequipitems []MyEquipItem, err error) {
 	rows, err := Db.Query("select * from MeineGeraete")
 
@@ -42,7 +42,15 @@ func GetAll() (myequipitems []MyEquipItem, err error) {
 		user := benutzer.User{}
 		err = Db.QueryRow("select * from User where id = $1", userid).Scan(&user.ID, &user.Benutzername, &user.Email, &user.Passwort, &user.BenutzerTyp, &user.AktivBis, &user.Bild)
 		equipment := equipment.Equipment{}
-		err = Db.QueryRow("select * from Equipment where id = $1", equipid).Scan(&equipment.ID, &equipment.Bezeichnung, &equipment.Kategorie, &equipment.InventarNr, &equipment.Lagerort, &equipment.Inhalt, &equipment.Anzahl, &equipment.Hinweise, &equipment.Bild)
+		var lagerortnr int
+		var kategorienr int
+		categorie := categorie.Categorie{}
+		storage := storage.Storage{}
+		err = Db.QueryRow("select * from Equipment where id = $1", equipid).Scan(&equipment.ID, &equipment.Bezeichnung, &kategorienr, &equipment.InventarNr, &lagerortnr, &equipment.Inhalt, &equipment.Anzahl, &equipment.Hinweise, &equipment.Bild)
+		err = Db.QueryRow("select * from Lagerort where id = $1", lagerortnr).Scan(&storage.ID, &storage.LagerortName)
+		err = Db.QueryRow("select * from Kategorie where id = $1", kategorienr).Scan(&categorie.ID, &categorie.KategorieName)
+		equipment.Lagerort = storage
+		equipment.Kategorie = categorie
 		myequipitem.User = user
 		myequipitem.Equipment = equipment
 		if err != nil {
@@ -55,7 +63,6 @@ func GetAll() (myequipitems []MyEquipItem, err error) {
 	return
 }
 
-// GetAll Cart Items By UserID
 func GetAllByUserId(uid int) (myequipitems []MyEquipItem, err error) {
 	rows, err := Db.Query("select * from MeineGeraete where UserID = $1", uid)
 
@@ -70,7 +77,15 @@ func GetAllByUserId(uid int) (myequipitems []MyEquipItem, err error) {
 		user := benutzer.User{}
 		err = Db.QueryRow("select * from User where id = $1", userid).Scan(&user.ID, &user.Benutzername, &user.Email, &user.Passwort, &user.BenutzerTyp, &user.AktivBis, &user.Bild)
 		equipment := equipment.Equipment{}
-		err = Db.QueryRow("select * from Equipment where id = $1", equipid).Scan(&equipment.ID, &equipment.Bezeichnung, &equipment.Kategorie, &equipment.InventarNr, &equipment.Lagerort, &equipment.Inhalt, &equipment.Anzahl, &equipment.Hinweise, &equipment.Bild)
+		var lagerortnr int
+		var kategorienr int
+		categorie := categorie.Categorie{}
+		storage := storage.Storage{}
+		err = Db.QueryRow("select * from Equipment where id = $1", equipid).Scan(&equipment.ID, &equipment.Bezeichnung, &kategorienr, &equipment.InventarNr, &lagerortnr, &equipment.Inhalt, &equipment.Anzahl, &equipment.Hinweise, &equipment.Bild)
+		err = Db.QueryRow("select * from Lagerort where id = $1", lagerortnr).Scan(&storage.ID, &storage.LagerortName)
+		err = Db.QueryRow("select * from Kategorie where id = $1", kategorienr).Scan(&categorie.ID, &categorie.KategorieName)
+		equipment.Lagerort = storage
+		equipment.Kategorie = categorie
 		myequipitem.User = user
 		myequipitem.Equipment = equipment
 		if err != nil {
@@ -83,7 +98,6 @@ func GetAllByUserId(uid int) (myequipitems []MyEquipItem, err error) {
 	return
 }
 
-// GetAll Cart Items By EquipID
 func GetAllByEquipmentID(eid int) (myequipitems []MyEquipItem, err error) {
 	rows, err := Db.Query("select * from MeineGeraete where EquipmentID = $1", eid)
 
@@ -98,7 +112,15 @@ func GetAllByEquipmentID(eid int) (myequipitems []MyEquipItem, err error) {
 		user := benutzer.User{}
 		err = Db.QueryRow("select * from User where id = $1", userid).Scan(&user.ID, &user.Benutzername, &user.Email, &user.Passwort, &user.BenutzerTyp, &user.AktivBis, &user.Bild)
 		equipment := equipment.Equipment{}
-		err = Db.QueryRow("select * from Equipment where id = $1", equipid).Scan(&equipment.ID, &equipment.Bezeichnung, &equipment.Kategorie, &equipment.InventarNr, &equipment.Lagerort, &equipment.Inhalt, &equipment.Anzahl, &equipment.Hinweise, &equipment.Bild)
+		var lagerortnr int
+		var kategorienr int
+		categorie := categorie.Categorie{}
+		storage := storage.Storage{}
+		err = Db.QueryRow("select * from Equipment where id = $1", equipid).Scan(&equipment.ID, &equipment.Bezeichnung, &kategorienr, &equipment.InventarNr, &lagerortnr, &equipment.Inhalt, &equipment.Anzahl, &equipment.Hinweise, &equipment.Bild)
+		err = Db.QueryRow("select * from Lagerort where id = $1", lagerortnr).Scan(&storage.ID, &storage.LagerortName)
+		err = Db.QueryRow("select * from Kategorie where id = $1", kategorienr).Scan(&categorie.ID, &categorie.KategorieName)
+		equipment.Lagerort = storage
+		equipment.Kategorie = categorie
 		myequipitem.User = user
 		myequipitem.Equipment = equipment
 		if err != nil {
@@ -112,30 +134,27 @@ func GetAllByEquipmentID(eid int) (myequipitems []MyEquipItem, err error) {
 }
 
 func Get(id int) (myequipitem MyEquipItem, err error) {
-	rows, err := Db.Query("select * from MeineGeraete where ID = $1", id)
-
-	if err != nil {
-		return
-	}
+	myequipitem = MyEquipItem{}
+	user := benutzer.User{}
+	equipment := equipment.Equipment{}
+	storage := storage.Storage{}
+	categorie := categorie.Categorie{}
 	var userid int
 	var equipid int
-	for rows.Next() {
-		err = rows.Scan(&myequipitem.ID, &userid, &equipid, &myequipitem.EntleihDatum, &myequipitem.RueckgabeDatum)
-		user := benutzer.User{}
-		err = Db.QueryRow("select * from User where id = $1", userid).Scan(&user.ID, &user.Benutzername, &user.Email, &user.Passwort, &user.BenutzerTyp, &user.AktivBis, &user.Bild)
-		equipment := equipment.Equipment{}
-		err = Db.QueryRow("select * from Equipment where id = $1", equipid).Scan(&equipment.ID, &equipment.Bezeichnung, &equipment.Kategorie, &equipment.InventarNr, &equipment.Lagerort, &equipment.Inhalt, &equipment.Anzahl, &equipment.Hinweise, &equipment.Bild)
-		myequipitem.User = user
-		myequipitem.Equipment = equipment
-		if err != nil {
-			return
-		}
-	}
-	rows.Close()
+	var kategorienr int
+	var lagerortnr int
+	err = Db.QueryRow("select * from MeineGeraete where id = $1", id).Scan(&myequipitem.ID, &userid, &equipid, &myequipitem.EntleihDatum, &myequipitem.RueckgabeDatum)
+	err = Db.QueryRow("select * from User where id = $1", userid).Scan(&user.ID, &user.Benutzername, &user.Email, &user.Passwort, &user.BenutzerTyp, &user.AktivBis, &user.Bild)
+	err = Db.QueryRow("select * from Equipment where id = $1", equipid).Scan(&equipment.ID, &equipment.Bezeichnung, &kategorienr, &equipment.InventarNr, &lagerortnr, &equipment.Inhalt, &equipment.Anzahl, &equipment.Hinweise, &equipment.Bild)
+	err = Db.QueryRow("select * from Kategorie where id = $1", kategorienr).Scan(&categorie.ID, &categorie.KategorieName)
+	err = Db.QueryRow("select * from Lagerort where id = $1", lagerortnr).Scan(&storage.ID, &storage.LagerortName)
+	equipment.Lagerort = storage
+	equipment.Kategorie = categorie
+	myequipitem.User = user
+	myequipitem.Equipment = equipment
 	return
 }
 
-// Add CartItem
 func (myequipitem *MyEquipItem) Add() (err error) {
 	statement := "insert into MeineGeraete (UserID, EquipmentID, EntleihDatum, RueckgabeDatum) values ($1, $2, $3, $4)"
 	stmt, err := Db.Prepare(statement)

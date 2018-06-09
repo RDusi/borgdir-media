@@ -9,39 +9,28 @@ import (
 	"strconv"
 
 	"github.com/jhoefker/borgdir-media/app/model/benutzer"
+	"github.com/jhoefker/borgdir-media/app/model/nutzung"
 )
 
 type ProfilPageData struct {
-	Benutzername string
-	BenutzerTyp  string
-	UserData     benutzer.User
-}
-
-var tmpl *template.Template
-var err error
-
-// Is executed automatically on package load
-func init() {
-	tmpl, err = template.ParseFiles("template/layout/layout.tmpl", "template/user/header/header-profil.tmpl", "template/user/profil.tmpl")
-	if err != nil {
-		fmt.Println(err)
-	}
+	User     benutzer.User
+	UserData benutzer.User
 }
 
 func ProfilHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("ProfilHandler")
 	fmt.Println("method:", r.Method)
 
-	currentBenutzerName := "Peter Dieter"
-	currentBenutzerTyp := "Benutzer"
-	currentUser, _ := benutzer.Get(2)
-
+	currentUser := nutzung.GetCurrent().User
 	if r.Method == "GET" {
 		// GET
+		tmpl, err := template.ParseFiles("template/layout/layout.tmpl", "template/user/header/header-profil.tmpl", "template/user/profil.tmpl")
+		if err != nil {
+			fmt.Println(err)
+		}
 		data := ProfilPageData{
-			Benutzername: currentBenutzerName,
-			BenutzerTyp:  currentBenutzerTyp,
-			UserData:     currentUser,
+			User:     currentUser,
+			UserData: currentUser,
 		}
 		err = tmpl.ExecuteTemplate(w, "layout", data)
 		if err != nil {
@@ -63,10 +52,12 @@ func ProfilHandler(w http.ResponseWriter, r *http.Request) {
 		passwortneuwdh := r.FormValue("passwortneuwdh")
 		file, handler, err := r.FormFile("uploadfile")
 		speichern, _ := strconv.Atoi(r.FormValue("speichern"))
+
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
+
 		bild := "../../../static/images/" + handler.Filename
 
 		user, _ := benutzer.Get(currentUser.ID)
@@ -81,13 +72,6 @@ func ProfilHandler(w http.ResponseWriter, r *http.Request) {
 
 		defer file.Close()
 		fmt.Println("Bild wurde hochgeladen: ", handler.Filename)
-		currentUserBearb, _ := benutzer.Get(speichern)
-		data := ProfilPageData{
-			Benutzername: currentBenutzerName,
-			BenutzerTyp:  currentBenutzerTyp,
-			UserData:     currentUserBearb,
-		}
-		err = tmpl.ExecuteTemplate(w, "layout", data)
 		f, err := os.OpenFile("./static/images/upload/"+handler.Filename, os.O_WRONLY|os.O_CREATE, 0666)
 		if err != nil {
 			fmt.Println(err)

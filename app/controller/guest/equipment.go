@@ -3,14 +3,15 @@ package guest
 import (
 	"fmt"
 	"html/template"
+	"log"
 	"net/http"
 	"strconv"
-	"time"
 
 	"github.com/jhoefker/borgdir-media/app/model/benutzer"
 	"github.com/jhoefker/borgdir-media/app/model/bookmarked"
 	"github.com/jhoefker/borgdir-media/app/model/cart"
 	"github.com/jhoefker/borgdir-media/app/model/equipment"
+	"github.com/jhoefker/borgdir-media/app/model/nutzung"
 )
 
 type EquipmentPageData struct {
@@ -28,8 +29,9 @@ func EquipmentHandler(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			fmt.Println(err)
 		}
-		currentUser := benutzer.User{ID: 0, Benutzername: "Peter Test", BenutzerTyp: "Benutzer"}
+		currentUser := nutzung.GetCurrent().User
 		equipmentListe, err := equipment.GetAll()
+
 		data := EquipmentPageData{
 			User:           currentUser,
 			EquipmentListe: equipmentListe,
@@ -50,32 +52,28 @@ func EquipmentHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func AddToCart(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("ist hier")
 	id, _ := strconv.Atoi(r.FormValue("id"))
-	fmt.Println(id)
+	log.Println("AddToCart von Produkt, ID: ", id)
 	currentEquip, _ := equipment.Get(id)
-	fmt.Println(currentEquip)
 	var cartItem cart.CartItem
+	cartItem.User = nutzung.GetCurrent().User
 	cartItem.Equipment = currentEquip
-	cartItem.EntleihDatum = time.Now()
-	cartItem.RueckgabeDatum = time.Now().AddDate(0, 2, 0)
+	cartItem.EntleihDatum = "Test"
+	cartItem.RueckgabeDatum = "Test"
 	cartItem.Anzahl = 1
-	fmt.Println("Current Item: ", cartItem)
 	cartItem.Add()
-	fmt.Println("wurde hinzugefuegt")
 	http.Redirect(w, r, "/equipment", 301)
 }
 
 func Bookmark(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("ist hier")
 	id, _ := strconv.Atoi(r.FormValue("id"))
-	fmt.Println(id)
+	log.Println("Bookmark von Produkt, ID: ", id)
 	currentEquip, _ := equipment.Get(id)
-	fmt.Println(currentEquip)
 	var bookmarkItem bookmarked.BookmarkedItem
+	bookmarkItem.User = nutzung.GetCurrent().User
 	bookmarkItem.Equipment = currentEquip
-	bookmarkItem.RueckgabeDatum = time.Now().AddDate(0, 2, 0)
-	fmt.Println("Current Item: ", bookmarkItem)
+	bookmarkItem.RueckgabeDatum = "Test"
 	bookmarkItem.Add()
+	fmt.Println(bookmarkItem)
 	http.Redirect(w, r, "/equipment", 301)
 }

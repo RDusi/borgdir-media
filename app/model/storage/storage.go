@@ -1,13 +1,16 @@
 package storage
 
-import "database/sql"
+import (
+	"database/sql"
+
+	_ "github.com/mattn/go-sqlite3"
+)
 
 type Storage struct {
 	ID           int
 	LagerortName string
 }
 
-// Db handle
 var Db *sql.DB
 
 func init() {

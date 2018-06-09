@@ -9,6 +9,7 @@ import (
 	"github.com/jhoefker/borgdir-media/app/model/benutzer"
 	"github.com/jhoefker/borgdir-media/app/model/bookmarked"
 	"github.com/jhoefker/borgdir-media/app/model/myequipment"
+	"github.com/jhoefker/borgdir-media/app/model/nutzung"
 )
 
 type MyEquipmentPageData struct {
@@ -28,7 +29,8 @@ func MyEquipmentHandler(w http.ResponseWriter, r *http.Request) {
 			fmt.Println(err)
 		}
 
-		currentUser := benutzer.User{ID: 0, Benutzername: "Peter Test", BenutzerTyp: "Benutzer"}
+		currentUser := nutzung.GetCurrent().User
+		fmt.Println(currentUser.ID)
 		meineGeraeteListe, _ := myequipment.GetAllByUserId(currentUser.ID)
 		meineVorgemerktenListe, _ := bookmarked.GetAllByUserId(currentUser.ID)
 		data := MyEquipmentPageData{
@@ -52,7 +54,7 @@ func MyEquipmentHandler(w http.ResponseWriter, r *http.Request) {
 func ExtendMyEquipment(w http.ResponseWriter, r *http.Request) {
 	id, _ := strconv.Atoi(r.FormValue("id"))
 	currentMyEquipItem, _ := myequipment.Get(id)
-	currentMyEquipItem.RueckgabeDatum = currentMyEquipItem.RueckgabeDatum.AddDate(0, 2, 0)
+	currentMyEquipItem.RueckgabeDatum = currentMyEquipItem.RueckgabeDatum + "2 Wochen"
 	currentMyEquipItem.Update()
 	fmt.Println("Ausleihvorgang wurde verlaengert")
 	http.Redirect(w, r, "/my-equipment", 301)

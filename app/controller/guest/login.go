@@ -3,7 +3,10 @@ package guest
 import (
 	"fmt"
 	"html/template"
+	"log"
 	"net/http"
+
+	"github.com/jhoefker/borgdir-media/app/model/benutzer"
 )
 
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
@@ -28,10 +31,14 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		passwort := r.FormValue("passwort")
 		fmt.Println("Benutzername : ", benutzername)
 		fmt.Println("Passwort: ", passwort)
-		if benutzername == "test" && passwort == "test" {
-
-		} else {
-			fmt.Fprintf(w, "%s", "<h1>Falsche Daten</h1>")
+		var alleUser []benutzer.User
+		alleUser, _ = benutzer.GetAll()
+		for _, user := range alleUser {
+			if user.Benutzername == benutzername && user.Passwort == passwort {
+				// Start Session etc
+				log.Println("Start Session")
+				http.Redirect(w, r, "/my-equipment", 301)
+			}
 		}
 	}
 }

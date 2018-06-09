@@ -62,28 +62,19 @@ func GetAll() (equipments []Equipment, err error) {
 }
 
 func Get(id int) (equipment Equipment, err error) {
-	rows, err := Db.Query("select * from Equipment where ID = $1", id)
-
-	if err != nil {
-		return
-	}
+	equipment = Equipment{}
+	storage := storage.Storage{}
+	categorie := categorie.Categorie{}
 	var kategorienr int
 	var lagerortnr int
-	for rows.Next() {
-		equipment := Equipment{}
-		err = rows.Scan(&equipment.ID, &equipment.Bezeichnung, &kategorienr, &equipment.InventarNr, &lagerortnr, &equipment.Inhalt, &equipment.Anzahl, &equipment.Hinweise, &equipment.Bild)
-		categorie := categorie.Categorie{}
-		err = Db.QueryRow("select * from Kategorie where id = $1", kategorienr).Scan(&categorie.ID, &categorie.KategorieName)
-		storage := storage.Storage{}
-		err = Db.QueryRow("select * from Lagerort where id = $1", lagerortnr).Scan(&storage.ID, &storage.LagerortName)
-		equipment.Kategorie = categorie
-		equipment.Lagerort = storage
-	}
-	rows.Close()
+	err = Db.QueryRow("select * from Equipment where id = $1", id).Scan(&equipment.ID, &equipment.Bezeichnung, &kategorienr, &equipment.InventarNr, &lagerortnr, &equipment.Inhalt, &equipment.Anzahl, &equipment.Hinweise, &equipment.Bild)
+	err = Db.QueryRow("select * from Lagerort where id = $1", lagerortnr).Scan(&storage.ID, &storage.LagerortName)
+	err = Db.QueryRow("select * from Kategorie where id = $1", kategorienr).Scan(&categorie.ID, &categorie.KategorieName)
+	equipment.Lagerort = storage
+	equipment.Kategorie = categorie
 	return
 }
 
-// Add Equipment
 func (equipment *Equipment) Add() (err error) {
 	statement := "insert into Equipment (Bezeichnung, Kategorie, InventarNr, Lagerort, Inhalt, Anzahl, Hinweise, Bild) values ($1, $2, $3, $4, $5, $6, $7, $8)"
 	stmt, err := Db.Prepare(statement)

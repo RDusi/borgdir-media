@@ -27,7 +27,6 @@ func init() {
 	}
 }
 
-// GetAll Equipment
 func GetAll() (users []User, err error) {
 	rows, err := Db.Query("select * from User")
 
@@ -50,14 +49,12 @@ func GetAll() (users []User, err error) {
 	return
 }
 
-// Get Todo with the provided id
 func Get(id int) (user User, err error) {
 	user = User{}
 	err = Db.QueryRow("select * from User where id = $1", id).Scan(&user.ID, &user.Benutzername, &user.Email, &user.Passwort, &user.BenutzerTyp, &user.AktivBis, &user.Bild)
 	return
 }
 
-// Add Todo
 func (user *User) Add() (err error) {
 	statement := "insert into User (Benutzername, Email, Passwort, BenutzerTyp, AktivBis, Bild) values ($1, $2, $3, $4, $5, $6)"
 	stmt, err := Db.Prepare(statement)

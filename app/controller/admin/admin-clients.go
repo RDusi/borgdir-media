@@ -6,20 +6,17 @@ import (
 	"net/http"
 
 	"github.com/jhoefker/borgdir-media/app/model/benutzer"
+	"github.com/jhoefker/borgdir-media/app/model/nutzung"
 )
 
 type AdminClientsPageData struct {
-	Benutzername string
-	BenutzerTyp  string
-	UserListe    []benutzer.User
+	User      benutzer.User
+	UserListe []benutzer.User
 }
 
 func ClientsAdminHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("ClientsAdminHandler")
 	fmt.Println("method:", r.Method)
-
-	currentBenutzerName := "Peter Dieter"
-	currentBenutzerTyp := "Benutzer"
 
 	if r.Method == "GET" {
 		// GET
@@ -27,11 +24,11 @@ func ClientsAdminHandler(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			fmt.Println(err)
 		}
+		currentUser := nutzung.GetCurrent().User
 		userListe, err := benutzer.GetAll()
 		data := AdminClientsPageData{
-			Benutzername: currentBenutzerName,
-			BenutzerTyp:  currentBenutzerTyp,
-			UserListe:    userListe,
+			User:      currentUser,
+			UserListe: userListe,
 		}
 		fmt.Println("User: ", data)
 		err = t.ExecuteTemplate(w, "layout", data)

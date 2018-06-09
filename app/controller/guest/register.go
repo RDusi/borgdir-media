@@ -32,8 +32,8 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 		email := r.FormValue("email")
 		passwort := r.FormValue("passwort")
 		passwortwdh := r.FormValue("passwortwdh")
-
-		user := benutzer.User{Benutzername: benutzername, Email: email, Passwort: passwort}
+		bild := "http://via.placeholder.com/350x350"
+		user := benutzer.User{Benutzername: benutzername, Email: email, Passwort: passwort, Bild: bild}
 		if passwort == passwortwdh {
 			fmt.Println("gleiches PW")
 			user.Add()

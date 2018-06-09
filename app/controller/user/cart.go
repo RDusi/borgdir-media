@@ -9,6 +9,8 @@ import (
 	"github.com/jhoefker/borgdir-media/app/model/benutzer"
 	"github.com/jhoefker/borgdir-media/app/model/cart"
 	"github.com/jhoefker/borgdir-media/app/model/equipment"
+	"github.com/jhoefker/borgdir-media/app/model/myequipment"
+	"github.com/jhoefker/borgdir-media/app/model/nutzung"
 )
 
 type CartPageData struct {
@@ -26,7 +28,7 @@ func CartHandler(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			fmt.Println(err)
 		}
-		currentUser := benutzer.User{ID: 0, Benutzername: "Peter Test", BenutzerTyp: "Benutzer"}
+		currentUser := nutzung.GetCurrent().User
 		cartItems, _ := cart.GetAllByUserId(currentUser.ID)
 		data := CartPageData{
 			User:      currentUser,
@@ -67,9 +69,13 @@ func RentItems(w http.ResponseWriter, r *http.Request) {
 	cartItems, _ = cart.GetAllByUserId(id)
 	fmt.Println(cartItems)
 	for _, cartItem := range cartItems {
-		cartItem.Add()
+		var myequipitem myequipment.MyEquipItem
+		myequipitem.User = cartItem.User
+		myequipitem.Equipment = cartItem.Equipment
+		myequipitem.EntleihDatum = cartItem.EntleihDatum
+		myequipitem.RueckgabeDatum = cartItem.RueckgabeDatum
 		editEquipment, _ := equipment.Get(cartItem.Equipment.ID)
-		editEquipment.Anzahl = editEquipment.Anzahl - 1
+		editEquipment.Anzahl = editEquipment.Anzahl - cartItem.Anzahl
 		editEquipment.Update()
 	}
 	http.Redirect(w, r, "/cart", 301)
