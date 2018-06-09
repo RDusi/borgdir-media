@@ -183,3 +183,7 @@ textarea {
 .sperren:hover {
   background-color: white;
 }
+
+.iconBookmark:hover {
+  transform: scale(1.05);
+}

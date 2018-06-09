@@ -6,13 +6,14 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/jhoefker/borgdir-media/app/model/benutzer"
 	"github.com/jhoefker/borgdir-media/app/model/cart"
+	"github.com/jhoefker/borgdir-media/app/model/equipment"
 )
 
 type CartPageData struct {
-	Benutzername string
-	BenutzerTyp  string
-	CartItems    []cart.CartItem
+	User      benutzer.User
+	CartItems []cart.CartItem
 }
 
 func CartHandler(w http.ResponseWriter, r *http.Request) {
@@ -25,14 +26,11 @@ func CartHandler(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			fmt.Println(err)
 		}
-
-		currentBenutzerName := "Peter Dieter"
-		currentBenutzerTyp := "Benutzer"
-		cartItems, _ := cart.GetAllByUserId(0)
+		currentUser := benutzer.User{ID: 0, Benutzername: "Peter Test", BenutzerTyp: "Benutzer"}
+		cartItems, _ := cart.GetAllByUserId(currentUser.ID)
 		data := CartPageData{
-			Benutzername: currentBenutzerName,
-			BenutzerTyp:  currentBenutzerTyp,
-			CartItems:    cartItems,
+			User:      currentUser,
+			CartItems: cartItems,
 		}
 		err = t.ExecuteTemplate(w, "layout", data)
 		if err != nil {
@@ -59,5 +57,20 @@ func DeleteCartItem(w http.ResponseWriter, r *http.Request) {
 	id, _ := strconv.Atoi(r.FormValue("id"))
 	currentCartItem, _ := cart.Get(id)
 	currentCartItem.Delete()
+	http.Redirect(w, r, "/cart", 301)
+}
+
+func RentItems(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("ist hier")
+	id, _ := strconv.Atoi(r.FormValue("id"))
+	var cartItems []cart.CartItem
+	cartItems, _ = cart.GetAllByUserId(id)
+	fmt.Println(cartItems)
+	for _, cartItem := range cartItems {
+		cartItem.Add()
+		editEquipment, _ := equipment.Get(cartItem.Equipment.ID)
+		editEquipment.Anzahl = editEquipment.Anzahl - 1
+		editEquipment.Update()
+	}
 	http.Redirect(w, r, "/cart", 301)
 }

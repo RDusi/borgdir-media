@@ -4,15 +4,17 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
+	"strconv"
 
-	"github.com/jhoefker/borgdir-media/app/model/equipment"
+	"github.com/jhoefker/borgdir-media/app/model/benutzer"
+	"github.com/jhoefker/borgdir-media/app/model/bookmarked"
+	"github.com/jhoefker/borgdir-media/app/model/myequipment"
 )
 
 type MyEquipmentPageData struct {
-	Benutzername string
-	BenutzerTyp  string
-	MeineGeraete []equipment.Equipment //noch aendern
-	Vorgemerkte  []equipment.Equipment //noch aendern
+	User         benutzer.User
+	MeineGeraete []myequipment.MyEquipItem
+	Vorgemerkte  []bookmarked.BookmarkedItem
 }
 
 func MyEquipmentHandler(w http.ResponseWriter, r *http.Request) {
@@ -26,14 +28,13 @@ func MyEquipmentHandler(w http.ResponseWriter, r *http.Request) {
 			fmt.Println(err)
 		}
 
-		currentBenutzerName := "Peter Dieter"
-		currentBenutzerTyp := "Benutzer"
-		meineGeraeteListe, _ := equipment.GetAll() // noch aendern zu DB
+		currentUser := benutzer.User{ID: 0, Benutzername: "Peter Test", BenutzerTyp: "Benutzer"}
+		meineGeraeteListe, _ := myequipment.GetAllByUserId(currentUser.ID)
+		meineVorgemerktenListe, _ := bookmarked.GetAllByUserId(currentUser.ID)
 		data := MyEquipmentPageData{
-			Benutzername: currentBenutzerName,
-			BenutzerTyp:  currentBenutzerTyp,
+			User:         currentUser,
 			MeineGeraete: meineGeraeteListe,
-			Vorgemerkte:  []equipment.Equipment{},
+			Vorgemerkte:  meineVorgemerktenListe,
 		}
 		err = t.ExecuteTemplate(w, "layout", data)
 		if err != nil {
@@ -46,4 +47,21 @@ func MyEquipmentHandler(w http.ResponseWriter, r *http.Request) {
 		r.ParseForm()
 		// logic part of Equipment
 	}
+}
+
+func ExtendMyEquipment(w http.ResponseWriter, r *http.Request) {
+	id, _ := strconv.Atoi(r.FormValue("id"))
+	currentMyEquipItem, _ := myequipment.Get(id)
+	currentMyEquipItem.RueckgabeDatum = currentMyEquipItem.RueckgabeDatum.AddDate(0, 2, 0)
+	currentMyEquipItem.Update()
+	fmt.Println("Ausleihvorgang wurde verlaengert")
+	http.Redirect(w, r, "/my-equipment", 301)
+}
+
+func DeleteBookmark(w http.ResponseWriter, r *http.Request) {
+	id, _ := strconv.Atoi(r.FormValue("id"))
+	currentBookmark, _ := bookmarked.Get(id)
+	currentBookmark.Delete()
+	fmt.Println("Vermerkung wurde geloescht")
+	http.Redirect(w, r, "/my-equipment", 301)
 }

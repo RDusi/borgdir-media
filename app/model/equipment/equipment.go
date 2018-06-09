@@ -3,15 +3,17 @@ package equipment
 import (
 	"database/sql"
 
+	"github.com/jhoefker/borgdir-media/app/model/categorie"
+	"github.com/jhoefker/borgdir-media/app/model/storage"
 	_ "github.com/mattn/go-sqlite3"
 )
 
 type Equipment struct {
 	ID          int
 	Bezeichnung string
-	Kategorie   string
+	Kategorie   categorie.Categorie
 	InventarNr  string
-	Lagerort    string
+	Lagerort    storage.Storage
 	Inhalt      string
 	Anzahl      int
 	Hinweise    string
@@ -37,10 +39,17 @@ func GetAll() (equipments []Equipment, err error) {
 		return
 	}
 
+	var kategorienr int
+	var lagerortnr int
 	for rows.Next() {
 		equipment := Equipment{}
-		err = rows.Scan(&equipment.ID, &equipment.Bezeichnung, &equipment.Kategorie, &equipment.InventarNr, &equipment.Lagerort, &equipment.Inhalt, &equipment.Anzahl, &equipment.Hinweise, &equipment.Bild)
-
+		err = rows.Scan(&equipment.ID, &equipment.Bezeichnung, &kategorienr, &equipment.InventarNr, &lagerortnr, &equipment.Inhalt, &equipment.Anzahl, &equipment.Hinweise, &equipment.Bild)
+		categorie := categorie.Categorie{}
+		err = Db.QueryRow("select * from Kategorie where id = $1", kategorienr).Scan(&categorie.ID, &categorie.KategorieName)
+		storage := storage.Storage{}
+		err = Db.QueryRow("select * from Lagerort where id = $1", lagerortnr).Scan(&storage.ID, &storage.LagerortName)
+		equipment.Kategorie = categorie
+		equipment.Lagerort = storage
 		if err != nil {
 			return
 		}
@@ -52,10 +61,25 @@ func GetAll() (equipments []Equipment, err error) {
 	return
 }
 
-// Get Todo with the provided id
 func Get(id int) (equipment Equipment, err error) {
-	equipment = Equipment{}
-	err = Db.QueryRow("select * from Equipment where id = $1", id).Scan(&equipment.ID, &equipment.Bezeichnung, &equipment.Kategorie, &equipment.InventarNr, &equipment.Lagerort, &equipment.Inhalt, &equipment.Anzahl, &equipment.Hinweise, &equipment.Bild)
+	rows, err := Db.Query("select * from Equipment where ID = $1", id)
+
+	if err != nil {
+		return
+	}
+	var kategorienr int
+	var lagerortnr int
+	for rows.Next() {
+		equipment := Equipment{}
+		err = rows.Scan(&equipment.ID, &equipment.Bezeichnung, &kategorienr, &equipment.InventarNr, &lagerortnr, &equipment.Inhalt, &equipment.Anzahl, &equipment.Hinweise, &equipment.Bild)
+		categorie := categorie.Categorie{}
+		err = Db.QueryRow("select * from Kategorie where id = $1", kategorienr).Scan(&categorie.ID, &categorie.KategorieName)
+		storage := storage.Storage{}
+		err = Db.QueryRow("select * from Lagerort where id = $1", lagerortnr).Scan(&storage.ID, &storage.LagerortName)
+		equipment.Kategorie = categorie
+		equipment.Lagerort = storage
+	}
+	rows.Close()
 	return
 }
 
@@ -69,7 +93,7 @@ func (equipment *Equipment) Add() (err error) {
 	}
 
 	defer stmt.Close()
-	_, err = stmt.Exec(equipment.Bezeichnung, equipment.Kategorie, equipment.InventarNr, equipment.Lagerort, equipment.Inhalt, equipment.Anzahl, equipment.Hinweise, equipment.Bild)
+	_, err = stmt.Exec(equipment.Bezeichnung, equipment.Kategorie.ID, equipment.InventarNr, equipment.Lagerort.ID, equipment.Inhalt, equipment.Anzahl, equipment.Hinweise, equipment.Bild)
 	return
 }
 
@@ -87,6 +111,6 @@ func (equipment *Equipment) Update() (err error) {
 	}
 
 	defer stmt.Close()
-	_, err = stmt.Exec(equipment.Bezeichnung, equipment.Kategorie, equipment.InventarNr, equipment.Lagerort, equipment.Inhalt, equipment.Anzahl, equipment.Hinweise, equipment.Bild, equipment.ID)
+	_, err = stmt.Exec(equipment.Bezeichnung, equipment.Kategorie.ID, equipment.InventarNr, equipment.Lagerort.ID, equipment.Inhalt, equipment.Anzahl, equipment.Hinweise, equipment.Bild, equipment.ID)
 	return
 }

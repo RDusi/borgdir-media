@@ -31,25 +31,25 @@
     <div class="col-4 equip">
       <div class="row">
         <div class="col">
-          <img src="{{.Bild}}" alt="img" class="festeGroesse150x150">
+          <img src="{{.Equipment.Bild}}" alt="img" class="festeGroesse150x150">
         </div>
         <div class="col">
-          <h5>{{.Bezeichnung}}</h5>
-          <small>Inv_Nr: {{.InventarNr}}</small>
+          <h5>{{.Equipment.Bezeichnung}}</h5>
+          <small>Inv_Nr: {{.Equipment.InventarNr}}</small>
         </div>
       </div>
     </div>
     <div class="col-3 beschreibung">
-      <p>{{.Inhalt}}</p>
+      <p>{{.Equipment.Inhalt}}</p>
     </div>
     <div class="col-2 entlam">
-      Platzhalter
+      {{.EntleihDatum}}
     </div>
     <div class="col-2 rueckgbis borgdir-color">
-      Platzhalter
+      {{.RueckgabeDatum}}
     </div>
     <div class="col-1 verl">
-      <a href="#"><i class="fas fa-sync-alt iconspez"></i></a>
+      <a href="/my-equipment/extend?id={{.ID}}"><i class="fas fa-sync-alt iconspez"></i></a>
     </div>
   </div>
   {{else}}
@@ -83,22 +83,22 @@
       <div class="col-4 equip">
         <div class="row">
           <div class="col">
-            <img src="{{.Bild}}" alt="img">
+            <img src="{{.Equipment.Bild}}" alt="img">
           </div>
           <div class="col">
-            <h5>{{.Bezeichnung}}</h5>
-            <small>Inv_Nr: {{.InventarNr}}</small>
+            <h5>{{.Equipment.Bezeichnung}}</h5>
+            <small>Inv_Nr: {{.Equipment.InventarNr}}</small>
           </div>
         </div>
       </div>
       <div class="col-3 beschreibung">
-        <p>{{.Inhalt}}</p>
+        <p>{{.Equipment.Inhalt}}</p>
       </div>
       <div class="col-4 rueckgbis borgdir-color">
-        Platzhalter
+        {{.RueckgabeDatum}}
       </div>
       <div class="col-1 verl">
-        <a href="#"><i class="far fa-trash-alt iconspez"></i></a>
+        <a href="/my-equipment/deleteBookmark?id={{.ID}}"><i class="far fa-trash-alt iconspez"></i></a>
       </div>
     </div>
     {{else}}
