@@ -18,7 +18,7 @@ func MapToController() {
 	http.HandleFunc("/bookmark", guest.Bookmark)
 	http.HandleFunc("/cart", user.CartHandler)
 	http.HandleFunc("/delete-cart-item", user.DeleteCartItem)
-	http.HandleFunc("/rentItems", user.RentItems)
+	http.HandleFunc("/cart/rentitems", user.RentItems)
 	http.HandleFunc("/my-equipment", user.MyEquipmentHandler)
 	http.HandleFunc("/my-equipment/extend", user.ExtendMyEquipment)
 	http.HandleFunc("/my-equipment/deleteBookmark", user.DeleteBookmark)

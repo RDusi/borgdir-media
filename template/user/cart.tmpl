@@ -45,7 +45,7 @@
     <div class="col-2 anzahl">
       <form action="/cart" method="post">
         <select name="anzahl" id="{{.ID}}" onchange="this.form.submit()">
-      <option value="{{.Anzahl}}">{{.Anzahl}}</option>
+      <option value="{{.Anzahl}}" selected>{{.Anzahl}}</option>
       <option value="1">1</option>
       <option value="2">2</option>
       <option value="3">3</option>
@@ -65,7 +65,7 @@
   <div style="color:gray; font-size:35px">Nichts im Warenkorb</div> {{end}}
   <div class="row ausleihbtn">
     <div class="col" style="display:flex; justify-content:flex-end">
-      <a href="/rentItems?id={{.User.ID}}" role="button" class="btn btn-primary">Jetzt ausleihen</a>
+      <a href="/cart/rentitems?id={{.User.ID}}" role="button" class="btn btn-primary">Jetzt ausleihen</a>
     </div>
   </div>
 </div>

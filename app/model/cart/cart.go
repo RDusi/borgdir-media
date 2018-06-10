@@ -174,6 +174,11 @@ func (cartitem *CartItem) Delete() (err error) {
 	return
 }
 
+func DeleteFromUser(uid int) (err error) {
+	_, err = Db.Exec("delete from Warenkorb where UserID = $1", uid)
+	return
+}
+
 func (cartitem *CartItem) Update() (err error) {
 	statement := "update Warenkorb set UserID = ?, EquipmentID = ?, EntleihDatum= ?, RueckgabeDatum= ?, Anzahl= ? where id = ?"
 	stmt, err := Db.Prepare(statement)

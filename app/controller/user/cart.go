@@ -51,6 +51,7 @@ func CartHandler(w http.ResponseWriter, r *http.Request) {
 		cartItem.Anzahl = anzahl
 		fmt.Println(cartItem)
 		cartItem.Update()
+		fmt.Println("Update von CartItem Nr: ", id)
 		http.Redirect(w, r, "/cart", 301)
 	}
 }
@@ -78,5 +79,7 @@ func RentItems(w http.ResponseWriter, r *http.Request) {
 		editEquipment.Anzahl = editEquipment.Anzahl - cartItem.Anzahl
 		editEquipment.Update()
 	}
+	cart.DeleteFromUser(id)
+
 	http.Redirect(w, r, "/cart", 301)
 }
