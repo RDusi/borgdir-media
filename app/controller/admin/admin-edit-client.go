@@ -86,7 +86,7 @@ func EditClientAdminHandler(w http.ResponseWriter, r *http.Request) {
 		defer f.Close()
 		wert, _ := io.Copy(f, file)
 		if wert != 0 {
-			http.Redirect(w, r, "/admin/edit-client", 301)
+			http.Redirect(w, r, "/admin/edit-client", http.StatusFound)
 		}
 	}
 }
@@ -96,7 +96,7 @@ func BlockUser(w http.ResponseWriter, r *http.Request) {
 	currentUserbearb, _ := benutzer.Get(id)
 	currentUserbearb.Sperren()
 	fmt.Println("Konto mit ID " + strconv.Itoa(id) + " wurde gesperrt")
-	http.Redirect(w, r, "/admin/edit-client?id="+strconv.Itoa(id)+"", 301)
+	http.Redirect(w, r, "/admin/edit-client?id="+strconv.Itoa(id)+"", http.StatusFound)
 }
 
 func DeblockUser(w http.ResponseWriter, r *http.Request) {
@@ -104,5 +104,5 @@ func DeblockUser(w http.ResponseWriter, r *http.Request) {
 	currentUserbearb, _ := benutzer.Get(id)
 	currentUserbearb.Entsperren()
 	fmt.Println("Konto mit ID " + strconv.Itoa(id) + " wurde entsperrt")
-	http.Redirect(w, r, "/admin/edit-client?id="+strconv.Itoa(id)+"", 301)
+	http.Redirect(w, r, "/admin/edit-client?id="+strconv.Itoa(id)+"", http.StatusFound)
 }

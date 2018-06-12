@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/jhoefker/borgdir-media/app/model/benutzer"
 	"github.com/jhoefker/borgdir-media/app/model/bookmarked"
@@ -54,10 +55,11 @@ func MyEquipmentHandler(w http.ResponseWriter, r *http.Request) {
 func ExtendMyEquipment(w http.ResponseWriter, r *http.Request) {
 	id, _ := strconv.Atoi(r.FormValue("id"))
 	currentMyEquipItem, _ := myequipment.Get(id)
-	currentMyEquipItem.RueckgabeDatum = currentMyEquipItem.RueckgabeDatum + "2 Wochen"
+	t, _ := time.Parse("02.01.2006", currentMyEquipItem.RueckgabeDatum)
+	currentMyEquipItem.RueckgabeDatum = t.AddDate(0, 2, 0).Format("02.01.2006")
 	currentMyEquipItem.Update()
 	fmt.Println("Ausleihvorgang wurde verlaengert")
-	http.Redirect(w, r, "/my-equipment", 301)
+	http.Redirect(w, r, "/my-equipment", http.StatusFound)
 }
 
 func DeleteBookmark(w http.ResponseWriter, r *http.Request) {
@@ -65,5 +67,5 @@ func DeleteBookmark(w http.ResponseWriter, r *http.Request) {
 	currentBookmark, _ := bookmarked.Get(id)
 	currentBookmark.Delete()
 	fmt.Println("Vermerkung wurde geloescht")
-	http.Redirect(w, r, "/my-equipment", 301)
+	http.Redirect(w, r, "/my-equipment", http.StatusFound)
 }

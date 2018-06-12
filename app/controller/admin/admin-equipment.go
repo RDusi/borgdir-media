@@ -48,5 +48,5 @@ func DeleteEquipment(w http.ResponseWriter, r *http.Request) {
 	id, _ := strconv.Atoi(r.FormValue("id"))
 	currentEquip, _ := equipment.Get(id)
 	currentEquip.Delete()
-	http.Redirect(w, r, "admin/equipment", 301)
+	http.Redirect(w, r, "admin/equipment", http.StatusFound)
 }

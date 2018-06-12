@@ -75,7 +75,7 @@ func AddAdminHandler(w http.ResponseWriter, r *http.Request) {
 		wert, _ = io.Copy(f, file)
 		if wert != 0 && temp == 2 {
 			log.Println("hier")
-			http.Redirect(w, r, "/admin/add", 301)
+			http.Redirect(w, r, "/admin/add", http.StatusFound)
 		}
 	}
 }

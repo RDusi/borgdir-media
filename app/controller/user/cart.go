@@ -52,7 +52,7 @@ func CartHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(cartItem)
 		cartItem.Update()
 		fmt.Println("Update von CartItem Nr: ", id)
-		http.Redirect(w, r, "/cart", 301)
+		http.Redirect(w, r, "/cart", http.StatusFound)
 	}
 }
 
@@ -75,11 +75,12 @@ func RentItems(w http.ResponseWriter, r *http.Request) {
 		myequipitem.Equipment = cartItem.Equipment
 		myequipitem.EntleihDatum = cartItem.EntleihDatum
 		myequipitem.RueckgabeDatum = cartItem.RueckgabeDatum
+		myequipitem.Add()
 		editEquipment, _ := equipment.Get(cartItem.Equipment.ID)
 		editEquipment.Anzahl = editEquipment.Anzahl - cartItem.Anzahl
 		editEquipment.Update()
 	}
 	cart.DeleteFromUser(id)
 
-	http.Redirect(w, r, "/cart", 301)
+	http.Redirect(w, r, "/cart", http.StatusFound)
 }

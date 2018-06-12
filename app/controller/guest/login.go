@@ -37,7 +37,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 			if user.Benutzername == benutzername && user.Passwort == passwort {
 				// Start Session etc
 				log.Println("Start Session")
-				http.Redirect(w, r, "/my-equipment", 301)
+				http.Redirect(w, r, "/my-equipment", http.StatusFound)
 			}
 		}
 	}
