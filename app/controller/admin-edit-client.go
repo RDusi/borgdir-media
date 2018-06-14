@@ -14,6 +14,7 @@ import (
 type AdminEditClientPageData struct {
 	User     model.User
 	UserData model.User
+	Gesperrt int
 }
 
 func EditClientAdminHandler(w http.ResponseWriter, r *http.Request) {
@@ -29,16 +30,14 @@ func EditClientAdminHandler(w http.ResponseWriter, r *http.Request) {
 		id, _ := strconv.Atoi(r.FormValue("id"))
 		currentUser := model.GetCurrentSession().User
 		currentUserEdit, _ := model.GetBenutzerByID(id)
-
+		var temp int
+		if currentUserEdit.AktivBis == "gesperrt" {
+			temp = 1
+		}
 		data := AdminEditClientPageData{
 			User:     currentUser,
 			UserData: currentUserEdit,
-		}
-		if data.UserData.AktivBis == "gesperrt" {
-			tmpl, err = template.ParseFiles("template/layout/layout.tmpl", "template/admin/header/header-admin-std.tmpl", "template/admin/admin-edit-client-gesperrt.tmpl")
-			if err != nil {
-				fmt.Println(err)
-			}
+			Gesperrt: temp,
 		}
 		err = tmpl.ExecuteTemplate(w, "layout", data)
 		if err != nil {

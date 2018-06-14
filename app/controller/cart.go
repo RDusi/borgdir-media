@@ -55,6 +55,9 @@ func CartHandler(w http.ResponseWriter, r *http.Request) {
 func DeleteCartItem(w http.ResponseWriter, r *http.Request) {
 	id, _ := strconv.Atoi(r.FormValue("id"))
 	currentCartItem, _ := model.GetWarenkorbItemByID(id)
+	currentEquipment, _ := model.GetEquipmentByID(currentCartItem.Equipment.ID)
+	currentEquipment.Anzahl++
+	currentEquipment.Update()
 	currentCartItem.Delete()
 	http.Redirect(w, r, "/cart", 301)
 }

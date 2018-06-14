@@ -52,6 +52,8 @@ func AddToCart(w http.ResponseWriter, r *http.Request) {
 	id, _ := strconv.Atoi(r.FormValue("id"))
 	log.Println("AddToCart von Produkt, ID: ", id)
 	currentEquip, _ := model.GetEquipmentByID(id)
+	currentEquip.Anzahl--
+	currentEquip.Update()
 	if currentEquip.Anzahl <= 0 {
 		currentEquip.Anzahl = 0
 		currentEquip.Update()
