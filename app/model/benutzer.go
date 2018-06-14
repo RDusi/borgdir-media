@@ -1,4 +1,4 @@
-package benutzer
+package model
 
 import (
 	"database/sql"

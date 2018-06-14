@@ -1,38 +1,23 @@
-package equipment
+package model
 
 import (
-	"database/sql"
-
-	"github.com/jhoefker/borgdir-media/app/model/categorie"
-	"github.com/jhoefker/borgdir-media/app/model/storage"
 	_ "github.com/mattn/go-sqlite3"
 )
 
 type Equipment struct {
 	ID          int
 	Bezeichnung string
-	Kategorie   categorie.Categorie
+	Kategorie   Categorie
 	InventarNr  string
-	Lagerort    storage.Storage
+	Lagerort    Storage
 	Inhalt      string
 	Anzahl      int
 	Hinweise    string
 	Bild        string
 }
 
-// Db handle
-var Db *sql.DB
-
-func init() {
-	var err error
-	Db, err = sql.Open("sqlite3", "./data/borgdir.media.db")
-	if err != nil {
-		panic(err)
-	}
-}
-
 // GetAll Equipment
-func GetAll() (equipments []Equipment, err error) {
+func GetAllEquipment() (equipments []Equipment, err error) {
 	rows, err := Db.Query("select * from Equipment")
 
 	if err != nil {
@@ -44,9 +29,9 @@ func GetAll() (equipments []Equipment, err error) {
 	for rows.Next() {
 		equipment := Equipment{}
 		err = rows.Scan(&equipment.ID, &equipment.Bezeichnung, &kategorienr, &equipment.InventarNr, &lagerortnr, &equipment.Inhalt, &equipment.Anzahl, &equipment.Hinweise, &equipment.Bild)
-		categorie := categorie.Categorie{}
+		categorie := Categorie{}
 		err = Db.QueryRow("select * from Kategorie where id = $1", kategorienr).Scan(&categorie.ID, &categorie.KategorieName)
-		storage := storage.Storage{}
+		storage := Storage{}
 		err = Db.QueryRow("select * from Lagerort where id = $1", lagerortnr).Scan(&storage.ID, &storage.LagerortName)
 		equipment.Kategorie = categorie
 		equipment.Lagerort = storage
@@ -61,10 +46,10 @@ func GetAll() (equipments []Equipment, err error) {
 	return
 }
 
-func Get(id int) (equipment Equipment, err error) {
+func GetEquipmentByID(id int) (equipment Equipment, err error) {
 	equipment = Equipment{}
-	storage := storage.Storage{}
-	categorie := categorie.Categorie{}
+	storage := Storage{}
+	categorie := Categorie{}
 	var kategorienr int
 	var lagerortnr int
 	err = Db.QueryRow("select * from Equipment where id = $1", id).Scan(&equipment.ID, &equipment.Bezeichnung, &kategorienr, &equipment.InventarNr, &lagerortnr, &equipment.Inhalt, &equipment.Anzahl, &equipment.Hinweise, &equipment.Bild)
