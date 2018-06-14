@@ -1,4 +1,4 @@
-package guest
+package controller
 
 import (
 	"fmt"
@@ -6,7 +6,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/jhoefker/borgdir-media/app/model/benutzer"
+	"github.com/jhoefker/borgdir-media/app/model"
 )
 
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
@@ -31,8 +31,8 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		passwort := r.FormValue("passwort")
 		fmt.Println("Benutzername : ", benutzername)
 		fmt.Println("Passwort: ", passwort)
-		var alleUser []benutzer.User
-		alleUser, _ = benutzer.GetAll()
+		var alleUser []model.User
+		alleUser, _ = model.GetAllBenutzer()
 		for _, user := range alleUser {
 			if user.Benutzername == benutzername && user.Passwort == passwort {
 				// Start Session etc

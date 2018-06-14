@@ -1,4 +1,4 @@
-package admin
+package controller
 
 import (
 	"fmt"
@@ -6,14 +6,12 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/jhoefker/borgdir-media/app/model/benutzer"
-	"github.com/jhoefker/borgdir-media/app/model/equipment"
-	"github.com/jhoefker/borgdir-media/app/model/nutzung"
+	"github.com/jhoefker/borgdir-media/app/model"
 )
 
 type AdminEquipmentPageData struct {
-	User            benutzer.User
-	EquipementListe []equipment.Equipment
+	User            model.User
+	EquipementListe []model.Equipment
 }
 
 func EquipmentAdminHandler(w http.ResponseWriter, r *http.Request) {
@@ -25,8 +23,8 @@ func EquipmentAdminHandler(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			fmt.Println(err)
 		}
-		currentUser := nutzung.GetCurrent().User
-		currentEquipliste, _ := equipment.GetAll()
+		currentUser := model.GetCurrentSession().User
+		currentEquipliste, _ := model.GetAllEquipment()
 		data := AdminEquipmentPageData{
 			User:            currentUser,
 			EquipementListe: currentEquipliste,
@@ -46,7 +44,7 @@ func EquipmentAdminHandler(w http.ResponseWriter, r *http.Request) {
 
 func DeleteEquipment(w http.ResponseWriter, r *http.Request) {
 	id, _ := strconv.Atoi(r.FormValue("id"))
-	currentEquip, _ := equipment.Get(id)
+	currentEquip, _ := model.GetEquipmentByID(id)
 	currentEquip.Delete()
 	http.Redirect(w, r, "admin/equipment", http.StatusFound)
 }

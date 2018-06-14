@@ -46,7 +46,7 @@ func GetAllVorgemerkt() (bookmarkeditems []BookmarkedItem, err error) {
 	return
 }
 
-func GetAllByUserId(uid int) (bookmarkeditems []BookmarkedItem, err error) {
+func GetAllVorgemerktByUserId(uid int) (bookmarkeditems []BookmarkedItem, err error) {
 	rows, err := Db.Query("select * from Vorgemerkt where UserID = $1", uid)
 
 	if err != nil {
@@ -81,7 +81,7 @@ func GetAllByUserId(uid int) (bookmarkeditems []BookmarkedItem, err error) {
 	return
 }
 
-func GetAllByEquipmentID(eid int) (bookmarkeditems []BookmarkedItem, err error) {
+func GetAllVorgemerktByEquipmentID(eid int) (bookmarkeditems []BookmarkedItem, err error) {
 	rows, err := Db.Query("select * from Vorgemerkt where EquipmentID = $1", eid)
 
 	if err != nil {
@@ -116,7 +116,7 @@ func GetAllByEquipmentID(eid int) (bookmarkeditems []BookmarkedItem, err error) 
 	return
 }
 
-func GetVorgemerkt(id int) (bookmarkeditem BookmarkedItem, err error) {
+func GetVorgemerktByID(id int) (bookmarkeditem BookmarkedItem, err error) {
 	bookmarkeditem = BookmarkedItem{}
 	user := User{}
 	equipment := Equipment{}

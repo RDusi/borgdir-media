@@ -27,7 +27,7 @@ func init() {
 	}
 }
 
-func GetAll() (users []User, err error) {
+func GetAllBenutzer() (users []User, err error) {
 	rows, err := Db.Query("select * from User")
 
 	if err != nil {
@@ -49,7 +49,7 @@ func GetAll() (users []User, err error) {
 	return
 }
 
-func Get(id int) (user User, err error) {
+func GetBenutzerByID(id int) (user User, err error) {
 	user = User{}
 	err = Db.QueryRow("select * from User where id = $1", id).Scan(&user.ID, &user.Benutzername, &user.Email, &user.Passwort, &user.BenutzerTyp, &user.AktivBis, &user.Bild)
 	return

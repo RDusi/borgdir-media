@@ -1,4 +1,4 @@
-package user
+package controller
 
 import (
 	"fmt"
@@ -8,20 +8,19 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/jhoefker/borgdir-media/app/model/benutzer"
-	"github.com/jhoefker/borgdir-media/app/model/nutzung"
+	"github.com/jhoefker/borgdir-media/app/model"
 )
 
 type ProfilPageData struct {
-	User     benutzer.User
-	UserData benutzer.User
+	User     model.User
+	UserData model.User
 }
 
 func ProfilHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("ProfilHandler")
 	fmt.Println("method:", r.Method)
 
-	currentUser := nutzung.GetCurrent().User
+	currentUser := model.GetCurrentSession().User
 	if r.Method == "GET" {
 		// GET
 		tmpl, err := template.ParseFiles("template/layout/layout.tmpl", "template/user/header/header-profil.tmpl", "template/user/profil.tmpl")
@@ -60,14 +59,14 @@ func ProfilHandler(w http.ResponseWriter, r *http.Request) {
 
 		bild := "../../../static/images/" + handler.Filename
 
-		user, _ := benutzer.Get(currentUser.ID)
+		user, _ := model.GetBenutzerByID(currentUser.ID)
 		var passwort string
 		if passwortalt == user.Passwort && passwortneu == passwortneuwdh {
 			fmt.Println("gleiches Passwort wurde eingegeben")
 			passwort = r.FormValue("passwortneu")
 		}
 
-		userNEW := benutzer.User{ID: speichern, Benutzername: benutzername, Email: email, Passwort: passwort, Bild: bild}
+		userNEW := model.User{ID: speichern, Benutzername: benutzername, Email: email, Passwort: passwort, Bild: bild}
 		userNEW.Update()
 
 		defer file.Close()
@@ -84,7 +83,7 @@ func ProfilHandler(w http.ResponseWriter, r *http.Request) {
 
 func DeleteUser(w http.ResponseWriter, r *http.Request) {
 	id, _ := strconv.Atoi(r.FormValue("id"))
-	currentUserbearb, _ := benutzer.Get(id)
+	currentUserbearb, _ := model.GetBenutzerByID(id)
 	currentUserbearb.Delete()
 	fmt.Println("Konto mit ID " + strconv.Itoa(id) + " wurde gelöscht")
 	tmpl, err := template.ParseFiles("template/layout/layout.tmpl", "template/user/header/header-profil.tmpl", "template/user/profil-delete.tmpl")

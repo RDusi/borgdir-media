@@ -1,17 +1,16 @@
-package admin
+package controller
 
 import (
 	"fmt"
 	"html/template"
 	"net/http"
 
-	"github.com/jhoefker/borgdir-media/app/model/benutzer"
-	"github.com/jhoefker/borgdir-media/app/model/nutzung"
+	"github.com/jhoefker/borgdir-media/app/model"
 )
 
 type AdminClientsPageData struct {
-	User      benutzer.User
-	UserListe []benutzer.User
+	User      model.User
+	UserListe []model.User
 }
 
 func ClientsAdminHandler(w http.ResponseWriter, r *http.Request) {
@@ -24,8 +23,8 @@ func ClientsAdminHandler(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			fmt.Println(err)
 		}
-		currentUser := nutzung.GetCurrent().User
-		userListe, err := benutzer.GetAll()
+		currentUser := model.GetCurrentSession().User
+		userListe, err := model.GetAllBenutzer()
 		data := AdminClientsPageData{
 			User:      currentUser,
 			UserListe: userListe,

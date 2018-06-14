@@ -118,7 +118,7 @@ func GetAllWarenkorbItemsByEquipmentID(eid int) (cartitems []CartItem, err error
 	return
 }
 
-func GetWarenkorbItem(id int) (cartitem CartItem, err error) {
+func GetWarenkorbItemByID(id int) (cartitem CartItem, err error) {
 	cartitem = CartItem{}
 	user := User{}
 	equipment := Equipment{}

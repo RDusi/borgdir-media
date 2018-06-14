@@ -3,33 +3,31 @@ package route
 import (
 	"net/http"
 
-	"github.com/jhoefker/borgdir-media/app/controller/admin"
-	"github.com/jhoefker/borgdir-media/app/controller/guest"
-	"github.com/jhoefker/borgdir-media/app/controller/user"
+	"github.com/jhoefker/borgdir-media/app/controller"
 )
 
 func MapToController() {
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
-	http.HandleFunc("/", guest.IndexStartHandler)
-	http.HandleFunc("/login", guest.LoginHandler)
-	http.HandleFunc("/register", guest.RegisterHandler)
-	http.HandleFunc("/equipment", guest.EquipmentHandler)
-	http.HandleFunc("/addtocart", guest.AddToCart)
-	http.HandleFunc("/bookmark", guest.Bookmark)
-	http.HandleFunc("/cart", user.CartHandler)
-	http.HandleFunc("/delete-cart-item", user.DeleteCartItem)
-	http.HandleFunc("/cart/rentitems", user.RentItems)
-	http.HandleFunc("/my-equipment", user.MyEquipmentHandler)
-	http.HandleFunc("/my-equipment/extend", user.ExtendMyEquipment)
-	http.HandleFunc("/my-equipment/deleteBookmark", user.DeleteBookmark)
-	http.HandleFunc("/profil", user.ProfilHandler)
-	http.HandleFunc("/konto-loeschen", user.DeleteUser)
-	http.HandleFunc("/admin/", admin.IndexAdminHandler)
-	http.HandleFunc("/admin/equipment", admin.EquipmentAdminHandler)
-	http.HandleFunc("/delete-equip", admin.DeleteEquipment)
-	http.HandleFunc("/admin/add", admin.AddAdminHandler)
-	http.HandleFunc("/admin/clients", admin.ClientsAdminHandler)
-	http.HandleFunc("/admin/edit-client", admin.EditClientAdminHandler)
-	http.HandleFunc("/admin/konto-sperren", admin.BlockUser)
-	http.HandleFunc("/admin/konto-entsperren", admin.DeblockUser)
+	http.HandleFunc("/", controller.IndexStartHandler)
+	http.HandleFunc("/login", controller.LoginHandler)
+	http.HandleFunc("/register", controller.RegisterHandler)
+	http.HandleFunc("/equipment", controller.EquipmentHandler)
+	http.HandleFunc("/addtocart", controller.AddToCart)
+	http.HandleFunc("/bookmark", controller.Bookmark)
+	http.HandleFunc("/cart", controller.CartHandler)
+	http.HandleFunc("/delete-cart-item", controller.DeleteCartItem)
+	http.HandleFunc("/cart/rentitems", controller.RentItems)
+	http.HandleFunc("/my-equipment", controller.MyEquipmentHandler)
+	http.HandleFunc("/my-equipment/extend", controller.ExtendMyEquipment)
+	http.HandleFunc("/my-equipment/deleteBookmark", controller.DeleteBookmark)
+	http.HandleFunc("/profil", controller.ProfilHandler)
+	http.HandleFunc("/konto-loeschen", controller.DeleteUser)
+	http.HandleFunc("/admin/", controller.IndexAdminHandler)
+	http.HandleFunc("/admin/equipment", controller.EquipmentAdminHandler)
+	http.HandleFunc("/delete-equip", controller.DeleteEquipment)
+	http.HandleFunc("/admin/add", controller.AddAdminHandler)
+	http.HandleFunc("/admin/clients", controller.ClientsAdminHandler)
+	http.HandleFunc("/admin/edit-client", controller.EditClientAdminHandler)
+	http.HandleFunc("/admin/konto-sperren", controller.BlockUser)
+	http.HandleFunc("/admin/konto-entsperren", controller.DeblockUser)
 }

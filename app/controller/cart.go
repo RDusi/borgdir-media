@@ -1,4 +1,4 @@
-package user
+package controller
 
 import (
 	"fmt"
@@ -6,16 +6,12 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/jhoefker/borgdir-media/app/model/benutzer"
-	"github.com/jhoefker/borgdir-media/app/model/cart"
-	"github.com/jhoefker/borgdir-media/app/model/equipment"
-	"github.com/jhoefker/borgdir-media/app/model/myequipment"
-	"github.com/jhoefker/borgdir-media/app/model/nutzung"
+	"github.com/jhoefker/borgdir-media/app/model"
 )
 
 type CartPageData struct {
-	User      benutzer.User
-	CartItems []cart.CartItem
+	User      model.User
+	CartItems []model.CartItem
 }
 
 func CartHandler(w http.ResponseWriter, r *http.Request) {
@@ -28,8 +24,8 @@ func CartHandler(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			fmt.Println(err)
 		}
-		currentUser := nutzung.GetCurrent().User
-		cartItems, _ := cart.GetAllByUserId(currentUser.ID)
+		currentUser := model.GetCurrentSession().User
+		cartItems, _ := model.GetAllWarenkorbItemsByUserId(currentUser.ID)
 		data := CartPageData{
 			User:      currentUser,
 			CartItems: cartItems,
@@ -47,7 +43,7 @@ func CartHandler(w http.ResponseWriter, r *http.Request) {
 		id, _ := strconv.Atoi(r.FormValue("id"))
 		fmt.Println(id)
 		fmt.Println(anzahl)
-		cartItem, _ := cart.Get(id)
+		cartItem, _ := model.GetWarenkorbItemByID(id)
 		cartItem.Anzahl = anzahl
 		fmt.Println(cartItem)
 		cartItem.Update()
@@ -58,7 +54,7 @@ func CartHandler(w http.ResponseWriter, r *http.Request) {
 
 func DeleteCartItem(w http.ResponseWriter, r *http.Request) {
 	id, _ := strconv.Atoi(r.FormValue("id"))
-	currentCartItem, _ := cart.Get(id)
+	currentCartItem, _ := model.GetWarenkorbItemByID(id)
 	currentCartItem.Delete()
 	http.Redirect(w, r, "/cart", 301)
 }
@@ -66,21 +62,21 @@ func DeleteCartItem(w http.ResponseWriter, r *http.Request) {
 func RentItems(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("ist hier")
 	id, _ := strconv.Atoi(r.FormValue("id"))
-	var cartItems []cart.CartItem
-	cartItems, _ = cart.GetAllByUserId(id)
+	var cartItems []model.CartItem
+	cartItems, _ = model.GetAllWarenkorbItemsByUserId(id)
 	fmt.Println(cartItems)
 	for _, cartItem := range cartItems {
-		var myequipitem myequipment.MyEquipItem
+		var myequipitem model.MyEquipItem
 		myequipitem.User = cartItem.User
 		myequipitem.Equipment = cartItem.Equipment
 		myequipitem.EntleihDatum = cartItem.EntleihDatum
 		myequipitem.RueckgabeDatum = cartItem.RueckgabeDatum
 		myequipitem.Add()
-		editEquipment, _ := equipment.Get(cartItem.Equipment.ID)
+		editEquipment, _ := model.GetEquipmentByID(cartItem.Equipment.ID)
 		editEquipment.Anzahl = editEquipment.Anzahl - cartItem.Anzahl
 		editEquipment.Update()
 	}
-	cart.DeleteFromUser(id)
+	model.DeleteFromUser(id)
 
 	http.Redirect(w, r, "/cart", http.StatusFound)
 }

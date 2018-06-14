@@ -1,11 +1,11 @@
-package guest
+package controller
 
 import (
 	"fmt"
 	"html/template"
 	"net/http"
 
-	"github.com/jhoefker/borgdir-media/app/model/benutzer"
+	"github.com/jhoefker/borgdir-media/app/model"
 )
 
 func RegisterHandler(w http.ResponseWriter, r *http.Request) {
@@ -33,7 +33,7 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 		passwort := r.FormValue("passwort")
 		passwortwdh := r.FormValue("passwortwdh")
 		bild := "http://via.placeholder.com/350x350"
-		user := benutzer.User{Benutzername: benutzername, Email: email, Passwort: passwort, Bild: bild}
+		user := model.User{Benutzername: benutzername, Email: email, Passwort: passwort, Bild: bild}
 		if passwort == passwortwdh {
 			fmt.Println("gleiches PW")
 			user.Add()

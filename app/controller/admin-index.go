@@ -1,16 +1,15 @@
-package admin
+package controller
 
 import (
 	"fmt"
 	"html/template"
 	"net/http"
 
-	"github.com/jhoefker/borgdir-media/app/model/benutzer"
-	"github.com/jhoefker/borgdir-media/app/model/nutzung"
+	"github.com/jhoefker/borgdir-media/app/model"
 )
 
 type AdminIndextPageData struct {
-	User benutzer.User
+	User model.User
 }
 
 func IndexAdminHandler(w http.ResponseWriter, r *http.Request) {
@@ -23,7 +22,7 @@ func IndexAdminHandler(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			fmt.Println(err)
 		}
-		currentUser := nutzung.GetCurrent().User
+		currentUser := model.GetCurrentSession().User
 		data := AdminIndextPageData{
 			User: currentUser,
 		}

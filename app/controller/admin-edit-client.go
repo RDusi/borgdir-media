@@ -1,4 +1,4 @@
-package admin
+package controller
 
 import (
 	"fmt"
@@ -8,13 +8,12 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/jhoefker/borgdir-media/app/model/benutzer"
-	"github.com/jhoefker/borgdir-media/app/model/nutzung"
+	"github.com/jhoefker/borgdir-media/app/model"
 )
 
 type AdminEditClientPageData struct {
-	User     benutzer.User
-	UserData benutzer.User
+	User     model.User
+	UserData model.User
 }
 
 func EditClientAdminHandler(w http.ResponseWriter, r *http.Request) {
@@ -28,8 +27,8 @@ func EditClientAdminHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		id, _ := strconv.Atoi(r.FormValue("id"))
-		currentUser := nutzung.GetCurrent().User
-		currentUserEdit, _ := benutzer.Get(id)
+		currentUser := model.GetCurrentSession().User
+		currentUserEdit, _ := model.GetBenutzerByID(id)
 
 		data := AdminEditClientPageData{
 			User:     currentUser,
@@ -70,7 +69,7 @@ func EditClientAdminHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		defer file.Close()
-		user, _ := benutzer.Get(speichern)
+		user, _ := model.GetBenutzerByID(speichern)
 		user.Benutzername = benutzername
 		user.Email = email
 		user.Passwort = passwort
@@ -93,7 +92,7 @@ func EditClientAdminHandler(w http.ResponseWriter, r *http.Request) {
 
 func BlockUser(w http.ResponseWriter, r *http.Request) {
 	id, _ := strconv.Atoi(r.FormValue("id"))
-	currentUserbearb, _ := benutzer.Get(id)
+	currentUserbearb, _ := model.GetBenutzerByID(id)
 	currentUserbearb.Sperren()
 	fmt.Println("Konto mit ID " + strconv.Itoa(id) + " wurde gesperrt")
 	http.Redirect(w, r, "/admin/edit-client?id="+strconv.Itoa(id)+"", http.StatusFound)
@@ -101,7 +100,7 @@ func BlockUser(w http.ResponseWriter, r *http.Request) {
 
 func DeblockUser(w http.ResponseWriter, r *http.Request) {
 	id, _ := strconv.Atoi(r.FormValue("id"))
-	currentUserbearb, _ := benutzer.Get(id)
+	currentUserbearb, _ := model.GetBenutzerByID(id)
 	currentUserbearb.Entsperren()
 	fmt.Println("Konto mit ID " + strconv.Itoa(id) + " wurde entsperrt")
 	http.Redirect(w, r, "/admin/edit-client?id="+strconv.Itoa(id)+"", http.StatusFound)

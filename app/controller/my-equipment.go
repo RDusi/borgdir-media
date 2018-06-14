@@ -1,4 +1,4 @@
-package user
+package controller
 
 import (
 	"fmt"
@@ -7,16 +7,13 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/jhoefker/borgdir-media/app/model/benutzer"
-	"github.com/jhoefker/borgdir-media/app/model/bookmarked"
-	"github.com/jhoefker/borgdir-media/app/model/myequipment"
-	"github.com/jhoefker/borgdir-media/app/model/nutzung"
+	"github.com/jhoefker/borgdir-media/app/model"
 )
 
 type MyEquipmentPageData struct {
-	User         benutzer.User
-	MeineGeraete []myequipment.MyEquipItem
-	Vorgemerkte  []bookmarked.BookmarkedItem
+	User         model.User
+	MeineGeraete []model.MyEquipItem
+	Vorgemerkte  []model.BookmarkedItem
 }
 
 func MyEquipmentHandler(w http.ResponseWriter, r *http.Request) {
@@ -30,10 +27,10 @@ func MyEquipmentHandler(w http.ResponseWriter, r *http.Request) {
 			fmt.Println(err)
 		}
 
-		currentUser := nutzung.GetCurrent().User
+		currentUser := model.GetCurrentSession().User
 		fmt.Println(currentUser.ID)
-		meineGeraeteListe, _ := myequipment.GetAllByUserId(currentUser.ID)
-		meineVorgemerktenListe, _ := bookmarked.GetAllByUserId(currentUser.ID)
+		meineGeraeteListe, _ := model.GetAllMeineGeraeteByUserId(currentUser.ID)
+		meineVorgemerktenListe, _ := model.GetAllVorgemerktByUserId(currentUser.ID)
 		data := MyEquipmentPageData{
 			User:         currentUser,
 			MeineGeraete: meineGeraeteListe,
@@ -54,7 +51,7 @@ func MyEquipmentHandler(w http.ResponseWriter, r *http.Request) {
 
 func ExtendMyEquipment(w http.ResponseWriter, r *http.Request) {
 	id, _ := strconv.Atoi(r.FormValue("id"))
-	currentMyEquipItem, _ := myequipment.Get(id)
+	currentMyEquipItem, _ := model.GetMeineGeraeteByID(id)
 	t, _ := time.Parse("02.01.2006", currentMyEquipItem.RueckgabeDatum)
 	currentMyEquipItem.RueckgabeDatum = t.AddDate(0, 2, 0).Format("02.01.2006")
 	currentMyEquipItem.Update()
@@ -64,7 +61,7 @@ func ExtendMyEquipment(w http.ResponseWriter, r *http.Request) {
 
 func DeleteBookmark(w http.ResponseWriter, r *http.Request) {
 	id, _ := strconv.Atoi(r.FormValue("id"))
-	currentBookmark, _ := bookmarked.Get(id)
+	currentBookmark, _ := model.GetVorgemerktByID(id)
 	currentBookmark.Delete()
 	fmt.Println("Vermerkung wurde geloescht")
 	http.Redirect(w, r, "/my-equipment", http.StatusFound)

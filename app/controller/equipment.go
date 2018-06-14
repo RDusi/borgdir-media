@@ -1,4 +1,4 @@
-package guest
+package controller
 
 import (
 	"fmt"
@@ -8,16 +8,12 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/jhoefker/borgdir-media/app/model/benutzer"
-	"github.com/jhoefker/borgdir-media/app/model/bookmarked"
-	"github.com/jhoefker/borgdir-media/app/model/cart"
-	"github.com/jhoefker/borgdir-media/app/model/equipment"
-	"github.com/jhoefker/borgdir-media/app/model/nutzung"
+	"github.com/jhoefker/borgdir-media/app/model"
 )
 
 type EquipmentPageData struct {
-	User           benutzer.User
-	EquipmentListe []equipment.Equipment
+	User           model.User
+	EquipmentListe []model.Equipment
 }
 
 func EquipmentHandler(w http.ResponseWriter, r *http.Request) {
@@ -30,8 +26,8 @@ func EquipmentHandler(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			fmt.Println(err)
 		}
-		currentUser := nutzung.GetCurrent().User
-		equipmentListe, err := equipment.GetAll()
+		currentUser := model.GetCurrentSession().User
+		equipmentListe, err := model.GetAllEquipment()
 
 		data := EquipmentPageData{
 			User:           currentUser,
@@ -55,14 +51,14 @@ func EquipmentHandler(w http.ResponseWriter, r *http.Request) {
 func AddToCart(w http.ResponseWriter, r *http.Request) {
 	id, _ := strconv.Atoi(r.FormValue("id"))
 	log.Println("AddToCart von Produkt, ID: ", id)
-	currentEquip, _ := equipment.Get(id)
+	currentEquip, _ := model.GetEquipmentByID(id)
 	if currentEquip.Anzahl <= 0 {
 		currentEquip.Anzahl = 0
 		currentEquip.Update()
 		http.Redirect(w, r, "/equipment", http.StatusFound)
 	} else {
-		var cartItem cart.CartItem
-		cartItem.User = nutzung.GetCurrent().User
+		var cartItem model.CartItem
+		cartItem.User = model.GetCurrentSession().User
 		cartItem.Equipment = currentEquip
 		cartItem.EntleihDatum = time.Now().Format("02.01.2006")
 		cartItem.RueckgabeDatum = time.Now().AddDate(0, 2, 0).Format("02.01.2006")
@@ -76,9 +72,9 @@ func AddToCart(w http.ResponseWriter, r *http.Request) {
 func Bookmark(w http.ResponseWriter, r *http.Request) {
 	id, _ := strconv.Atoi(r.FormValue("id"))
 	log.Println("Bookmark von Produkt, ID: ", id)
-	currentEquip, _ := equipment.Get(id)
-	var bookmarkItem bookmarked.BookmarkedItem
-	bookmarkItem.User = nutzung.GetCurrent().User
+	currentEquip, _ := model.GetEquipmentByID(id)
+	var bookmarkItem model.BookmarkedItem
+	bookmarkItem.User = model.GetCurrentSession().User
 	bookmarkItem.Equipment = currentEquip
 	bookmarkItem.RueckgabeDatum = time.Now().AddDate(0, 2, 0).Format("02.01.2006")
 	bookmarkItem.Add()
