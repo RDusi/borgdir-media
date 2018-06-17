@@ -19,8 +19,9 @@ type MyEquipmentPageData struct {
 func MyEquipmentHandler(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, "session")
 	typ := session.Values["type"]
-	if typ.(string) != "Benutzer" || typ == nil {
-		http.Redirect(w, r, "/admin", http.StatusFound)
+	fmt.Println(typ)
+	if typ == "" {
+		http.Redirect(w, r, "/", http.StatusFound)
 	} else {
 		fmt.Println("MyEquipmentHandler")
 		fmt.Println("method:", r.Method)

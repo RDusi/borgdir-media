@@ -19,7 +19,6 @@ type EquipmentPageData struct {
 func EquipmentHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("EquipmentHandler")
 	fmt.Println("method:", r.Method)
-
 	if r.Method == "GET" {
 		// GET
 		t, err := template.ParseFiles("template/layout/layout.tmpl", "template/guest/header/header-equip.tmpl", "template/guest/equipment.tmpl")
@@ -49,6 +48,7 @@ func EquipmentHandler(w http.ResponseWriter, r *http.Request) {
 		r.ParseForm()
 		// logic part of Equipment
 	}
+
 }
 
 func AddToCart(w http.ResponseWriter, r *http.Request) {
