@@ -10,6 +10,7 @@ func MapToController() {
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 	http.HandleFunc("/", controller.IndexStartHandler)
 	http.HandleFunc("/login", controller.LoginHandler)
+	http.HandleFunc("/logout", controller.LogoutHandler)
 	http.HandleFunc("/register", controller.RegisterHandler)
 	http.HandleFunc("/equipment", controller.EquipmentHandler)
 	http.HandleFunc("/addtocart", controller.AddToCart)

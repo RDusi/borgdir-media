@@ -33,12 +33,16 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 		passwort := r.FormValue("passwort")
 		passwortwdh := r.FormValue("passwortwdh")
 		bild := "http://via.placeholder.com/350x350"
-		user := model.User{Benutzername: benutzername, Email: email, Passwort: passwort, Bild: bild}
+		user := model.User{Benutzername: benutzername, Email: email, Passwort: passwort, Bild: bild, BenutzerTyp: "Benutzer", AktivBis: "erstmal soweit"}
 		if passwort == passwortwdh {
 			fmt.Println("gleiches PW")
 			user.Add()
+			http.Redirect(w, r, "/login", http.StatusFound)
 		} else {
-			fmt.Println("Passwort stimmt nicht überein")
+			t, err = template.ParseFiles("template/layout/layout.tmpl", "template/guest/header/header-register.tmpl", "template/guest/register-falschesPW.tmpl")
+			if err != nil {
+				fmt.Println(err)
+			}
 		}
 		err = t.ExecuteTemplate(w, "layout", "data")
 		if err != nil {

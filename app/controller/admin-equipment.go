@@ -15,30 +15,39 @@ type AdminEquipmentPageData struct {
 }
 
 func EquipmentAdminHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("EquipmentAdminHandler")
-	fmt.Println("method:", r.Method)
+	session, _ := store.Get(r, "session")
+	typ := session.Values["type"]
+	if typ.(string) != "Verleiher" && typ == nil {
+		http.Redirect(w, r, "/", http.StatusFound)
+	} else {
+		fmt.Println("EquipmentAdminHandler")
+		fmt.Println("method:", r.Method)
 
-	if r.Method == "GET" {
-		t, err := template.ParseFiles("template/layout/layout.tmpl", "template/admin/header/header-admin-std.tmpl", "template/admin/admin-equipment.tmpl")
-		if err != nil {
-			fmt.Println(err)
+		if r.Method == "GET" {
+			t, err := template.ParseFiles("template/layout/layout.tmpl", "template/admin/header/header-admin-std.tmpl", "template/admin/admin-equipment.tmpl")
+			if err != nil {
+				fmt.Println(err)
+			}
+			session, _ := store.Get(r, "session")
+			benutzername := session.Values["username"]
+			fmt.Println(benutzername)
+			currentUser, _ := model.GetUserByUsername(benutzername.(string))
+			currentEquipliste, _ := model.GetAllEquipment()
+			data := AdminEquipmentPageData{
+				User:            currentUser,
+				EquipementListe: currentEquipliste,
+			}
+			err = t.ExecuteTemplate(w, "layout", data)
+			if err != nil {
+				fmt.Println(err)
+			}
 		}
-		currentUser := model.GetCurrentSession().User
-		currentEquipliste, _ := model.GetAllEquipment()
-		data := AdminEquipmentPageData{
-			User:            currentUser,
-			EquipementListe: currentEquipliste,
-		}
-		err = t.ExecuteTemplate(w, "layout", data)
-		if err != nil {
-			fmt.Println(err)
-		}
-	}
 
-	if r.Method == "POST" {
-		// POST
-		r.ParseForm()
-		// logic part of Equipment
+		if r.Method == "POST" {
+			// POST
+			r.ParseForm()
+			// logic part of Equipment
+		}
 	}
 }
 

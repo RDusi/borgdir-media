@@ -17,35 +17,44 @@ type MyEquipmentPageData struct {
 }
 
 func MyEquipmentHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("MyEquipmentHandler")
-	fmt.Println("method:", r.Method)
+	session, _ := store.Get(r, "session")
+	typ := session.Values["type"]
+	if typ.(string) != "Benutzer" || typ == nil {
+		http.Redirect(w, r, "/admin", http.StatusFound)
+	} else {
+		fmt.Println("MyEquipmentHandler")
+		fmt.Println("method:", r.Method)
 
-	if r.Method == "GET" {
-		// GET
-		t, err := template.ParseFiles("template/layout/layout.tmpl", "template/user/header/header-myequip.tmpl", "template/user/my-equipment.tmpl")
-		if err != nil {
-			fmt.Println(err)
+		if r.Method == "GET" {
+			// GET
+			t, err := template.ParseFiles("template/layout/layout.tmpl", "template/user/header/header-myequip.tmpl", "template/user/my-equipment.tmpl")
+			if err != nil {
+				fmt.Println(err)
+			}
+
+			session, _ := store.Get(r, "session")
+			benutzername := session.Values["username"]
+			fmt.Println(benutzername)
+			currentUser, _ := model.GetUserByUsername(benutzername.(string))
+			fmt.Println(currentUser.ID)
+			meineGeraeteListe, _ := model.GetAllMeineGeraeteByUserId(currentUser.ID)
+			meineVorgemerktenListe, _ := model.GetAllVorgemerktByUserId(currentUser.ID)
+			data := MyEquipmentPageData{
+				User:         currentUser,
+				MeineGeraete: meineGeraeteListe,
+				Vorgemerkte:  meineVorgemerktenListe,
+			}
+			err = t.ExecuteTemplate(w, "layout", data)
+			if err != nil {
+				fmt.Println(err)
+			}
 		}
 
-		currentUser := model.GetCurrentSession().User
-		fmt.Println(currentUser.ID)
-		meineGeraeteListe, _ := model.GetAllMeineGeraeteByUserId(currentUser.ID)
-		meineVorgemerktenListe, _ := model.GetAllVorgemerktByUserId(currentUser.ID)
-		data := MyEquipmentPageData{
-			User:         currentUser,
-			MeineGeraete: meineGeraeteListe,
-			Vorgemerkte:  meineVorgemerktenListe,
+		if r.Method == "POST" {
+			// POST
+			r.ParseForm()
+			// logic part of Equipment
 		}
-		err = t.ExecuteTemplate(w, "layout", data)
-		if err != nil {
-			fmt.Println(err)
-		}
-	}
-
-	if r.Method == "POST" {
-		// POST
-		r.ParseForm()
-		// logic part of Equipment
 	}
 }
 

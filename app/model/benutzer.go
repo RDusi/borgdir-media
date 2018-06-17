@@ -2,8 +2,10 @@ package model
 
 import (
 	"database/sql"
+	"encoding/base64"
 
 	_ "github.com/mattn/go-sqlite3"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type User struct {
@@ -55,7 +57,7 @@ func GetBenutzerByID(id int) (user User, err error) {
 	return
 }
 
-func (user *User) Add() (err error) {
+/*func (user *User) Add() (err error) {
 	statement := "insert into User (Benutzername, Email, Passwort, BenutzerTyp, AktivBis, Bild) values ($1, $2, $3, $4, $5, $6)"
 	stmt, err := Db.Prepare(statement)
 
@@ -66,7 +68,26 @@ func (user *User) Add() (err error) {
 	defer stmt.Close()
 	_, err = stmt.Exec(user.Benutzername, user.Email, user.Passwort, user.BenutzerTyp, user.AktivBis, user.Bild)
 	return
+}*/
+
+//////////
+func (user *User) Add() (err error) {
+	statement := "insert into User (Benutzername, Email, Passwort, BenutzerTyp, AktivBis, Bild) values ($1, $2, $3, $4, $5, $6)"
+	stmt, err := Db.Prepare(statement)
+
+	if err != nil {
+		return
+	}
+	defer stmt.Close()
+
+	hashedPwd, err := bcrypt.GenerateFromPassword([]byte(user.Passwort), 14)
+	b64HashedPwd := base64.StdEncoding.EncodeToString(hashedPwd)
+
+	_, err = stmt.Exec(user.Benutzername, user.Email, b64HashedPwd, user.BenutzerTyp, user.AktivBis, user.Bild)
+	return
 }
+
+////////////////////
 
 func (user *User) Update() (err error) {
 	statement := "update User set Benutzername = ?, Email= ?, Passwort= ?, BenutzerTyp= ?, AktivBis= ?, Bild= ? where id = ?"
@@ -94,5 +115,12 @@ func (user *User) Entsperren() (err error) {
 // Delete Todo with the provided id from the list of Todos
 func (user *User) Delete() (err error) {
 	_, err = Db.Exec("delete from User where id = $1", user.ID)
+	return
+}
+
+// GetUserByUsername retrieve User by username
+func GetUserByUsername(username string) (user User, err error) {
+	user = User{}
+	err = Db.QueryRow("select * from User where Benutzername = $1", username).Scan(&user.ID, &user.Benutzername, &user.Email, &user.Passwort, &user.BenutzerTyp, &user.AktivBis, &user.Bild)
 	return
 }
