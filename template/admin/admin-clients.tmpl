@@ -49,7 +49,11 @@
       </div>
     </div>
     <div class="col-5 beschreibung">
-      <p>Platzhalter</p>
+      {{range .EquipmentListe}}
+      <p>{{.Bezeichnung}}</p>
+      {{else}}
+      <p>Nichts ausgeliehen</p>
+      {{end}}
     </div>
     <div class="col-2 entl">
       Konto aktiv bis: <br> <span class="borgdir-color">{{.AktivBis}}</span>

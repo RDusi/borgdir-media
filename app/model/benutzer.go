@@ -9,13 +9,14 @@ import (
 )
 
 type User struct {
-	ID           int
-	Benutzername string
-	Email        string
-	Passwort     string
-	BenutzerTyp  string
-	AktivBis     string
-	Bild         string
+	ID             int
+	Benutzername   string
+	Email          string
+	Passwort       string
+	BenutzerTyp    string
+	AktivBis       string
+	Bild           string
+	EquipmentListe []Equipment
 }
 
 // Db handle
@@ -39,9 +40,17 @@ func GetAllBenutzer() (users []User, err error) {
 	for rows.Next() {
 		user := User{}
 		err = rows.Scan(&user.ID, &user.Benutzername, &user.Email, &user.Passwort, &user.BenutzerTyp, &user.AktivBis, &user.Bild)
-
-		if err != nil {
-			return
+		rows2, _ := Db.Query("select EquipmentID from MeineGeraete where UserID = $1", user.ID)
+		for rows2.Next() {
+			var equipID int
+			err = rows2.Scan(&equipID)
+			equipments := []Equipment{}
+			equipment := Equipment{}
+			var kategorienr int
+			var lagerortnr int
+			_ = Db.QueryRow("select * from Equipment where ID = $1", equipID).Scan(&equipment.ID, &equipment.Bezeichnung, &kategorienr, &equipment.InventarNr, &lagerortnr, &equipment.Inhalt, &equipment.Anzahl, &equipment.Hinweise, &equipment.Bild)
+			equipments = append(equipments, equipment)
+			user.EquipmentListe = equipments
 		}
 
 		users = append(users, user)
@@ -98,7 +107,11 @@ func (user *User) Update() (err error) {
 	}
 
 	defer stmt.Close()
-	_, err = stmt.Exec(user.Benutzername, user.Email, user.Passwort, user.BenutzerTyp, user.AktivBis, user.Bild, user.ID)
+
+	hashedPwd, err := bcrypt.GenerateFromPassword([]byte(user.Passwort), 14)
+	b64HashedPwd := base64.StdEncoding.EncodeToString(hashedPwd)
+
+	_, err = stmt.Exec(user.Benutzername, user.Email, b64HashedPwd, user.BenutzerTyp, user.AktivBis, user.Bild, user.ID)
 	return
 }
 

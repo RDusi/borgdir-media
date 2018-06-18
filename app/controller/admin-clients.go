@@ -9,8 +9,9 @@ import (
 )
 
 type AdminClientsPageData struct {
-	User      model.User
-	UserListe []model.User
+	User                 model.User
+	UserListe            []model.User
+	EquipmentListeByUser []model.Equipment
 }
 
 func ClientsAdminHandler(w http.ResponseWriter, r *http.Request) {

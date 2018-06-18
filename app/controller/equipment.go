@@ -53,6 +53,7 @@ func EquipmentHandler(w http.ResponseWriter, r *http.Request) {
 
 func AddToCart(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, "session")
+	currentUser, _ := model.GetUserByUsername(session.Values["username"].(string))
 	typ := session.Values["type"]
 	if typ.(string) != "Benutzer" || typ == nil {
 		http.Redirect(w, r, "/equipment", http.StatusFound)
@@ -68,7 +69,7 @@ func AddToCart(w http.ResponseWriter, r *http.Request) {
 			http.Redirect(w, r, "/equipment", http.StatusFound)
 		} else {
 			var cartItem model.CartItem
-			cartItem.User = model.GetCurrentSession().User
+			cartItem.User = currentUser
 			cartItem.Equipment = currentEquip
 			cartItem.EntleihDatum = time.Now().Format("02.01.2006")
 			cartItem.RueckgabeDatum = time.Now().AddDate(0, 2, 0).Format("02.01.2006")

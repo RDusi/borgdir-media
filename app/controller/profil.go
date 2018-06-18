@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"encoding/base64"
 	"fmt"
 	"html/template"
 	"io"
@@ -10,7 +9,6 @@ import (
 	"strconv"
 
 	"github.com/jhoefker/borgdir-media/app/model"
-	"golang.org/x/crypto/bcrypt"
 )
 
 type ProfilPageData struct {
@@ -40,7 +38,7 @@ func ProfilHandler(w http.ResponseWriter, r *http.Request) {
 			}
 			data := ProfilPageData{
 				User:     currentUser,
-				UserData: currentUser,
+				UserData: currentUserEdit,
 			}
 			err = tmpl.ExecuteTemplate(w, "layout", data)
 			if err != nil {
@@ -55,61 +53,48 @@ func ProfilHandler(w http.ResponseWriter, r *http.Request) {
 
 			r.ParseMultipartForm(32 << 20)
 
-			benutzername := r.FormValue("benutzername")
+			benutzernameINPUT := r.FormValue("benutzername")
 			email := r.FormValue("email")
 			passwortalt := r.FormValue("passwortalt")
 			passwortneu := r.FormValue("passwortneu")
 			passwortneuwdh := r.FormValue("passwortneuwdh")
 			file, handler, err := r.FormFile("uploadfile")
 			speichern, _ := strconv.Atoi(r.FormValue("speichern"))
-			fmt.Println(speichern)
+			bild := "../../../static/images/" + handler.Filename
 
+			userEDIT, _ := model.GetBenutzerByID(speichern)
+			fmt.Println("CURRENTUSER POOOOOOST: ", userEDIT)
+
+			if passwortneu == passwortneuwdh {
+				if passwortneuwdh == "" && passwortalt == "" && passwortneuwdh == "" {
+					userEDIT.Benutzername = benutzernameINPUT
+					userEDIT.Email = email
+					userEDIT.Bild = bild
+					userEDIT.Update()
+					fmt.Println("KEIN NEUES PASSWORT: ", userEDIT)
+					http.Redirect(w, r, "/profil", http.StatusFound)
+				} else {
+					userEDIT.Benutzername = benutzernameINPUT
+					userEDIT.Email = email
+					userEDIT.Passwort = passwortneu
+					userEDIT.Bild = bild
+					userEDIT.Update()
+					fmt.Println("CURRENTUSER POOOOOOST NACH UPDATE: ", userEDIT)
+					http.Redirect(w, r, "/profil", http.StatusFound)
+				}
+			}
+			defer file.Close()
+			fmt.Println("Bild wurde hochgeladen: ", handler.Filename)
+			f, err := os.OpenFile("./static/images/upload/"+handler.Filename, os.O_WRONLY|os.O_CREATE, 0666)
 			if err != nil {
 				fmt.Println(err)
 				return
 			}
+			defer f.Close()
+			io.Copy(f, file)
 
-			bild := "../../../static/images/" + handler.Filename
-			fmt.Println(currentUserEdit)
-			user, _ := model.GetBenutzerByID(currentUserEdit.ID)
-			fmt.Println(user)
-			if speichern == user.ID {
-				fmt.Println("hier")
-				if benutzername != "" && benutzername != user.Benutzername {
-					user.Benutzername = benutzername
-				}
-				if email != "" && email != user.Email {
-					user.Email = email
-				}
-				user.Bild = bild
-				passwordDB, _ := base64.StdEncoding.DecodeString(user.Passwort) //PW aus DB
-				err1 := bcrypt.CompareHashAndPassword(passwordDB, []byte(passwortalt))
-				if err1 == nil {
-					hashedPwdNeu, _ := bcrypt.GenerateFromPassword([]byte(passwortneu), 14)
-					b64HashedNeuPwd := base64.StdEncoding.EncodeToString(hashedPwdNeu)
-					passwordDBNeuDE, _ := base64.StdEncoding.DecodeString(b64HashedNeuPwd) //PW aus DB
-					err2 := bcrypt.CompareHashAndPassword(passwordDBNeuDE, []byte(passwortneuwdh))
-					if err2 == nil {
-						fmt.Println("neues Passwort korrekt")
-						user.Passwort = BytesToString(passwordDBNeuDE)
-						user.Update()
-						http.Redirect(w, r, "/profil", http.StatusFound)
-					}
-				}
-				defer file.Close()
-				fmt.Println("Bild wurde hochgeladen: ", handler.Filename)
-				f, err := os.OpenFile("./static/images/upload/"+handler.Filename, os.O_WRONLY|os.O_CREATE, 0666)
-				if err != nil {
-					fmt.Println(err)
-					return
-				}
-				defer f.Close()
-				io.Copy(f, file)
-
-			}
 		}
 	}
-
 }
 
 func DeleteUser(w http.ResponseWriter, r *http.Request) {
