@@ -39,32 +39,32 @@
   <div>
     <hr>
   </div>
-  {{range .EquipementListe}}
+  {{range .ModEquip}}
   <div class="row cartgrid abstandGrid">
     <div class="col-4 cartprod">
       <div class="row">
         <div class="col">
-          <img src="{{.Bild}}" alt="img" class="festeGroesse150x150">
+          <img src="{{.Equipment.Bild}}" alt="img" class="festeGroesse150x150">
         </div>
         <div class="col">
-          <h5>{{.Bezeichnung}}</h5>
-          <small>Inv-Nr: {{.InventarNr}}</small>
+          <h5>{{.Equipment.Bezeichnung}}</h5>
+          <small>Inv-Nr: {{.Equipment.InventarNr}}</small>
         </div>
       </div>
     </div>
     <div class="col-3 beschreibung">
-      <p>{{.Inhalt}}</p>
+      <p>{{.Equipment.Inhalt}}</p>
     </div>
     <div class="col-2 entl">
-      Entliehen an: <br> <span class="borgdir-color">Platzhalter</span>
+      Entliehen an: <br> <span class="borgdir-color"><ul>{{range .User}}<li>{{.Benutzername}}</li>{{else}}---{{end}}</ul></span>
     </div>
     <div class="col-2 rueckgbis">
-      Rückgabe: <br> <span class="borgdir-color">Platzhalter</span>
+      Rückgabe: <br> <span class="borgdir-color"><ul>{{range .Rueckgabe}}<li>{{.}}</li>{{else}}---{{end}}</ul></span>
     </div>
     <div class="col-1 verl">
       <div class=row>
         <button name="edit" value="2" class="btn-icon"><i class="fas fa-pencil-alt iconspez" ></i></button>
-        <a href="/delete-equip?id={{.ID}}"><button name="loeschen" value="1" class="btn-icon"><i class="far fa-trash-alt iconspez " ></i></button></a>
+        <a href="/delete-equip?id={{.Equipment.ID}}"><button name="loeschen" value="1" class="btn-icon"><i class="far fa-trash-alt iconspez " ></i></button></a>
       </div>
     </div>
   </div>

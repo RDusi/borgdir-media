@@ -53,9 +53,9 @@ func EquipmentHandler(w http.ResponseWriter, r *http.Request) {
 
 func AddToCart(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, "session")
-	currentUser, _ := model.GetUserByUsername(session.Values["username"].(string))
-	typ := session.Values["type"]
-	if typ.(string) != "Benutzer" || typ == nil {
+	user, _ := model.GetUserByUsername(session.Values["username"].(string))
+	fmt.Println(user)
+	if user.BenutzerTyp == "Verleiher" {
 		http.Redirect(w, r, "/equipment", http.StatusFound)
 	} else {
 		id, _ := strconv.Atoi(r.FormValue("id"))
@@ -69,7 +69,7 @@ func AddToCart(w http.ResponseWriter, r *http.Request) {
 			http.Redirect(w, r, "/equipment", http.StatusFound)
 		} else {
 			var cartItem model.CartItem
-			cartItem.User = currentUser
+			cartItem.User = user
 			cartItem.Equipment = currentEquip
 			cartItem.EntleihDatum = time.Now().Format("02.01.2006")
 			cartItem.RueckgabeDatum = time.Now().AddDate(0, 2, 0).Format("02.01.2006")
@@ -82,8 +82,11 @@ func AddToCart(w http.ResponseWriter, r *http.Request) {
 
 func Bookmark(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, "session")
-	typ := session.Values["type"]
-	if typ.(string) != "Benutzer" || typ == nil {
+	user, err := model.GetUserByUsername(session.Values["username"].(string))
+	fmt.Println(user)
+	if err != nil {
+		http.Redirect(w, r, "/login", http.StatusFound)
+	} else if user.BenutzerTyp == "Verleiher" {
 		http.Redirect(w, r, "/equipment", http.StatusFound)
 	} else {
 		id, _ := strconv.Atoi(r.FormValue("id"))

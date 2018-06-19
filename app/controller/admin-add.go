@@ -18,9 +18,12 @@ type AdminAddPageData struct {
 
 func AddAdminHandler(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, "session")
-	typ := session.Values["type"]
-	if typ.(string) != "Verleiher" && typ == nil {
-		http.Redirect(w, r, "/", http.StatusFound)
+	user, err := model.GetUserByUsername(session.Values["username"].(string))
+	fmt.Println(user)
+	if err != nil {
+		http.Redirect(w, r, "/login", http.StatusFound)
+	} else if user.BenutzerTyp == "Benutzer" {
+		http.Redirect(w, r, "/login", http.StatusFound)
 	} else {
 		fmt.Println("AddEquipmentAdminHandler")
 		fmt.Println("method:", r.Method)

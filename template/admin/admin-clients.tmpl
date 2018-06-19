@@ -38,28 +38,26 @@
     <div class="col-4 cartprod">
       <div class="row">
         <div class="col">
-          <img src="{{.Bild}}" alt="img" class="festeGroesse150x150">
+          <img src="{{.User.Bild}}" alt="img" class="festeGroesse150x150">
         </div>
         <div class="col">
-          <h5 style="font-weight:bold">{{.Benutzername}}</h5>
-          <small>ID: {{.ID}}</small>
+          <h5 style="font-weight:bold">{{.User.Benutzername}}</h5>
+          <small>ID: {{.User.ID}}</small>
           <br>
-          <small class="borgdir-color">{{.BenutzerTyp}}</small>
+          <small class="borgdir-color">{{.User.BenutzerTyp}}</small>
         </div>
       </div>
     </div>
     <div class="col-5 beschreibung">
-      {{range .EquipmentListe}}
-      <p>{{.Bezeichnung}}</p>
-      {{else}}
-      <p>Nichts ausgeliehen</p>
-      {{end}}
+      <ul>{{range .EquipmentListeByUser}}
+        <li>{{.Bezeichnung}}</li> {{else}} Nichts ausgeliehen {{end}}
+      </ul>
     </div>
     <div class="col-2 entl">
-      Konto aktiv bis: <br> <span class="borgdir-color">{{.AktivBis}}</span>
+      Konto aktiv bis: <br> <span class="borgdir-color">{{.User.AktivBis}}</span>
     </div>
     <div class="col-1 button">
-      <a href="/admin/edit-client?id={{.ID}}"><i class="fas fa-pencil-alt iconspez"></i></a>
+      <a href="/admin/edit-client?id={{.User.ID}}"><i class="fas fa-pencil-alt iconspez"></i></a>
     </div>
   </div>
   {{else}}

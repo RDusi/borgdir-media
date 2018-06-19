@@ -14,6 +14,7 @@ type Equipment struct {
 	Anzahl      int
 	Hinweise    string
 	Bild        string
+	User        []User
 }
 
 // GetAll Equipment

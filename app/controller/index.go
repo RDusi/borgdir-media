@@ -23,13 +23,22 @@ func renderSliderBilder() SliderData {
 }
 
 func IndexStartHandler(w http.ResponseWriter, r *http.Request) {
-	t, err := template.ParseFiles("template/layout/layout.tmpl", "template/guest/header/header-std.tmpl", "template/guest/index-start.tmpl")
-	if err != nil {
-		fmt.Println(err)
-	}
-	data := renderSliderBilder()
-	err = t.ExecuteTemplate(w, "layout", data)
-	if err != nil {
-		fmt.Println(err)
+	session, _ := store.Get(r, "session")
+	user, _ := model.GetUserByUsername(session.Values["username"].(string))
+	fmt.Println(user)
+	if user.BenutzerTyp == "Benutzer" {
+		http.Redirect(w, r, "/equipment", http.StatusFound)
+	} else if user.BenutzerTyp == "Verleiher" {
+		http.Redirect(w, r, "/admin/index", http.StatusFound)
+	} else {
+		t, err := template.ParseFiles("template/layout/layout.tmpl", "template/guest/header/header-std.tmpl", "template/guest/index-start.tmpl")
+		if err != nil {
+			fmt.Println(err)
+		}
+		data := renderSliderBilder()
+		err = t.ExecuteTemplate(w, "layout", data)
+		if err != nil {
+			fmt.Println(err)
+		}
 	}
 }

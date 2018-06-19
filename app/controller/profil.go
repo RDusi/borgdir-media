@@ -18,8 +18,11 @@ type ProfilPageData struct {
 
 func ProfilHandler(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, "session")
-	typ := session.Values["type"]
-	if typ.(string) == "Verleiher" || typ.(string) == "Benutzer" {
+	user, err := model.GetUserByUsername(session.Values["username"].(string))
+	fmt.Println(user)
+	if err != nil {
+		http.Redirect(w, r, "/login", http.StatusFound)
+	} else {
 		fmt.Println("ProfilHandler")
 		fmt.Println("method:", r.Method)
 		var currentUser model.User
@@ -85,7 +88,7 @@ func ProfilHandler(w http.ResponseWriter, r *http.Request) {
 			}
 			defer file.Close()
 			fmt.Println("Bild wurde hochgeladen: ", handler.Filename)
-			f, err := os.OpenFile("./static/images/upload/"+handler.Filename, os.O_WRONLY|os.O_CREATE, 0666)
+			f, err := os.OpenFile("./static/images/"+handler.Filename, os.O_WRONLY|os.O_CREATE, 0666)
 			if err != nil {
 				fmt.Println(err)
 				return
