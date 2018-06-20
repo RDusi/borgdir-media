@@ -105,17 +105,5 @@ func DeleteUser(w http.ResponseWriter, r *http.Request) {
 	currentUserbearb, _ := model.GetBenutzerByID(id)
 	currentUserbearb.Delete()
 	fmt.Println("Konto mit ID " + strconv.Itoa(id) + " wurde gelöscht")
-	tmpl, err := template.ParseFiles("template/layout/layout.tmpl", "template/user/header/header-profil.tmpl", "template/user/profil-delete.tmpl")
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	err = tmpl.ExecuteTemplate(w, "layout", "data")
-	if err != nil {
-		fmt.Println(err)
-	}
-}
-
-func BytesToString(data []byte) string {
-	return string(data[:])
+	http.Redirect(w, r, "/", http.StatusFound)
 }

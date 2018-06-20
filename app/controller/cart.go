@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/jhoefker/borgdir-media/app/model"
 )
@@ -16,9 +17,9 @@ type CartPageData struct {
 
 func CartHandler(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, "session")
-	user, err := model.GetUserByUsername(session.Values["username"].(string))
+	user, err2 := model.GetUserByUsername(session.Values["username"].(string))
 	fmt.Println(user)
-	if err != nil {
+	if err2 != nil {
 		http.Redirect(w, r, "/login", http.StatusFound)
 	} else if user.BenutzerTyp == "Verleiher" {
 		http.Redirect(w, r, "/admin/index", http.StatusFound)
@@ -36,6 +37,25 @@ func CartHandler(w http.ResponseWriter, r *http.Request) {
 			benutzername := session.Values["username"]
 			fmt.Println(benutzername)
 			currentUser, _ := model.GetUserByUsername(benutzername.(string))
+
+			equips := session.Values["equip"]
+			var equip []int
+			if equips != nil {
+				equip = equips.([]int)
+			}
+			fmt.Println(equip)
+			for i := 0; i < len(equip); i++ {
+				var cartitem model.CartItem
+				cartitem.User = currentUser
+				cartitem.Equipment, _ = model.GetEquipmentByID(equip[i])
+				cartitem.Anzahl = 1
+				cartitem.EntleihDatum = time.Now().Format("02.01.2006")
+				cartitem.RueckgabeDatum = time.Now().AddDate(0, 2, 0).Format("02.01.2006")
+				cartitem.Add()
+			}
+			session.Values["equip"] = nil
+			session.Save(r, w)
+
 			cartItems, _ := model.GetAllWarenkorbItemsByUserId(currentUser.ID)
 			data := CartPageData{
 				User:      currentUser,

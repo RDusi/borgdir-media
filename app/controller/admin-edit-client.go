@@ -92,6 +92,8 @@ func EditClientAdminHandler(w http.ResponseWriter, r *http.Request) {
 					fmt.Println("CURRENTUSER POOOOOOST NACH UPDATE: ", userEDIT)
 					http.Redirect(w, r, "/admin/edit-client?id="+strconv.Itoa(userEDIT.ID)+"", http.StatusFound)
 				}
+			} else {
+				http.Redirect(w, r, "/admin/edit-client?id="+strconv.Itoa(userEDIT.ID)+"", http.StatusFound)
 			}
 
 			defer file.Close()

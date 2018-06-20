@@ -51,9 +51,11 @@ func EquipmentHandler(w http.ResponseWriter, r *http.Request) {
 
 }
 
+var equip []int
+
 func AddToCart(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, "session")
-	user, _ := model.GetUserByUsername(session.Values["username"].(string))
+	user, err := model.GetUserByUsername(session.Values["username"].(string))
 	fmt.Println(user)
 	if user.BenutzerTyp == "Verleiher" {
 		http.Redirect(w, r, "/equipment", http.StatusFound)
@@ -68,6 +70,13 @@ func AddToCart(w http.ResponseWriter, r *http.Request) {
 			currentEquip.Update()
 			http.Redirect(w, r, "/equipment", http.StatusFound)
 		} else {
+			if err != nil {
+				equip = append(equip, id)
+				session.Values["equip"] = equip
+				session.Save(r, w)
+				http.Redirect(w, r, "/equipment", http.StatusFound)
+
+			}
 			var cartItem model.CartItem
 			cartItem.User = user
 			cartItem.Equipment = currentEquip
@@ -93,7 +102,7 @@ func Bookmark(w http.ResponseWriter, r *http.Request) {
 		log.Println("Bookmark von Produkt, ID: ", id)
 		currentEquip, _ := model.GetEquipmentByID(id)
 		var bookmarkItem model.BookmarkedItem
-		bookmarkItem.User = model.GetCurrentSession().User
+		bookmarkItem.User = user
 		bookmarkItem.Equipment = currentEquip
 		bookmarkItem.RueckgabeDatum = time.Now().AddDate(0, 2, 0).Format("02.01.2006")
 		bookmarkItem.Add()
