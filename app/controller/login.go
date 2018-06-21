@@ -20,7 +20,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(user)
 	if user.BenutzerTyp == "Verleiher" {
 		http.Redirect(w, r, "/admin/index", http.StatusFound)
-	} else if user.BenutzerTyp == "Benutzer" {
+	} else if user.BenutzerTyp == "Benutzer" && user.AktivBis != "gesperrt" {
 		http.Redirect(w, r, "/equipment", http.StatusFound)
 	} else {
 		fmt.Println("LoginHandler")
@@ -58,6 +58,8 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 				session.Save(r, w)
 				if benutzer.BenutzerTyp == "Verleiher" {
 					http.Redirect(w, r, "/admin", http.StatusFound)
+				} else if benutzer.AktivBis == "gesperrt" {
+					http.Redirect(w, r, "/login", http.StatusFound)
 				} else {
 					http.Redirect(w, r, "/", http.StatusFound)
 				}
