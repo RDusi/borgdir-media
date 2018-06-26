@@ -15,13 +15,19 @@ type CartPageData struct {
 	CartItems []model.CartItem
 }
 
+var Items []model.CartItem
+
 func CartHandler(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, "session")
-	user, err2 := model.GetUserByUsername(session.Values["username"].(string))
+	var benutzername string
+	if session.Values["username"] != nil {
+		benutzername = session.Values["username"].(string)
+	} else {
+		benutzername = ""
+	}
+	user, _ := model.GetUserByUsername(benutzername)
 	fmt.Println(user)
-	if err2 != nil {
-		http.Redirect(w, r, "/login", http.StatusFound)
-	} else if user.BenutzerTyp == "Verleiher" {
+	if user.BenutzerTyp == "Verleiher" {
 		http.Redirect(w, r, "/admin/index", http.StatusFound)
 	} else {
 		fmt.Println("CartHandler")
@@ -34,16 +40,20 @@ func CartHandler(w http.ResponseWriter, r *http.Request) {
 				fmt.Println(err)
 			}
 			session, _ := store.Get(r, "session")
-			benutzername := session.Values["username"]
-			fmt.Println(benutzername)
-			currentUser, _ := model.GetUserByUsername(benutzername.(string))
-
+			var benutzername string
+			if session.Values["username"] != nil {
+				benutzername = session.Values["username"].(string)
+			} else {
+				benutzername = ""
+			}
+			currentUser, _ := model.GetUserByUsername(benutzername)
 			equips := session.Values["equip"]
 			var equip []int
 			if equips != nil {
 				equip = equips.([]int)
 			}
-			fmt.Println(equip)
+			fmt.Println("Equipment aus Session: ", equip)
+			var items []model.CartItem
 			for i := 0; i < len(equip); i++ {
 				var cartitem model.CartItem
 				cartitem.User = currentUser
@@ -51,15 +61,13 @@ func CartHandler(w http.ResponseWriter, r *http.Request) {
 				cartitem.Anzahl = 1
 				cartitem.EntleihDatum = time.Now().Format("02.01.2006")
 				cartitem.RueckgabeDatum = time.Now().AddDate(0, 2, 0).Format("02.01.2006")
-				cartitem.Add()
+				items = append(items, cartitem)
 			}
-			session.Values["equip"] = nil
-			session.Save(r, w)
+			Items = items
 
-			cartItems, _ := model.GetAllWarenkorbItemsByUserId(currentUser.ID)
 			data := CartPageData{
 				User:      currentUser,
-				CartItems: cartItems,
+				CartItems: Items,
 			}
 			err = t.ExecuteTemplate(w, "layout", data)
 			if err != nil {
@@ -85,13 +93,27 @@ func CartHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func DeleteCartItem(w http.ResponseWriter, r *http.Request) {
+	session, _ := store.Get(r, "session")
+	fmt.Println("Delete VOR: Aktuelle Equips in Session: ", session.Values["equip"].([]int))
 	id, _ := strconv.Atoi(r.FormValue("id"))
-	currentCartItem, _ := model.GetWarenkorbItemByID(id)
-	currentEquipment, _ := model.GetEquipmentByID(currentCartItem.Equipment.ID)
+	currentEquipment, _ := model.GetEquipmentByID(id)
 	currentEquipment.Anzahl++
 	currentEquipment.Update()
-	currentCartItem.Delete()
-	http.Redirect(w, r, "/cart", 301)
+	equips := session.Values["equip"]
+	var equip []int
+	if equips != nil {
+		equip = equips.([]int)
+	}
+	var index int
+	for i := 0; i < len(equip); i++ {
+		if equip[i] == id {
+			index = i
+		}
+	}
+	equipEDIT := append(equip[:index], equip[index+1:]...)
+	session.Values["equip"] = equipEDIT
+	session.Save(r, w)
+	http.Redirect(w, r, "/cart", http.StatusFound)
 }
 
 func RentItems(w http.ResponseWriter, r *http.Request) {
@@ -101,22 +123,18 @@ func RentItems(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/login", http.StatusFound)
 	} else {
 		fmt.Println("ist hier")
-		id, _ := strconv.Atoi(r.FormValue("id"))
-		var cartItems []model.CartItem
-		cartItems, _ = model.GetAllWarenkorbItemsByUserId(id)
-		fmt.Println(cartItems)
-		for _, cartItem := range cartItems {
+		fmt.Println(Items)
+		for _, item := range Items {
 			var myequipitem model.MyEquipItem
-			myequipitem.User = cartItem.User
-			myequipitem.Equipment = cartItem.Equipment
-			myequipitem.EntleihDatum = cartItem.EntleihDatum
-			myequipitem.RueckgabeDatum = cartItem.RueckgabeDatum
+			myequipitem.User = item.User
+			myequipitem.Equipment = item.Equipment
+			myequipitem.EntleihDatum = item.EntleihDatum
+			myequipitem.RueckgabeDatum = item.RueckgabeDatum
 			myequipitem.Add()
-			editEquipment, _ := model.GetEquipmentByID(cartItem.Equipment.ID)
-			editEquipment.Anzahl = editEquipment.Anzahl - cartItem.Anzahl
-			editEquipment.Update()
 		}
-		model.DeleteFromUser(id)
+		emptyArray := make([]int, 0)
+		session.Values["equip"] = emptyArray
+		session.Save(r, w)
 		http.Redirect(w, r, "/cart", http.StatusFound)
 	}
 }

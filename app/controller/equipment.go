@@ -26,9 +26,13 @@ func EquipmentHandler(w http.ResponseWriter, r *http.Request) {
 			fmt.Println(err)
 		}
 		session, _ := store.Get(r, "session")
-		benutzername := session.Values["username"]
-		fmt.Println(benutzername)
-		currentUser, _ := model.GetUserByUsername(benutzername.(string))
+		var benutzername string
+		if session.Values["username"] != nil {
+			benutzername = session.Values["username"].(string)
+		} else {
+			benutzername = ""
+		}
+		currentUser, _ := model.GetUserByUsername(benutzername)
 		equipmentListe, err := model.GetAllEquipment()
 
 		data := EquipmentPageData{
@@ -51,11 +55,9 @@ func EquipmentHandler(w http.ResponseWriter, r *http.Request) {
 
 }
 
-var equip []int
-
 func AddToCart(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, "session")
-	user, err := model.GetUserByUsername(session.Values["username"].(string))
+	user, _ := model.GetUserByUsername(session.Values["username"].(string))
 	fmt.Println(user)
 	if user.BenutzerTyp == "Verleiher" {
 		http.Redirect(w, r, "/equipment", http.StatusFound)
@@ -70,21 +72,10 @@ func AddToCart(w http.ResponseWriter, r *http.Request) {
 			currentEquip.Update()
 			http.Redirect(w, r, "/equipment", http.StatusFound)
 		} else {
-			if err != nil {
-				equip = append(equip, id)
-				session.Values["equip"] = equip
-				session.Save(r, w)
-				http.Redirect(w, r, "/equipment", http.StatusFound)
-
-			}
-			var cartItem model.CartItem
-			cartItem.User = user
-			cartItem.Equipment = currentEquip
-			cartItem.EntleihDatum = time.Now().Format("02.01.2006")
-			cartItem.RueckgabeDatum = time.Now().AddDate(0, 2, 0).Format("02.01.2006")
-			cartItem.Anzahl = 1
-			cartItem.Add()
+			session.Values["equip"] = append(session.Values["equip"].([]int), id)
+			session.Save(r, w)
 			http.Redirect(w, r, "/equipment", http.StatusFound)
+			fmt.Println("Hinzufügen von Equipment mit ID: ", id)
 		}
 	}
 }

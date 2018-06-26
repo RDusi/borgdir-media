@@ -10,7 +10,13 @@ import (
 
 func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, "session")
-	user, _ := model.GetUserByUsername(session.Values["username"].(string))
+	var benutzername string
+	if session.Values["username"] != nil {
+		benutzername = session.Values["username"].(string)
+	} else {
+		benutzername = ""
+	}
+	user, _ := model.GetUserByUsername(benutzername)
 	fmt.Println(user)
 	if user.BenutzerTyp == "Verleiher" {
 		http.Redirect(w, r, "/admin/index", http.StatusFound)

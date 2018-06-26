@@ -18,7 +18,13 @@ type MyEquipmentPageData struct {
 
 func MyEquipmentHandler(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, "session")
-	user, err := model.GetUserByUsername(session.Values["username"].(string))
+	var benutzername string
+	if session.Values["username"] != nil {
+		benutzername = session.Values["username"].(string)
+	} else {
+		benutzername = ""
+	}
+	user, err := model.GetUserByUsername(benutzername)
 	fmt.Println(user)
 	if err != nil {
 		http.Redirect(w, r, "/login", http.StatusFound)

@@ -12,11 +12,17 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-var store = sessions.NewCookieStore([]byte("something-very-secret"))
+var store = sessions.NewCookieStore([]byte("Cookie "))
 
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, "session")
-	user, _ := model.GetUserByUsername(session.Values["username"].(string))
+	var benutzername string
+	if session.Values["username"] != nil {
+		benutzername = session.Values["username"].(string)
+	} else {
+		benutzername = ""
+	}
+	user, _ := model.GetUserByUsername(benutzername)
 	fmt.Println(user)
 	if user.BenutzerTyp == "Verleiher" {
 		http.Redirect(w, r, "/admin/index", http.StatusFound)
@@ -72,11 +78,12 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func LogoutHandler(w http.ResponseWriter, r *http.Request) {
+	emptyArray := make([]int, 0)
 	session, _ := store.Get(r, "session")
-
+	fmt.Println("-----------------------------------")
 	session.Values["authenticated"] = false
 	session.Values["username"] = ""
+	session.Values["equip"] = emptyArray
 	session.Save(r, w)
-
 	http.Redirect(w, r, "/", http.StatusFound)
 }

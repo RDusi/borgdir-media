@@ -9,10 +9,9 @@
       <small>Kategorie</small>
       <div>
         <form action="/equipment" method="post">
-          <input type="text " placeholder="Suche ">
-          <select name="" id="kategorie ">
-          <option selected>Alle</option>
-          <option value="1 ">Kategorie1</option>
+          <input type="text " placeholder="Suche " id="search-box">
+          <select name="" id="kategorie " id="select-category">
+          <option selected value="all">Alle</option>
         </select>
         </form>
       </div>
@@ -20,9 +19,10 @@
     <div class="col sortbar ">
       <small>Sortieren nach</small>
       <div>
-        <select>
-          <option selected id="sortby ">--</option>
-          <option value="1 ">Kategorie1</option>
+        <select id="select-sortorder">
+          <option value="none"></option>
+          <option value="name">Name</option>
+          <option value="category">Kategorie</option>
         </select>
       </div>
     </div>
@@ -30,38 +30,38 @@
 
   <div class="row equiprow abstandGrid">
     {{range .EquipmentListe}}
-    <div class="col-6 equipprodukt vorgegrid">
-      <div class="row">
+    <div class="col-6 equipprodukt vorgegrid filter-element" data-name="{{.Bezeichnung}}" data-category="{{.Kategorie.KategorieName}}">
+      <div class=" row ">
 
-        <div class="col">
-          <h5 style="font-weight:bold">{{.Bezeichnung}}</h5>
+        <div class="col ">
+          <h5 style="font-weight:bold ">{{.Bezeichnung}}</h5>
           <p>{{.Inhalt}}</p>
           <small>{{.Hinweise}}</small>
         </div>
-        <div class="col">
-          <img src="{{.Bild}}" alt="img" class="festeGroesse150x150">
+        <div class="col ">
+          <img src="{{.Bild}} " alt="img " class="festeGroesse150x150 ">
         </div>
       </div>
-      <div class="row">
-        <div class="col-6">
-          <div class="row">
-            <div class="col-6">
+      <div class="row ">
+        <div class="col-6 ">
+          <div class="row ">
+            <div class="col-6 ">
               {{if eq .Anzahl 0}}
-              <a href="/bookmark?id={{.ID}}" role="button" class="btn btn-primary" style="background-color: gray;">Vormerken</a> {{else}}
-              <a href="/addtocart?id={{.ID}}" role="button" class="btn btn-primary">In den Warenkorb</a>{{end}}
+              <a href="/bookmark?id={{.ID}} " role="button " class="btn btn-primary " style="background-color: gray; ">Vormerken</a> {{else}}
+              <a href="/addtocart?id={{.ID}} " role="button " class="btn btn-primary ">In den Warenkorb</a>{{end}}
             </div>
-            <div class="col-6" style="display:flex; align-items:center; justify-content:flex-end">
-              <small style="text-align:right">{{.Anzahl}} Verfügbar</small>
+            <div class="col-6 " style="display:flex; align-items:center; justify-content:flex-end ">
+              <small style="text-align:right ">{{.Anzahl}} Verfügbar</small>
             </div>
           </div>
         </div>
-        <div class="col-6" style="display:flex; align-items:center;">
-          <a href="/bookmark?id={{.ID}}" role="button" style="font-size:140%; color: gray; " class="iconBookmark"><i class="far fa-bookmark"></i></a>
+        <div class="col-6 " style="display:flex; align-items:center; ">
+          <a href="/bookmark?id={{.ID}} " role="button " style="font-size:140%; color: gray; " class="iconBookmark "><i class="far fa-bookmark "></i></a>
         </div>
       </div>
     </div>
     {{else}}
-    <div style="color:gray; font-size:35px">Kein Equipment Verfügbar</div>
+    <div style="color:gray; font-size:35px ">Kein Equipment Verfügbar</div>
     {{end}}
   </div>
 

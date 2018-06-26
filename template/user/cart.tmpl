@@ -43,22 +43,13 @@
       <p>{{.Equipment.Inhalt}}</p>
     </div>
     <div class="col-2 anzahl">
-      <form action="/cart" method="post">
-        <select name="anzahl" id="{{.ID}}" onchange="this.form.submit()">
-      <option value="{{.Anzahl}}" selected>{{.Anzahl}}</option>
-      <option value="1">1</option>
-      <option value="2">2</option>
-      <option value="3">3</option>
-      <option value="4">4</option>
-
-      <input type="hidden" value="{{.ID}}" name="id">
-      </select></form>
+      {{.Anzahl}}
     </div>
     <div class="col-2 rueckgbis borgdir-color">
       {{.RueckgabeDatum}}
     </div>
     <div class="col-1 verl">
-      <a href="/delete-cart-item?id={{.ID}}"><i class="far fa-trash-alt iconspez"></i></a>
+      <a href="/delete-cart-item?id={{.Equipment.ID}}"><i class="far fa-trash-alt iconspez"></i></a>
     </div>
   </div>
   {{else}}
