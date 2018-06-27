@@ -14,6 +14,7 @@ import (
 type EquipmentPageData struct {
 	User           model.User
 	EquipmentListe []model.Equipment
+	AllCategories  []model.Categorie
 }
 
 func EquipmentHandler(w http.ResponseWriter, r *http.Request) {
@@ -34,10 +35,11 @@ func EquipmentHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		currentUser, _ := model.GetUserByUsername(benutzername)
 		equipmentListe, err := model.GetAllEquipment()
-
+		kategorien, _ := model.GetAllKategorien()
 		data := EquipmentPageData{
 			User:           currentUser,
 			EquipmentListe: equipmentListe,
+			AllCategories:  kategorien,
 		}
 		fmt.Println("Equipment: ", data)
 

@@ -8,19 +8,20 @@
     <div class="col searchbar ">
       <small>Kategorie</small>
       <div>
-        <form action="/equipment" method="post">
-          <input type="text " placeholder="Suche " id="search-box">
-          <select name="" id="kategorie " id="select-category">
+        <input type="text " placeholder="Suche " id="search-box">
+        <select name="" id="kategorie " id="select-category">
           <option selected value="all">Alle</option>
+          {{range .AllCategories}}
+            <option value="{{.ID}}">{{.KategorieName}}</option>
+          {{end}}
         </select>
-        </form>
       </div>
     </div>
     <div class="col sortbar ">
       <small>Sortieren nach</small>
       <div>
         <select id="select-sortorder">
-          <option value="none"></option>
+          <option value="none">--</option>
           <option value="name">Name</option>
           <option value="category">Kategorie</option>
         </select>

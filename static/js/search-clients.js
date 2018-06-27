@@ -1,20 +1,10 @@
 $(document).ready(function() {
-  $("#search-box").on("keyup", function() {
+  $("#searchbox-clients").on("keyup", function() {
     filterRows()
   });
 
   $("#select-category").on("change", function() {
     filterRows()
-  });
-
-  $("#select-sortorder").on("change", function() {
-    var value = $(this).val()
-    var $wrapper = $(".elements");
-
-    $wrapper.find(".filter-element").sort(function(a, b) {
-        return ($(b).attr("data-" + value).toLowerCase()) < ($(a).attr("data-" + value).toLowerCase()) ? 1 : -1;
-      })
-      .appendTo($wrapper);
   });
 
   function filterRows() {

@@ -9,7 +9,7 @@
       <small>Kategorie</small>
       <div><input type="text " placeholder="Suche " id="searchbox-clients">
         <select name=" " id="select-category ">
-        <option selected>Alle</option>
+        <option selected value="all">Alle</option>
         <option value="Benutzer">Benutzer</option>
         <option value="Verleiher">Verleiher</option>
       </select></div>
@@ -34,7 +34,7 @@
     <hr>
   </div>
   {{range .UserListe}}
-  <div class="row cartgrid abstandGrid">
+  <div class="row cartgrid abstandGrid filter-element" data-name="{{.User.Benutzername}}" data-category="{{.User.BenutzerTyp}}">
     <div class="col-4 cartprod">
       <div class="row">
         <div class="col">
