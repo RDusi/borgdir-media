@@ -115,6 +115,20 @@ func (user *User) Update() (err error) {
 	return
 }
 
+func (user *User) UpdateWithoutPassword() (err error) {
+	statement := "update User set Benutzername = ?, Email= ?, BenutzerTyp= ?, AktivBis= ?, Bild= ? where id = ?"
+	stmt, err := Db.Prepare(statement)
+
+	if err != nil {
+		return
+	}
+
+	defer stmt.Close()
+
+	_, err = stmt.Exec(user.Benutzername, user.Email, user.BenutzerTyp, user.AktivBis, user.Bild, user.ID)
+	return
+}
+
 func (user *User) Sperren() (err error) {
 	_, err = Db.Exec("update User set AktivBis = 'gesperrt' where id = $1", user.ID)
 	return

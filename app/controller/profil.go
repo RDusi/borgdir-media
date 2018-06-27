@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"encoding/base64"
 	"fmt"
 	"html/template"
 	"io"
@@ -9,6 +10,7 @@ import (
 	"strconv"
 
 	"github.com/jhoefker/borgdir-media/app/model"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type ProfilPageData struct {
@@ -71,24 +73,31 @@ func ProfilHandler(w http.ResponseWriter, r *http.Request) {
 			speichern, _ := strconv.Atoi(r.FormValue("speichern"))
 			bild := "../../../static/images/" + handler.Filename
 
-			userEDIT, _ := model.GetBenutzerByID(speichern)
-			fmt.Println("CURRENTUSER POOOOOOST: ", userEDIT)
+			benutzerEdit, _ := model.GetBenutzerByID(speichern)
+			if handler.Filename == "" {
+				bild = benutzerEdit.Bild
+			}
+			fmt.Println("CURRENTUSER POOOOOOST: ", benutzerEdit)
 
-			if passwortneu == passwortneuwdh {
-				if passwortneuwdh == "" && passwortalt == "" && passwortneuwdh == "" {
-					userEDIT.Benutzername = benutzernameINPUT
-					userEDIT.Email = email
-					userEDIT.Bild = bild
-					userEDIT.Update()
-					fmt.Println("KEIN NEUES PASSWORT: ", userEDIT)
-					http.Redirect(w, r, "/profil", http.StatusFound)
-				} else {
-					userEDIT.Benutzername = benutzernameINPUT
-					userEDIT.Email = email
-					userEDIT.Passwort = passwortneu
-					userEDIT.Bild = bild
-					userEDIT.Update()
-					fmt.Println("CURRENTUSER POOOOOOST NACH UPDATE: ", userEDIT)
+			passwordDB, _ := base64.StdEncoding.DecodeString(benutzerEdit.Passwort)
+			errPW := bcrypt.CompareHashAndPassword(passwordDB, []byte(passwortalt))
+
+			if passwortneuwdh == "" && passwortalt == "" && passwortneuwdh == "" {
+				benutzerEdit.Benutzername = benutzernameINPUT
+				benutzerEdit.Email = email
+				benutzerEdit.Bild = bild
+				benutzerEdit.UpdateWithoutPassword()
+				fmt.Println("Profil mit ID: " + strconv.Itoa(benutzerEdit.ID) + " wurde bearbeitet. OHNE NEUES PASSWORT")
+				http.Redirect(w, r, "/profil", http.StatusFound)
+			} else {
+				if errPW == nil && passwortneu == passwortneuwdh {
+					fmt.Println("Altes Passwort ist korrekt und neue Passwörter sind gleich")
+					benutzerEdit.Benutzername = benutzernameINPUT
+					benutzerEdit.Email = email
+					benutzerEdit.Passwort = passwortneu
+					benutzerEdit.Bild = bild
+					benutzerEdit.Update()
+					fmt.Println("CURRENTUSER POOOOOOST NACH UPDATE: ", benutzerEdit)
 					http.Redirect(w, r, "/profil", http.StatusFound)
 				}
 			}
@@ -101,9 +110,10 @@ func ProfilHandler(w http.ResponseWriter, r *http.Request) {
 			}
 			defer f.Close()
 			io.Copy(f, file)
-
 		}
+
 	}
+
 }
 
 func DeleteUser(w http.ResponseWriter, r *http.Request) {

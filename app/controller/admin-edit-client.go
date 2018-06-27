@@ -72,28 +72,30 @@ func EditClientAdminHandler(w http.ResponseWriter, r *http.Request) {
 			speichern, _ := strconv.Atoi(r.FormValue("speichern"))
 			bild := "../../../static/images/" + handler.Filename
 
-			userEDIT, _ := model.GetBenutzerByID(speichern)
-			fmt.Println("CURRENTUSER POOOOOOST: ", userEDIT)
+			benutzerEdit, _ := model.GetBenutzerByID(speichern)
+			if handler.Filename == "" {
+				bild = benutzerEdit.Bild
+			}
 
 			if passwortneu == passwortneuwdh {
 				if passwortneuwdh == "" {
-					userEDIT.Benutzername = benutzernameINPUT
-					userEDIT.Email = email
-					userEDIT.Bild = bild
-					userEDIT.Update()
-					fmt.Println("KEIN NEUES PASSWORT: ", userEDIT)
-					http.Redirect(w, r, "/admin/edit-client?id="+strconv.Itoa(userEDIT.ID)+"", http.StatusFound)
+					benutzerEdit.Benutzername = benutzernameINPUT
+					benutzerEdit.Email = email
+					benutzerEdit.Bild = bild
+					benutzerEdit.UpdateWithoutPassword()
+					fmt.Println("KEIN NEUES PASSWORT: ", benutzerEdit)
+					http.Redirect(w, r, "/admin/edit-client?id="+strconv.Itoa(benutzerEdit.ID)+"", http.StatusFound)
 				} else {
-					userEDIT.Benutzername = benutzernameINPUT
-					userEDIT.Email = email
-					userEDIT.Passwort = passwortneu
-					userEDIT.Bild = bild
-					userEDIT.Update()
-					fmt.Println("CURRENTUSER POOOOOOST NACH UPDATE: ", userEDIT)
-					http.Redirect(w, r, "/admin/edit-client?id="+strconv.Itoa(userEDIT.ID)+"", http.StatusFound)
+					benutzerEdit.Benutzername = benutzernameINPUT
+					benutzerEdit.Email = email
+					benutzerEdit.Passwort = passwortneu
+					benutzerEdit.Bild = bild
+					benutzerEdit.Update()
+					fmt.Println("CURRENTUSER POOOOOOST NACH UPDATE: ", benutzerEdit)
+					http.Redirect(w, r, "/admin/edit-client?id="+strconv.Itoa(benutzerEdit.ID)+"", http.StatusFound)
 				}
 			} else {
-				http.Redirect(w, r, "/admin/edit-client?id="+strconv.Itoa(userEDIT.ID)+"", http.StatusFound)
+				http.Redirect(w, r, "/admin/edit-client?id="+strconv.Itoa(benutzerEdit.ID)+"", http.StatusFound)
 			}
 
 			defer file.Close()
