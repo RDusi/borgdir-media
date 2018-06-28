@@ -74,6 +74,9 @@ func AddToCart(w http.ResponseWriter, r *http.Request) {
 			currentEquip.Update()
 			http.Redirect(w, r, "/equipment", http.StatusFound)
 		} else {
+			if session.Values["equip"] == nil {
+				session.Values["equip"] = []int{}
+			}
 			session.Values["equip"] = append(session.Values["equip"].([]int), id)
 			session.Save(r, w)
 			http.Redirect(w, r, "/equipment", http.StatusFound)

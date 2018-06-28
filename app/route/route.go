@@ -29,6 +29,7 @@ func MapToController() {
 	http.HandleFunc("/admin/add", controller.AddAdminHandler)
 	http.HandleFunc("/admin/clients", controller.ClientsAdminHandler)
 	http.HandleFunc("/admin/edit-client", controller.EditClientAdminHandler)
+	http.HandleFunc("/admin/edit-equipment", controller.AdminEditEquipmentHandler)
 	http.HandleFunc("/admin/konto-sperren", controller.BlockUser)
 	http.HandleFunc("/admin/konto-entsperren", controller.DeblockUser)
 }
