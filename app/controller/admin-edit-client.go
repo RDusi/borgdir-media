@@ -32,7 +32,7 @@ func EditClientAdminHandler(w http.ResponseWriter, r *http.Request) {
 		var currentUserEdit model.User
 		if r.Method == "GET" {
 
-			tmpl, err := template.ParseFiles("template/layout/layout.tmpl", "template/admin/header/header-admin-std.tmpl", "template/admin/admin-edit-client.tmpl")
+			tmpl, err := template.ParseFiles("template/layout.tmpl", "template/header-admin-std.tmpl", "template/admin-edit-client.tmpl")
 			if err != nil {
 				fmt.Println(err)
 			}

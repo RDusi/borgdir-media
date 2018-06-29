@@ -33,7 +33,7 @@ func AdminEditEquipmentHandler(w http.ResponseWriter, r *http.Request) {
 		var currentUserEdit model.User
 		if r.Method == "GET" {
 
-			tmpl, err := template.ParseFiles("template/layout/layout.tmpl", "template/admin/header/header-admin-std.tmpl", "template/admin/admin-edit-equipment.tmpl")
+			tmpl, err := template.ParseFiles("template/layout.tmpl", "template/header-admin-std.tmpl", "template/admin-edit-equipment.tmpl")
 			if err != nil {
 				fmt.Println(err)
 			}

@@ -1,0 +1,31 @@
+{{define "header"}}
+
+<nav class="container navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand borgdir-color brand-size" href="/index">borgdir.media</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse anordnung-nav-items1" id="navbarNavAltMarkup">
+    <div class="navbar-nav">
+      <a class="nav-item nav-link" href="/equipment">Equipment <span class="sr-only">(current)</span></a>
+      <a class="nav-item nav-link" href="/my-equipment">Meine Geräte</a>
+      <a class="nav-item nav-link" href="/logout">Logout</a>
+    </div>
+  </div>
+  <div class="collapse navbar-collapse anordnung-nav-items2" id="navbarNavAltMarkup">
+    <div class="navbar-nav">
+      {{if ne .User.BenutzerTyp "Verleiher"}}
+      <a class="nav-item nav-link" style="margin-right: 20px; display:flex; align-items: center;" href="/cart"><i class="fas fa-shopping-cart"></i>{{if ne .AnzahlinCart 0}}<div style="background-color: orange; height: 20px; width: 20px; text-align: center; justify-content: center;  align-items: center; border-radius:50%; color:white; font-size: 70%;">{{.AnzahlinCart}}</div>{{end}}</a>      {{end}}
+      <div class="center">
+        <img style="height: 32px;width: 32px;border-radius: 50px;" src="{{.User.Bild}}" alt="">
+        <a href="/profil" class="nav-link active">
+          <div>
+            {{.User.Benutzername}} <br><small class="borgdir-color">{{.User.BenutzerTyp}}</small>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+{{end}}

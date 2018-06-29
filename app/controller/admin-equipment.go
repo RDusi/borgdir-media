@@ -33,7 +33,7 @@ func EquipmentAdminHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("method:", r.Method)
 
 		if r.Method == "GET" {
-			t, err := template.ParseFiles("template/layout/layout.tmpl", "template/admin/header/header-admin-std.tmpl", "template/admin/admin-equipment.tmpl")
+			t, err := template.ParseFiles("template/layout.tmpl", "template/header-admin-std.tmpl", "template/admin-equipment.tmpl")
 			if err != nil {
 				fmt.Println(err)
 			}

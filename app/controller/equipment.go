@@ -15,6 +15,7 @@ type EquipmentPageData struct {
 	User           model.User
 	EquipmentListe []model.Equipment
 	AllCategories  []model.Categorie
+	AnzahlinCart   int
 }
 
 func EquipmentHandler(w http.ResponseWriter, r *http.Request) {
@@ -22,7 +23,7 @@ func EquipmentHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("method:", r.Method)
 	if r.Method == "GET" {
 		// GET
-		t, err := template.ParseFiles("template/layout/layout.tmpl", "template/guest/header/header-equip.tmpl", "template/guest/equipment.tmpl")
+		t, err := template.ParseFiles("template/layout.tmpl", "template/header-equip.tmpl", "template/equipment.tmpl")
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -33,6 +34,14 @@ func EquipmentHandler(w http.ResponseWriter, r *http.Request) {
 		} else {
 			benutzername = ""
 		}
+
+		equips := session.Values["equip"]
+		var equip []int
+		if equips != nil {
+			equip = equips.([]int)
+		}
+		cartAnzahl := len(equip)
+
 		currentUser, _ := model.GetUserByUsername(benutzername)
 		equipmentListe, err := model.GetAllEquipment()
 		kategorien, _ := model.GetAllKategorien()
@@ -40,6 +49,7 @@ func EquipmentHandler(w http.ResponseWriter, r *http.Request) {
 			User:           currentUser,
 			EquipmentListe: equipmentListe,
 			AllCategories:  kategorien,
+			AnzahlinCart:   cartAnzahl,
 		}
 		fmt.Println("Equipment: ", data)
 

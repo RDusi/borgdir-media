@@ -8,6 +8,11 @@ import (
 	"github.com/jhoefker/borgdir-media/app/model"
 )
 
+type IndexPageData struct {
+	SliderData   SliderData
+	AnzahlinCart int
+}
+
 type SliderData struct {
 	EquipmentListe []model.Equipment
 	Startbild      string
@@ -30,6 +35,12 @@ func IndexStartHandler(w http.ResponseWriter, r *http.Request) {
 	} else {
 		benutzername = ""
 	}
+	equips := session.Values["equip"]
+	var equip []int
+	if equips != nil {
+		equip = equips.([]int)
+	}
+	cartAnzahl := len(equip)
 	user, _ := model.GetUserByUsername(benutzername)
 	fmt.Println(user)
 	if user.BenutzerTyp == "Benutzer" {
@@ -37,11 +48,15 @@ func IndexStartHandler(w http.ResponseWriter, r *http.Request) {
 	} else if user.BenutzerTyp == "Verleiher" {
 		http.Redirect(w, r, "/admin/index", http.StatusFound)
 	} else {
-		t, err := template.ParseFiles("template/layout/layout.tmpl", "template/guest/header/header-std.tmpl", "template/guest/index-start.tmpl")
+		t, err := template.ParseFiles("template/layout.tmpl", "template/header-std.tmpl", "template/index-start.tmpl")
 		if err != nil {
 			fmt.Println(err)
 		}
-		data := renderSliderBilder()
+		sliderdata := renderSliderBilder()
+		data := IndexPageData{
+			SliderData:   sliderdata,
+			AnzahlinCart: cartAnzahl,
+		}
 		err = t.ExecuteTemplate(w, "layout", data)
 		if err != nil {
 			fmt.Println(err)

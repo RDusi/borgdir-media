@@ -32,7 +32,7 @@ func ClientsAdminHandler(w http.ResponseWriter, r *http.Request) {
 
 		if r.Method == "GET" {
 			// GET
-			t, err := template.ParseFiles("template/layout/layout.tmpl", "template/admin/header/header-admin-clients.tmpl", "template/admin/admin-clients.tmpl")
+			t, err := template.ParseFiles("template/layout.tmpl", "template/header-admin-clients.tmpl", "template/admin-clients.tmpl")
 			if err != nil {
 				fmt.Println(err)
 			}

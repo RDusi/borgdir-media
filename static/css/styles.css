@@ -187,3 +187,9 @@ textarea {
 .iconBookmark:hover {
   transform: scale(1.05);
 }
+
+.profilIconNav {
+  height: 32px;
+  width: 32px;
+  border-radius: 50px;
+}

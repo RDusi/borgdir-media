@@ -31,7 +31,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	} else {
 		fmt.Println("LoginHandler")
 		fmt.Println("method:", r.Method)
-		T, err := template.ParseFiles("template/layout/layout.tmpl", "template/guest/header/header-login.tmpl", "template/guest/login.tmpl")
+		T, err := template.ParseFiles("template/layout.tmpl", "template/header-login.tmpl", "template/login.tmpl")
 		if err != nil {
 			fmt.Println(err)
 		}

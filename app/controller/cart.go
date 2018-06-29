@@ -11,8 +11,9 @@ import (
 )
 
 type CartPageData struct {
-	User      model.User
-	CartItems []model.CartItem
+	User         model.User
+	CartItems    []model.CartItem
+	AnzahlinCart int
 }
 
 var Items []model.CartItem
@@ -35,7 +36,7 @@ func CartHandler(w http.ResponseWriter, r *http.Request) {
 
 		if r.Method == "GET" {
 			// GET
-			t, err := template.ParseFiles("template/layout/layout.tmpl", "template/user/header/header-cart.tmpl", "template/user/cart.tmpl")
+			t, err := template.ParseFiles("template/layout.tmpl", "template/header-cart.tmpl", "template/cart.tmpl")
 			if err != nil {
 				fmt.Println(err)
 			}
@@ -52,6 +53,7 @@ func CartHandler(w http.ResponseWriter, r *http.Request) {
 			if equips != nil {
 				equip = equips.([]int)
 			}
+			cartAnzahl := len(equip)
 			fmt.Println("Equipment aus Session: ", equip)
 			var items []model.CartItem
 			for i := 0; i < len(equip); i++ {
@@ -66,8 +68,9 @@ func CartHandler(w http.ResponseWriter, r *http.Request) {
 			Items = items
 
 			data := CartPageData{
-				User:      currentUser,
-				CartItems: Items,
+				User:         currentUser,
+				CartItems:    Items,
+				AnzahlinCart: cartAnzahl,
 			}
 			err = t.ExecuteTemplate(w, "layout", data)
 			if err != nil {

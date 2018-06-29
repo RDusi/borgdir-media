@@ -14,6 +14,7 @@ type MyEquipmentPageData struct {
 	User         model.User
 	MeineGeraete []model.MyEquipItem
 	Vorgemerkte  []model.BookmarkedItem
+	AnzahlinCart int
 }
 
 func MyEquipmentHandler(w http.ResponseWriter, r *http.Request) {
@@ -36,7 +37,7 @@ func MyEquipmentHandler(w http.ResponseWriter, r *http.Request) {
 
 		if r.Method == "GET" {
 			// GET
-			t, err := template.ParseFiles("template/layout/layout.tmpl", "template/user/header/header-myequip.tmpl", "template/user/my-equipment.tmpl")
+			t, err := template.ParseFiles("template/layout.tmpl", "template/header-myequip.tmpl", "template/my-equipment.tmpl")
 			if err != nil {
 				fmt.Println(err)
 			}
@@ -48,10 +49,18 @@ func MyEquipmentHandler(w http.ResponseWriter, r *http.Request) {
 			fmt.Println(currentUser.ID)
 			meineGeraeteListe, _ := model.GetAllMeineGeraeteByUserId(currentUser.ID)
 			meineVorgemerktenListe, _ := model.GetAllVorgemerktByUserId(currentUser.ID)
+			equips := session.Values["equip"]
+			var equip []int
+			if equips != nil {
+				equip = equips.([]int)
+			}
+			cartAnzahl := len(equip)
+
 			data := MyEquipmentPageData{
 				User:         currentUser,
 				MeineGeraete: meineGeraeteListe,
 				Vorgemerkte:  meineVorgemerktenListe,
+				AnzahlinCart: cartAnzahl,
 			}
 			err = t.ExecuteTemplate(w, "layout", data)
 			if err != nil {

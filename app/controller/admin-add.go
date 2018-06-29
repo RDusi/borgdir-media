@@ -33,7 +33,7 @@ func AddAdminHandler(w http.ResponseWriter, r *http.Request) {
 		currentUser, _ := model.GetUserByUsername(benutzername.(string))
 
 		if r.Method == "GET" {
-			tmpl, err := template.ParseFiles("template/layout/layout.tmpl", "template/admin/header/header-admin-std.tmpl", "template/admin/admin-add.tmpl")
+			tmpl, err := template.ParseFiles("template/layout.tmpl", "template/header-admin-std.tmpl", "template/admin-add.tmpl")
 			if err != nil {
 				fmt.Println(err)
 			}

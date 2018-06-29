@@ -26,7 +26,7 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("RegisterHandler")
 		fmt.Println("method:", r.Method)
 
-		t, err := template.ParseFiles("template/layout/layout.tmpl", "template/guest/header/header-register.tmpl", "template/guest/register.tmpl")
+		t, err := template.ParseFiles("template/layout.tmpl", "template/header-register.tmpl", "template/register.tmpl")
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -53,7 +53,7 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 				user.Add()
 				http.Redirect(w, r, "/login", http.StatusFound)
 			} else {
-				t, err = template.ParseFiles("template/layout/layout.tmpl", "template/guest/header/header-register.tmpl", "template/guest/register-falschesPW.tmpl")
+				t, err = template.ParseFiles("template/layout.tmpl", "template/header-register.tmpl", "template/register-falschesPW.tmpl")
 				if err != nil {
 					fmt.Println(err)
 				}

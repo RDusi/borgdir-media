@@ -14,8 +14,9 @@ import (
 )
 
 type ProfilPageData struct {
-	User     model.User
-	UserData model.User
+	User         model.User
+	UserData     model.User
+	AnzahlinCart int
 }
 
 func ProfilHandler(w http.ResponseWriter, r *http.Request) {
@@ -40,16 +41,23 @@ func ProfilHandler(w http.ResponseWriter, r *http.Request) {
 			session, _ := store.Get(r, "session")
 			benutzername := session.Values["username"]
 			fmt.Println(benutzername)
+			equips := session.Values["equip"]
+			var equip []int
+			if equips != nil {
+				equip = equips.([]int)
+			}
+			cartAnzahl := len(equip)
 			currentUser, _ = model.GetUserByUsername(benutzername.(string))
 			currentUserEdit, _ = model.GetBenutzerByID(currentUser.ID)
 			fmt.Println(currentUser)
-			tmpl, err := template.ParseFiles("template/layout/layout.tmpl", "template/user/header/header-profil.tmpl", "template/user/profil.tmpl")
+			tmpl, err := template.ParseFiles("template/layout.tmpl", "template/header-profil.tmpl", "template/profil.tmpl")
 			if err != nil {
 				fmt.Println(err)
 			}
 			data := ProfilPageData{
-				User:     currentUser,
-				UserData: currentUserEdit,
+				User:         currentUser,
+				UserData:     currentUserEdit,
+				AnzahlinCart: cartAnzahl,
 			}
 			err = tmpl.ExecuteTemplate(w, "layout", data)
 			if err != nil {
