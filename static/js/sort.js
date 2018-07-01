@@ -1,6 +1,5 @@
 $(document).ready(function() {
   $("#select-sortorder").on("change", function() {
-    document.getElementById("info-equipmentseite").innerHTML = "";
     var value = $(this).val()
     var $wrapper = $(".elements");
 
