@@ -8,8 +8,8 @@
     <div class="col searchbar ">
       <small>Kategorie</small>
       <div>
-        <input type="text " placeholder="Suche " id="search-box">
-        <select name="" id="kategorie " id="select-category">
+        <input type="text " placeholder="Suche " id="search-box" onkeyup="search()">
+        <select name=" " id="select-category" onchange="search()">
           <option selected value="all">Alle</option>
           {{range .AllCategories}}
             <option value="{{.ID}}">{{.KategorieName}}</option>
@@ -21,17 +21,18 @@
       <small>Sortieren nach</small>
       <div>
         <select id="select-sortorder">
-          <option value="none">--</option>
+          <option value="none"></option>
           <option value="name">Name</option>
           <option value="category">Kategorie</option>
+          <option value="anzahl">Verfügbarkeit</option>
         </select>
       </div>
     </div>
   </div>
 
-  <div class="row equiprow abstandGrid elements">
+  <div class="row equiprow abstandGrid elements ">
     {{range .EquipmentListe}}
-    <div class="col-6 equipprodukt vorgegrid filter-element" data-name="{{.Bezeichnung}}" data-category="{{.Kategorie.KategorieName}}">
+    <div class="col-6 equipprodukt vorgegrid filter-element" data-name={{.Bezeichnung}} data-category="{{.Kategorie.ID}}" data-anzahl="{{.Anzahl}}">
       <div class=" row ">
 
         <div class="col ">
@@ -57,13 +58,14 @@
           </div>
         </div>
         <div class="col-6 " style="display:flex; align-items:center; ">
-          <a href="/bookmark?id={{.ID}} " role="button " style="font-size:140%; color: gray; " class="iconBookmark "><i class="far fa-bookmark "></i></a>
+          <a href="/bookmark?id={{.ID}} " role="button " style="font-size:140%; color: gray; " class="iconBookmark "><i class="far fa-bookmark "></i></span></a>
         </div>
       </div>
     </div>
     {{else}}
-    <div style="color:gray; font-size:35px ">Kein Equipment Verfügbar</div>
+    <div style="color:gray; font-size:35px">Kein Equipment Verfügbar</div>
     {{end}}
+    <div style="color:gray; font-size:35px" id="info-equipmentseite"></div>
   </div>
 
 </div>

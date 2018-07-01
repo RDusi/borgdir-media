@@ -7,8 +7,8 @@
     </div>
     <div class="col searchbar">
       <small>Kategorie</small>
-      <div><input type="text " placeholder="Suche " id="searchbox-clients">
-        <select name=" " id="select-category ">
+      <div><input type="text " placeholder="Suche " id="search-box-admin-kunde" onkeyup="searchKundeAdmin()">
+        <select name=" " id="select-category-admin-kunde" onchange="searchKundeAdmin()">
         <option selected value="all">Alle</option>
         <option value="Benutzer">Benutzer</option>
         <option value="Verleiher">Verleiher</option>
@@ -34,7 +34,7 @@
     <hr>
   </div>
   {{range .UserListe}}
-  <div class="row cartgrid abstandGrid filter-element" data-name="{{.User.Benutzername}}" data-category="{{.User.BenutzerTyp}}">
+  <div class="row cartgrid abstandGrid filter-element-admin-kunde" data-name="{{.User.Benutzername}}" data-category="{{.User.BenutzerTyp}}">
     <div class="col-4 cartprod">
       <div class="row">
         <div class="col">

@@ -16,8 +16,9 @@ type ModEquipment struct {
 }
 
 type AdminEquipmentPageData struct {
-	User     model.User
-	ModEquip []ModEquipment
+	User          model.User
+	ModEquip      []ModEquipment
+	AllCategories []model.Categorie
 }
 
 func EquipmentAdminHandler(w http.ResponseWriter, r *http.Request) {
@@ -61,9 +62,11 @@ func EquipmentAdminHandler(w http.ResponseWriter, r *http.Request) {
 				currentEquiplisteTEMP = append(currentEquiplisteTEMP, modqeuip)
 			}
 
+			kategorien, _ := model.GetAllKategorien()
 			data := AdminEquipmentPageData{
-				User:     currentUser,
-				ModEquip: currentEquiplisteTEMP,
+				User:          currentUser,
+				ModEquip:      currentEquiplisteTEMP,
+				AllCategories: kategorien,
 			}
 
 			fmt.Println(data)

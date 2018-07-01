@@ -79,7 +79,7 @@ func AddToCart(w http.ResponseWriter, r *http.Request) {
 		currentEquip, _ := model.GetEquipmentByID(id)
 		currentEquip.Anzahl--
 		currentEquip.Update()
-		if currentEquip.Anzahl <= 0 {
+		if currentEquip.Anzahl < 0 {
 			currentEquip.Anzahl = 0
 			currentEquip.Update()
 			http.Redirect(w, r, "/equipment", http.StatusFound)

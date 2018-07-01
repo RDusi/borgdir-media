@@ -10,13 +10,12 @@
     </div>
     <div class="col searchbar">
       <small>Kategorie</small>
-      <div><input type="text " placeholder="Suche ">
-        <select name=" " id="kategorie ">
-        <option selected>Alle</option>
-        <option value="Kamera">Kameras</option>
-        <option value="2 ">Objektive</option>
-        <option value="3 ">Mikrofone</option>
-        <option value="4 ">Stative</option>
+      <div><input type="text " placeholder="Suche " id="search-box-admin" onkeyup="searchEquipAdmin()">
+        <select name=" " id="select-category-admin" onchange="searchEquipAdmin()">
+        <option selected value="all">Alle</option>
+        {{range .AllCategories}}
+          <option value="{{.ID}}">{{.KategorieName}}</option>
+        {{end}}
       </select></div>
 
     </div>
@@ -40,7 +39,7 @@
     <hr>
   </div>
   {{range .ModEquip}}
-  <div class="row cartgrid abstandGrid">
+  <div class="row cartgrid abstandGrid filter-element-admin" data-name={{.Equipment.Bezeichnung}} data-category="{{.Equipment.Kategorie.ID}}">
     <div class="col-4 cartprod">
       <div class="row">
         <div class="col">
@@ -71,6 +70,7 @@
   {{else}}
   <div style="color:gray; font-size:35px">Kein Equipment vorhanden</div>
   {{end}}
+  <div style="color:gray; font-size:35px" id="info-equipadmin"></div>
 </div>
 
 {{end}}
