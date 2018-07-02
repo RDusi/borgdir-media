@@ -15,6 +15,7 @@
   <div class="collapse navbar-collapse anordnung-nav-items2" id="navbarNavAltMarkup">
     <div class="navbar-nav">
       {{if ne .User.BenutzerTyp "Verleiher"}}
+      <img src="" alt="Test" id="equip" style="position: relative; visibility: hidden; height: 32px; width: 32px;">
       <a class="nav-item nav-link" style="margin-right: 20px; display:flex; align-items: center;" href="/cart"><i class="fas fa-shopping-cart"></i>{{if ne .AnzahlinCart 0}}<div style="background-color: orange; height: 20px; width: 20px; text-align: center; justify-content: center;  align-items: center; border-radius:50%; color:white; font-size: 70%;">{{.AnzahlinCart}}</div>{{end}}</a>      {{end}}
       <div class="center">
         <img style="height: 32px;width: 32px;border-radius: 50px;" src="{{.User.Bild}}" alt="">

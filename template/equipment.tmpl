@@ -41,7 +41,7 @@
           <small>{{.Hinweise}}</small>
         </div>
         <div class="col ">
-          <img src="{{.Bild}} " alt="img " class="festeGroesse150x150 ">
+          <img src="{{.Bild}} " alt="img " class="festeGroesse150x150 " id="equipbild{{.ID}}">
         </div>
       </div>
       <div class="row ">
@@ -50,7 +50,7 @@
             <div class="col-6 ">
               {{if eq .Anzahl 0}}
               <a href="/bookmark?id={{.ID}} " role="button " class="btn btn-primary " style="background-color: gray; ">Vormerken</a> {{else}}
-              <a href="/addtocart?id={{.ID}} " role="button " class="btn btn-primary ">In den Warenkorb</a>{{end}}
+              <a href="/addtocart?id={{.ID}} " role="button " class="btn btn-primary " onclick="addtocart({{.ID}})">In den Warenkorb</a>{{end}}
             </div>
             <div class="col-6 " style="display:flex; align-items:center; justify-content:flex-end ">
               <small style="text-align:right ">{{.Anzahl}} Verfügbar</small>
@@ -66,7 +66,5 @@
     <div style="color:gray; font-size:35px">Kein Equipment Verfügbar</div>
     {{end}}
   </div>
-
 </div>
-
 {{end}}
